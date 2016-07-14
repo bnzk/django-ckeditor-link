@@ -8,6 +8,39 @@ DEBUG = True
 
 logging.getLogger("factory").setLevel(logging.WARN)
 
+# from selenium.webdriver.firefox import webdriver
+from selenium.webdriver.phantomjs import webdriver
+SELENIUM_WEBDRIVER = webdriver
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'extraPlugins': ','.join(
+            [
+                # your extra plugins here
+                'djangolink',
+                'autolink',
+                'autoembed',
+                'embedsemantic',
+                'autogrow',
+                # 'devtools',
+                'widget',
+                'lineutils',
+                'clipboard',
+                'dialog',
+                'dialogui',
+                'elementspath'
+            ]),
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['DjangLink'],
+            ['Bold', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source']
+        ]
+    }
+}
+
 SITE_ID = 1
 
 APP_ROOT = os.path.abspath(
@@ -20,10 +53,15 @@ DATABASES = {
     }
 }
 
+LANGUAGE_CODE = 'en'
+LANGUAGES = (
+    ('en', 'ENGLISHS' ),
+)
+
 ROOT_URLCONF = 'ckeditor_link.tests.urls'
 
 # media root is overridden when needed in tests
-MEDIA_ROOT = tempfile.mkdtemp(suffix='folderless_media_root')
+MEDIA_ROOT = tempfile.mkdtemp(suffix='ckeditor_media_root')
 MEDIA_URL = "/media/"
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(APP_ROOT, '../test_app_static')
@@ -52,6 +90,11 @@ EXTERNAL_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'django.contrib.sites',
+    'ckeditor',
+    # 'djangocms_text_ckeditor',
+    # 'cms',
+    # 'treebeard',
+    # 'menus',
 )
 
 INTERNAL_APPS = (

@@ -5,13 +5,13 @@ $(document).ready(function () {
     CKEDITOR.plugins.add('djangolink', {
 
         // Register the icons. They must match command names.
-        icons: 'cmsplugins',
+        icons: 'djangolink',
 
         // The plugin initialization logic goes inside this method.
         init: function(editor) {
             var that = this;
 
-            this.options = CMS.CKEditor.options.settings;
+            // this.options = CMS.CKEditor.options.settings;
             this.editor = editor;
 
             /**
@@ -26,7 +26,7 @@ $(document).ready(function () {
             this.setupDialog();
 
             // add the button
-            this.editor.ui.add('cmsplugins', CKEDITOR.UI_PANELBUTTON, {
+            this.editor.ui.add('djangolink', CKEDITOR.UI_PANELBUTTON, {
                 'toolbar': 'cms,0',
                 'label': this.options.lang.toolbar,
                 'title': this.options.lang.toolbar,
@@ -38,7 +38,6 @@ $(document).ready(function () {
                     'css': [CKEDITOR.skin.getPath('editor')].concat(that.editor.config.contentsCss),
                     'attributes': { role: 'cmsplugins', 'aria-label': this.options.lang.aria }
                 },
-                <
             });
 
             // handle edit event via context menu
@@ -337,4 +336,4 @@ $(document).ready(function () {
     });
 
 });
-})(CMS.$);
+})(django.jQuery);

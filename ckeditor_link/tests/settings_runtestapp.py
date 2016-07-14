@@ -1,7 +1,7 @@
 """
 These settings are used by the ``manage.py`` command.
-
 """
+
 from .settings_test import *  # NOQA
 
 
