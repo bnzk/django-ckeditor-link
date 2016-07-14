@@ -1,0 +1,11 @@
+
+==== 0.xxx (not yet) ===
+
+- fix for djangocms-admin-styles
+
+
+==== 0.0.1 (not yet) ===
+
+- support for django 1.9
+- refactored tests, to use default manage.py test command
+
