@@ -83,7 +83,7 @@
 
 			if ( editor.ui.addButton ) {
                 alert()
-				editor.ui.addButton( 'djangolink', {
+				editor.ui.addButton( 'DjangoLink', {
 					label: editor.lang.link.toolbar,
 					command: 'djangolink',
 					toolbar: 'djangolinks,10',
