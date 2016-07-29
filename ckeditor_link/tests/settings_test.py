@@ -22,7 +22,7 @@ CKEDITOR_CONFIGS = {
                 'autoembed',
                 'embedsemantic',
                 'autogrow',
-                # 'devtools',
+                'devtools',
                 'widget',
                 'lineutils',
                 'clipboard',
@@ -32,8 +32,8 @@ CKEDITOR_CONFIGS = {
             ]),
         'toolbar': 'Custom',
         'toolbar_Custom': [
-            ['DjangLink'],
             ['Bold', 'Underline'],
+            ['DjangoLink', 'Unlink'],
             ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Link', 'Unlink'],
             ['RemoveFormat', 'Source']

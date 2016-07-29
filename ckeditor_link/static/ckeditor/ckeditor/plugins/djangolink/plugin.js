@@ -1,339 +1,800 @@
-(function($) {
-// CMS.$ will be passed for $
-$(document).ready(function () {
+/**
+ Initial code from the ck editor default link plugin, by:
+ * @license Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md or http://ckeditor.com/license
+ */
 
-    CKEDITOR.plugins.add('djangolink', {
+/*
+ main things to do:
+ - get iframe url for link form onto button/into dialog
+ - catch onOk for dialog, get link value and data attrs
+ - put data attrs on link in ck html code
+  */
 
-        // Register the icons. They must match command names.
-        icons: 'djangolink',
 
-        // The plugin initialization logic goes inside this method.
-        init: function(editor) {
-            var that = this;
 
-            // this.options = CMS.CKEditor.options.settings;
-            this.editor = editor;
 
-            /**
-             * populated with _fresh_ child plugins
-             */
-            this.child_plugins = [];
-            this.setupCancelCleanupCallback(this.options);
+'use strict';
 
-            // don't do anything if there are no plugins defined
-            if(this.options === undefined || this.options.plugins === undefined) return false;
+( function() {
+	CKEDITOR.plugins.add( 'djangolink', {
+		requires: 'dialog,fakeobjects',
+		// jscs:disable maximumLineLength
+		// lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,de-ch,el,en,en-au,en-ca,en-gb,eo,es,et,eu,fa,fi,fo,fr,fr-ca,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt,pt-br,ro,ru,si,sk,sl,sq,sr,sr-latn,sv,th,tr,tt,ug,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%
+		// jscs:enable maximumLineLength
+		icons: 'DjangoLink', // %REMOVE_LINE_CORE%
+		hidpi: true, // %REMOVE_LINE_CORE%
+		onLoad: function() {
+			// Add the CSS styles for anchor placeholders.
+			var iconPath = CKEDITOR.getUrl( this.path + 'images' + ( CKEDITOR.env.hidpi ? '/hidpi' : '' ) + '/anchor.png' ),
+				baseStyle = 'background:url(' + iconPath + ') no-repeat %1 center;border:1px dotted #00f;background-size:16px;';
 
-            this.setupDialog();
+			var template = '.%2 a.cke_anchor,' +
+				'.%2 a.cke_anchor_empty' +
+				',.cke_editable.%2 a[name]' +
+				',.cke_editable.%2 a[data-cke-saved-name]' +
+				'{' +
+					baseStyle +
+					'padding-%1:18px;' +
+					// Show the arrow cursor for the anchor image (FF at least).
+					'cursor:auto;' +
+				'}' +
+				'.%2 img.cke_anchor' +
+				'{' +
+					baseStyle +
+					'width:16px;' +
+					'min-height:15px;' +
+					// The default line-height on IE.
+					'height:1.15em;' +
+					// Opera works better with "middle" (even if not perfect)
+					'vertical-align:text-bottom;' +
+				'}';
 
-            // add the button
-            this.editor.ui.add('djangolink', CKEDITOR.UI_PANELBUTTON, {
-                'toolbar': 'cms,0',
-                'label': this.options.lang.toolbar,
-                'title': this.options.lang.toolbar,
-                'className' : 'cke_panelbutton__cmsplugins',
-                'modes': { wysiwyg:1 },
-                'editorFocus': 0,
+			// Styles with contents direction awareness.
+			function cssWithDir( dir ) {
+				return template.replace( /%1/g, dir == 'rtl' ? 'right' : 'left' ).replace( /%2/g, 'cke_contents_' + dir );
+			}
 
-                'panel': {
-                    'css': [CKEDITOR.skin.getPath('editor')].concat(that.editor.config.contentsCss),
-                    'attributes': { role: 'cmsplugins', 'aria-label': this.options.lang.aria }
-                },
-            });
+			CKEDITOR.addCss( cssWithDir( 'ltr' ) + cssWithDir( 'rtl' ) );
+		},
 
-            // handle edit event via context menu
-            if(this.editor.contextMenu) {
-                this.setupContextMenu();
-                this.editor.addCommand('cmspluginsEdit', {
-                    exec: function () {
-                        var selection = that.editor.getSelection();
-                        var element = selection.getSelectedElement() || selection.getCommonAncestor().getAscendant('a', true);
-                        that.editPlugin(element);
-                    }
-                });
-            }
+		init: function( editor ) {
+			var allowed = 'a[!href]',
+				required = 'a[href]';
 
-            // handle edit e<vent on double click
-            // if event is <a jQuery event (touchend), than we mutate
-            // event a bit so we make the payload similar to what ckeditor.event produces
-            var handleEdit = function(event) {
-                if (event.type === 'touchend' || event.type === 'click') {
-                    var element = event.currentTarget;
-                    event.data = event.data ||  {};
-                    that.editor.getSelection().fake(new CKEDITOR.dom.element(element));
-                } else {
-                    // heavily relies on the fact that double click
-                    // also selects an element
-                    var selection = that.editor.getSelection();
-                    var element = selection.getSelectedElement() || selection.getCommonAncestor().getAscendant('a', true);
-                }
-                if(element && element.getAttribute('id').indexOf('plugin_obj_') === 0) {
-                    event.data.dialog = '';
-                    that.editPlugin(element);
-                }
-            }
-            this.editor.on('doubleclick', handleEdit);
-            this.editor.on('instanceReady', function () {
-                CMS.$('[id*="plugin_obj_"]', CMS.$('iframe.cke_wysiwyg_frame')[0]
-                    .contentWindow.document.documentElement).on('click touchend', handleEdit);
-            });
+			if ( CKEDITOR.dialog.isTabEnabled( editor, 'djangolink', 'advanced' ) )
+				allowed = allowed.replace( ']', ',accesskey,charset,dir,id,lang,name,rel,tabindex,title,type]{*}(*)' );
+			if ( CKEDITOR.dialog.isTabEnabled( editor, 'djangolink', 'target' ) )
+				allowed = allowed.replace( ']', ',target,onclick]' );
 
-            // setup CKEDITOR.htmlDataProcessor
-            this.setupDataProcessor();
-        },
+			// Add the link and unlink buttons.
+			editor.addCommand( 'djangolink', new CKEDITOR.dialogCommand( 'djangolink', {
+				allowedContent: allowed,
+				requiredContent: required
+			} ) );
+			editor.addCommand( 'anchor', new CKEDITOR.dialogCommand( 'anchor', {
+				allowedContent: 'a[!name,id]',
+				requiredContent: 'a[name]'
+			} ) );
+			editor.addCommand( 'unlink', new CKEDITOR.unlinkCommand() );
+			editor.addCommand( 'removeAnchor', new CKEDITOR.removeAnchorCommand() );
 
-        setupDialog: function () {
-            var that = this;
-            var definition = function () { return {
-                'title': '',
-                'minWidth': 600,
-                'minHeight': 200,
-                'contents': [{
-                    'elements': [{ type: 'html', html: '<iframe style="position:static; width:100%; height:100%; border:none;" />' }]
-                }],
-                'onOk': function () {
-                    var iframe = $(CKEDITOR.dialog.getCurrent().parts.contents.$).find('iframe').contents();
-                        iframe.find('form').submit();
+			editor.setKeystroke( CKEDITOR.CTRL + 76 /*L*/, 'link' );
 
-                    // catch the reload event and reattach
-                    var reload = CMS.API.Helpers.reloadBrowser;
+			if ( editor.ui.addButton ) {
+                alert()
+				editor.ui.addButton( 'djangolink', {
+					label: editor.lang.link.toolbar,
+					command: 'djangolink',
+					toolbar: 'djangolinks,10',
+                    'icon': 'link'
+				} );
+				editor.ui.addButton( 'Unlink', {
+					label: editor.lang.link.unlink,
+					command: 'unlink',
+					toolbar: 'djangolinks,20'
+				} );
+				editor.ui.addButton( 'Anchor', {
+					label: editor.lang.link.anchor.toolbar,
+					command: 'anchor',
+					toolbar: 'djangolinks,30'
+				} );
+			}
 
-                    CMS.API.Helpers.reloadBrowser = function() {
-                        CKEDITOR.dialog.getCurrent().hide();
+			CKEDITOR.dialog.add( 'djangolink', this.path + 'dialogs/djangolink.js' );
+			//CKEDITOR.dialog.add( 'anchor', this.path + 'dialogs/anchor.js' );
 
-                        that.insertPlugin(CMS.API.Helpers.dataBridge);
+			editor.on( 'doubleclick', function( evt ) {
+				var element = CKEDITOR.plugins.link.getSelectedLink( editor ) || evt.data.element;
 
-                        CMS.API.Helpers.reloadBrowser = reload;
-                        return false;
-                    };
-                    return false;
-                }
-            }};
+				if ( !element.isReadOnly() ) {
+					if ( element.is( 'a' ) ) {
+						evt.data.dialog = ( element.getAttribute( 'name' ) && ( !element.getAttribute( 'href' ) || !element.getChildCount() ) ) ? 'anchor' : 'link';
 
-            // set default definition and open dialog
-            CKEDITOR.dialog.add('cmspluginsDialog', definition);
-        },
+						// Pass the link to be selected along with event data.
+						evt.data.link = element;
+					} else if ( CKEDITOR.plugins.link.tryRestoreFakeAnchor( editor, element ) ) {
+						evt.data.dialog = 'anchor';
+					}
+				}
+			}, null, null, 0 );
 
-        setupDropdown: function () {
-            var tpl = '<div class="cke_panel_block">';
+			// If event was cancelled, link passed in event data will not be selected.
+			editor.on( 'doubleclick', function( evt ) {
+				// Make sure both links and anchors are selected (#11822).
+				if ( evt.data.dialog in { link: 1, anchor: 1 } && evt.data.link )
+					editor.getSelection().selectElement( evt.data.link );
+			}, null, null, 20 );
 
-            // loop through the groups
-            $.each(this.options.plugins, function (i, group) {
-                // add template
-                tpl += '<h1 class="cke_panel_grouptitle">' + group.group + '</h1>';
-                tpl += '<ul role="presentation" class="cke_panel_list">';
-                // loop through the plugins
-                $.each(group.items, function (ii, item) {
-                    tpl += '<li class="cke_panel_listItem"><a href="#" rel="' + item.type + '">' + item.title + '</a></li>';
-                });
-                tpl += '</ul>';
-            });
+			// If the "menu" plugin is loaded, register the menu items.
+			if ( editor.addMenuItems ) {
+				editor.addMenuItems( {
+					anchor: {
+						label: editor.lang.link.anchor.menu,
+						command: 'anchor',
+						group: 'anchor',
+						order: 1
+					},
 
-            tpl += '</div>';
+					removeAnchor: {
+						label: editor.lang.link.anchor.remove,
+						command: 'removeAnchor',
+						group: 'anchor',
+						order: 5
+					},
 
-            return tpl;
-        },
+					link: {
+						label: editor.lang.link.menu,
+						command: 'link',
+						group: 'link',
+						order: 1
+					},
 
-        setupContextMenu: function () {
-            this.editor.addMenuGroup('cmspluginsGroup');
-            this.editor.addMenuItem('cmspluginsItem', {
-                label: this.options.lang.edit,
-                icon: this.path + 'icons/cmsplugins.png',
-                command: 'cmspluginsEdit',
-                group: 'cmspluginsGroup'
-            });
+					unlink: {
+						label: editor.lang.link.unlink,
+						command: 'unlink',
+						group: 'link',
+						order: 5
+					}
+				} );
+			}
 
-            this.editor.removeMenuItem('image');
+			// If the "contextmenu" plugin is loaded, register the listeners.
+			if ( editor.contextMenu ) {
+				editor.contextMenu.addListener( function( element ) {
+					if ( !element || element.isReadOnly() )
+						return null;
 
-            this.editor.contextMenu.addListener(function(element) {
-                if (element.$.id.indexOf('plugin_obj_') === 0) {
-                    return { cmspluginsItem: CKEDITOR.TRISTATE_OFF };
-                }
-            });
-        },
+					var anchor = CKEDITOR.plugins.link.tryRestoreFakeAnchor( editor, element );
 
-        editPlugin: function (element) {
-            var id = element.getAttribute('id').replace('plugin_obj_', '');
-            this.editor.openDialog('cmspluginsDialog');
-            var body = CMS.$(document);
+					if ( !anchor && !( anchor = CKEDITOR.plugins.link.getSelectedLink( editor ) ) )
+						return null;
 
-            // now tweak in dynamic stuff
-            var dialog = CKEDITOR.dialog.getCurrent();
-            dialog.resize(body.width() * 0.8, body.height() * 0.7);
-            $(dialog.getElement().$).addClass('cms-ckeditor-dialog');
-            $(dialog.parts.title.$).text(this.options.lang.edit);
-            $(dialog.parts.contents.$).find('iframe').attr('src', '../' + id + '/?_popup=1&no_preview')
-                .bind('load', function () {
-                    $(this).contents().find('.submit-row').hide().end()
-                        .find('#container').css('min-width', 0).css('padding', 0);
-                });
-        },
+					var menu = {};
 
-        addPlugin: function (item, panel) {
-            var that = this;
+					if ( anchor.getAttribute( 'href' ) && anchor.getChildCount() )
+						menu = { link: CKEDITOR.TRISTATE_OFF, unlink: CKEDITOR.TRISTATE_OFF };
 
-            // hide the panel
-            panel.hide();
+					if ( anchor && anchor.hasAttribute( 'name' ) )
+						menu.anchor = menu.removeAnchor = CKEDITOR.TRISTATE_OFF;
 
-            // lets figure out how to write something to the editor
-            this.editor.focus();
-            this.editor.fire('saveSnapshot');
+					return menu;
+				} );
+			}
 
-            // gather data
-            var data = {
-                'placeholder_id': this.options.placeholder_id,
-                'plugin_type': item.attr('rel'),
-                'plugin_parent': this.options.plugin_id,
-                'plugin_language':  this.options.plugin_language
-            };
+			this.compiledProtectionFunction = getCompiledProtectionFunction( editor );
+		},
 
-            that.addPluginDialog(item, data);
-        },
+		afterInit: function( editor ) {
+			// Empty anchors upcasting to fake objects.
+			editor.dataProcessor.dataFilter.addRules( {
+				elements: {
+					a: function( element ) {
+						if ( !element.attributes.name )
+							return null;
 
-        addPluginDialog: function (item, data) {
-            var body = CMS.$(document);
-            // open the dialog
-            var selected_text = this.editor.getSelection().getSelectedText();
-            this.editor.openDialog('cmspluginsDialog');
+						if ( !element.children.length )
+							return editor.createFakeParserElement( element, 'cke_anchor', 'anchor' );
 
-            // now tweak in dynamic stuff
-            var dialog = CKEDITOR.dialog.getCurrent();
-            dialog.resize(body.width() * 0.8, body.height() * 0.7);
-            $(dialog.getElement().$).addClass('cms-ckeditor-dialog');
-            $(dialog.parts.title.$).text(this.options.lang.add);
-            $(dialog.parts.contents.$).find('iframe').attr('src', this.options.add_plugin_url + '?' + $.param(data))
-                .bind('load', function () {
-                    $(this).contents().find('.submit-row').hide().end()
-                    .find('#container').css('min-width', 0).css('padding', 0)
-                    .find('#id_name').val(selected_text);
-                });
-        },
+						return null;
+					}
+				}
+			} );
 
-        // on ajax receivement from server, build <a> or <img> tag dependig in the plugin type
-        insertPlugin: function (data) {
-            var that = this;
-            var element, attrs = { id: 'plugin_obj_' + data.plugin_id };
-            if (data.plugin_type === this.options.lang.link) {
-                element = new CKEDITOR.dom.element('a', this.editor.document);
-                $.extend(attrs, {
-                    'href': '#',
-                    'data-cmsplugin_title': data.plugin_desc,
-                    'data-cmsplugin_alt': data.plugin_type,
-                    'data-cmsplugin_src': data.plugin_icon
-                });
-                element.setText(data.plugin_name);
-            } else {
-                element = new CKEDITOR.dom.element('img', this.editor.document);
-                $.extend(attrs, {
-                    'title': data.plugin_desc,
-                    'alt': data.plugin_type,
-                    'src': data.plugin_icon
-                });
-            }
-            element.setAttributes(attrs);
+			var pathFilters = editor._.elementsPath && editor._.elementsPath.filters;
+			if ( pathFilters ) {
+				pathFilters.push( function( element, name ) {
+					if ( name == 'a' ) {
+						if ( CKEDITOR.plugins.link.tryRestoreFakeAnchor( editor, element ) || ( element.getAttribute( 'name' ) && ( !element.getAttribute( 'href' ) || !element.getChildCount() ) ) )
+							return 'anchor';
+					}
+				} );
+			}
+		}
+	} );
 
-            // in case it's a fresh text plugin children don't have to be
-            // deleted separately
-            if (!this.options.delete_on_cancel) {
-                this.child_plugins.push(data.plugin_id);
-            }
-            this.editor.insertElement(element);
-        },
+	// Loads the parameters in a selected link to the link dialog fields.
+	var javascriptProtocolRegex = /^javascript:/,
+		emailRegex = /^mailto:([^?]+)(?:\?(.+))?$/,
+		emailSubjectRegex = /subject=([^;?:@&=$,\/]*)/i,
+		emailBodyRegex = /body=([^;?:@&=$,\/]*)/i,
+		anchorRegex = /^#(.*)$/,
+		urlRegex = /^((?:http|https|ftp|news):\/\/)?(.*)$/,
+		selectableTargets = /^(_(?:self|top|parent|blank))$/,
+		encodedEmailLinkRegex = /^javascript:void\(location\.href='mailto:'\+String\.fromCharCode\(([^)]+)\)(?:\+'(.*)')?\)$/,
+		functionCallProtectedEmailLinkRegex = /^javascript:([^(]+)\(([^)]+)\)$/,
+		popupRegex = /\s*window.open\(\s*this\.href\s*,\s*(?:'([^']*)'|null)\s*,\s*'([^']*)'\s*\)\s*;\s*return\s*false;*\s*/,
+		popupFeaturesRegex = /(?:^|,)([^=]+)=(\d+|yes|no)/gi;
 
-        /**
-         * Sets up cleanup requests. If the plugin itself or child plugin was created and then
-         * creation was cancelled - we need to clean up created plugins.
-         *
-         * @method setupCancelCleanupCallback
-         * @public
-         * @param {Object} data plugin data
-         */
-        setupCancelCleanupCallback: function setupCancelCleanupCallback (data) {
-            if (!window.parent || !window.parent.CMS || !window.parent.CMS.API || !window.parent.CMS.API.Helpers) {
-                return;
-            }
-            var that = this;
-            var CMS = window.parent.CMS;
-            var cancelModalCallback = function cancelModalCallback(e, opts) {
-                if (!that.options.delete_on_cancel && !that.child_plugins.length) {
-                    return;
-                }
-                e.preventDefault();
-                CMS.API.Toolbar.showLoader();
-                var data = {
-                    token: that.options.cancel_plugin_token
-                };
-                if (!that.options.delete_on_cancel) {
-                    data.child_plugins = that.child_plugins;
-                }
-                $.ajax({
-                    method: 'POST',
-                    url: that.options.cancel_plugin_url,
-                    data: data,
-                    // use 'child_plugins' instead of default 'child_plugins[]'
-                    traditional: true
-                }).done(function (res) {
-                    CMS.API.Helpers.removeEventListener('modal-close.text-plugin-' + that.options.plugin_id);
-                    opts.instance.close();
-                }).fail(function (res) {
-                    CMS.API.Messages.open({
-                        message: res.responseText + ' | ' + res.status + ' ' + res.statusText,
-                        delay: 0,
-                        error: true
-                    });
-                });
-            };
-            CMS.API.Helpers.addEventListener('modal-close.text-plugin-' + that.options.plugin_id, cancelModalCallback);
-        },
+	var advAttrNames = {
+		id: 'advId',
+		dir: 'advLangDir',
+		accessKey: 'advAccessKey',
+		// 'data-cke-saved-name': 'advName',
+		name: 'advName',
+		lang: 'advLangCode',
+		tabindex: 'advTabIndex',
+		title: 'advTitle',
+		type: 'advContentType',
+		'class': 'advCSSClasses',
+		charset: 'advCharset',
+		style: 'advStyles',
+		rel: 'advRel'
+	};
 
-        setupDataProcessor: function () {
-            var link_name = this.options.lang.link;
-            var link_pattern = new RegExp("^"+ link_name +"\\s-\\s(.+)$");
+	function unescapeSingleQuote( str ) {
+		return str.replace( /\\'/g, '\'' );
+	}
 
-            this.editor.dataProcessor.dataFilter.addRules({
-                elements: {
-                    // on load from server replace <img> tag by <a> in order to display a real link
-                    img: function(element) {
-                        var new_element, matches;
-                        if (element.attributes.id && element.attributes.alt
-                          && element.attributes.alt === link_name
-                          && element.attributes.id.indexOf('plugin_obj_') === 0) {
-                            matches = link_pattern.exec(element.attributes.title);
-                            new_element = new CKEDITOR.htmlParser.element('a', {
-                                'href': '#',
-                                'id': element.attributes.id,
-                                'data-cmsplugin_title': element.attributes.title,
-                                'data-cmsplugin_src': element.attributes.src,
-                                'data-cmsplugin_alt': element.attributes.alt
-                            });
-                            if (matches) {
-                                new_element.add(new CKEDITOR.htmlParser.text(matches[1]));
-                            }
-                            return new_element;
-                        }
-                    }
-                }
-            });
+	function escapeSingleQuote( str ) {
+		return str.replace( /'/g, '\\$&' );
+	}
 
-            this.editor.dataProcessor.htmlFilter.addRules({
-                elements: {
-                    // on post to server replace <a> tag by <img> in order keep plugin format consistent
-                    a: function(element) {
-                        var new_element;
-                        if (element.attributes.id && element.attributes.id.indexOf('plugin_obj_') === 0) {
-                            new_element = new CKEDITOR.htmlParser.element('img', {
-                                id: element.attributes.id,
-                                src: element.attributes['data-cmsplugin_src'],
-                                title: element.attributes['data-cmsplugin_title'],
-                                alt: element.attributes['data-cmsplugin_alt']
-                            });
-                            return new_element;
-                        }
-                    }
-                }
-            });
-        }
+	function protectEmailAddressAsEncodedString( address ) {
+		var charCode,
+			length = address.length,
+			encodedChars = [];
 
-    });
+		for ( var i = 0; i < length; i++ ) {
+			charCode = address.charCodeAt( i );
+			encodedChars.push( charCode );
+		}
 
-});
-})(django.jQuery);
+		return 'String.fromCharCode(' + encodedChars.join( ',' ) + ')';
+	}
+
+	function protectEmailLinkAsFunction( editor, email ) {
+		var plugin = editor.plugins.link,
+			name = plugin.compiledProtectionFunction.name,
+			params = plugin.compiledProtectionFunction.params,
+			paramName, paramValue, retval;
+
+		retval = [ name, '(' ];
+		for ( var i = 0; i < params.length; i++ ) {
+			paramName = params[ i ].toLowerCase();
+			paramValue = email[ paramName ];
+
+			i > 0 && retval.push( ',' );
+			retval.push( '\'', paramValue ? escapeSingleQuote( encodeURIComponent( email[ paramName ] ) ) : '', '\'' );
+		}
+		retval.push( ')' );
+		return retval.join( '' );
+	}
+
+	function getCompiledProtectionFunction( editor ) {
+		var emailProtection = editor.config.emailProtection || '',
+			compiledProtectionFunction;
+
+		// Compile the protection function pattern.
+		if ( emailProtection && emailProtection != 'encode' ) {
+			compiledProtectionFunction = {};
+
+			emailProtection.replace( /^([^(]+)\(([^)]+)\)$/, function( match, funcName, params ) {
+				compiledProtectionFunction.name = funcName;
+				compiledProtectionFunction.params = [];
+				params.replace( /[^,\s]+/g, function( param ) {
+					compiledProtectionFunction.params.push( param );
+				} );
+			} );
+		}
+
+		return compiledProtectionFunction;
+	}
+
+	/**
+	 * Set of Link plugin helpers.
+	 *
+	 * @class
+	 * @singleton
+	 */
+	CKEDITOR.plugins.link = {
+		/**
+		 * Get the surrounding link element of the current selection.
+		 *
+		 *		CKEDITOR.plugins.link.getSelectedLink( editor );
+		 *
+		 *		// The following selections will all return the link element.
+		 *
+		 *		<a href="#">li^nk</a>
+		 *		<a href="#">[link]</a>
+		 *		text[<a href="#">link]</a>
+		 *		<a href="#">li[nk</a>]
+		 *		[<b><a href="#">li]nk</a></b>]
+		 *		[<a href="#"><b>li]nk</b></a>
+		 *
+		 * @since 3.2.1
+		 * @param {CKEDITOR.editor} editor
+		 */
+		getSelectedLink: function( editor ) {
+			var selection = editor.getSelection();
+			var selectedElement = selection.getSelectedElement();
+			if ( selectedElement && selectedElement.is( 'a' ) )
+				return selectedElement;
+
+			var range = selection.getRanges()[ 0 ];
+
+			if ( range ) {
+				range.shrink( CKEDITOR.SHRINK_TEXT );
+				return editor.elementPath( range.getCommonAncestor() ).contains( 'a', 1 );
+			}
+			return null;
+		},
+
+		/**
+		 * Collects anchors available in the editor (i.e. used by the Link plugin).
+		 * Note that the scope of search is different for inline (the "global" document) and
+		 * classic (`iframe`-based) editors (the "inner" document).
+		 *
+		 * @since 4.3.3
+		 * @param {CKEDITOR.editor} editor
+		 * @returns {CKEDITOR.dom.element[]} An array of anchor elements.
+		 */
+		getEditorAnchors: function( editor ) {
+			var editable = editor.editable(),
+
+				// The scope of search for anchors is the entire document for inline editors
+				// and editor's editable for classic editor/divarea (#11359).
+				scope = ( editable.isInline() && !editor.plugins.divarea ) ? editor.document : editable,
+
+				links = scope.getElementsByTag( 'a' ),
+				imgs = scope.getElementsByTag( 'img' ),
+				anchors = [],
+				i = 0,
+				item;
+
+			// Retrieve all anchors within the scope.
+			while ( ( item = links.getItem( i++ ) ) ) {
+				if ( item.data( 'cke-saved-name' ) || item.hasAttribute( 'name' ) ) {
+					anchors.push( {
+						name: item.data( 'cke-saved-name' ) || item.getAttribute( 'name' ),
+						id: item.getAttribute( 'id' )
+					} );
+				}
+			}
+			// Retrieve all "fake anchors" within the scope.
+			i = 0;
+
+			while ( ( item = imgs.getItem( i++ ) ) ) {
+				if ( ( item = this.tryRestoreFakeAnchor( editor, item ) ) ) {
+					anchors.push( {
+						name: item.getAttribute( 'name' ),
+						id: item.getAttribute( 'id' )
+					} );
+				}
+			}
+
+			return anchors;
+		},
+
+		/**
+		 * Opera and WebKit do not make it possible to select empty anchors. Fake
+		 * elements must be used for them.
+		 *
+		 * @readonly
+		 * @deprecated 4.3.3 It is set to `true` in every browser.
+		 * @property {Boolean}
+		 */
+		fakeAnchor: true,
+
+		/**
+		 * For browsers that do not support CSS3 `a[name]:empty()`. Note that IE9 is included because of #7783.
+		 *
+		 * @readonly
+		 * @deprecated 4.3.3 It is set to `false` in every browser.
+		 * @property {Boolean} synAnchorSelector
+		 */
+
+		/**
+		 * For browsers that have editing issues with an empty anchor.
+		 *
+		 * @readonly
+		 * @deprecated 4.3.3 It is set to `false` in every browser.
+		 * @property {Boolean} emptyAnchorFix
+		 */
+
+		/**
+		 * Returns an element representing a real anchor restored from a fake anchor.
+		 *
+		 * @param {CKEDITOR.editor} editor
+		 * @param {CKEDITOR.dom.element} element
+		 * @returns {CKEDITOR.dom.element} Restored anchor element or nothing if the
+		 * passed element was not a fake anchor.
+		 */
+		tryRestoreFakeAnchor: function( editor, element ) {
+			if ( element && element.data( 'cke-real-element-type' ) && element.data( 'cke-real-element-type' ) == 'anchor' ) {
+				var link = editor.restoreRealElement( element );
+				if ( link.data( 'cke-saved-name' ) )
+					return link;
+			}
+		},
+
+		/**
+		 * Parses attributes of the link element and returns an object representing
+		 * the current state (data) of the link. This data format is a plain object accepted
+		 * e.g. by the Link dialog window and {@link #getLinkAttributes}.
+		 *
+		 * **Note:** Data model format produced by the parser must be compatible with the Link
+		 * plugin dialog because it is passed directly to {@link CKEDITOR.dialog#setupContent}.
+		 *
+		 * @since 4.4
+		 * @param {CKEDITOR.editor} editor
+		 * @param {CKEDITOR.dom.element} element
+		 * @returns {Object} An object of link data.
+		 */
+		parseLinkAttributes: function( editor, element ) {
+			var href = ( element && ( element.data( 'cke-saved-href' ) || element.getAttribute( 'href' ) ) ) || '',
+				compiledProtectionFunction = editor.plugins.link.compiledProtectionFunction,
+				emailProtection = editor.config.emailProtection,
+				javascriptMatch, emailMatch, anchorMatch, urlMatch,
+				retval = {};
+
+			if ( ( javascriptMatch = href.match( javascriptProtocolRegex ) ) ) {
+				if ( emailProtection == 'encode' ) {
+					href = href.replace( encodedEmailLinkRegex, function( match, protectedAddress, rest ) {
+						// Without it 'undefined' is appended to e-mails without subject and body (#9192).
+						rest = rest || '';
+
+						return 'mailto:' +
+							String.fromCharCode.apply( String, protectedAddress.split( ',' ) ) +
+							unescapeSingleQuote( rest );
+					} );
+				}
+				// Protected email link as function call.
+				else if ( emailProtection ) {
+					href.replace( functionCallProtectedEmailLinkRegex, function( match, funcName, funcArgs ) {
+						if ( funcName == compiledProtectionFunction.name ) {
+							retval.type = 'email';
+							var email = retval.email = {};
+
+							var paramRegex = /[^,\s]+/g,
+								paramQuoteRegex = /(^')|('$)/g,
+								paramsMatch = funcArgs.match( paramRegex ),
+								paramsMatchLength = paramsMatch.length,
+								paramName, paramVal;
+
+							for ( var i = 0; i < paramsMatchLength; i++ ) {
+								paramVal = decodeURIComponent( unescapeSingleQuote( paramsMatch[ i ].replace( paramQuoteRegex, '' ) ) );
+								paramName = compiledProtectionFunction.params[ i ].toLowerCase();
+								email[ paramName ] = paramVal;
+							}
+							email.address = [ email.name, email.domain ].join( '@' );
+						}
+					} );
+				}
+			}
+
+			if ( !retval.type ) {
+				if ( ( anchorMatch = href.match( anchorRegex ) ) ) {
+					retval.type = 'anchor';
+					retval.anchor = {};
+					retval.anchor.name = retval.anchor.id = anchorMatch[ 1 ];
+				}
+				// Protected email link as encoded string.
+				else if ( ( emailMatch = href.match( emailRegex ) ) ) {
+					var subjectMatch = href.match( emailSubjectRegex ),
+						bodyMatch = href.match( emailBodyRegex );
+
+					retval.type = 'email';
+					var email = ( retval.email = {} );
+					email.address = emailMatch[ 1 ];
+					subjectMatch && ( email.subject = decodeURIComponent( subjectMatch[ 1 ] ) );
+					bodyMatch && ( email.body = decodeURIComponent( bodyMatch[ 1 ] ) );
+				}
+				// urlRegex matches empty strings, so need to check for href as well.
+				else if ( href && ( urlMatch = href.match( urlRegex ) ) ) {
+					retval.type = 'url';
+					retval.url = {};
+					retval.url.protocol = urlMatch[ 1 ];
+					retval.url.url = urlMatch[ 2 ];
+				}
+			}
+
+			// Load target and popup settings.
+			if ( element ) {
+				var target = element.getAttribute( 'target' );
+
+				// IE BUG: target attribute is an empty string instead of null in IE if it's not set.
+				if ( !target ) {
+					var onclick = element.data( 'cke-pa-onclick' ) || element.getAttribute( 'onclick' ),
+						onclickMatch = onclick && onclick.match( popupRegex );
+
+					if ( onclickMatch ) {
+						retval.target = {
+							type: 'popup',
+							name: onclickMatch[ 1 ]
+						};
+
+						var featureMatch;
+						while ( ( featureMatch = popupFeaturesRegex.exec( onclickMatch[ 2 ] ) ) ) {
+							// Some values should remain numbers (#7300)
+							if ( ( featureMatch[ 2 ] == 'yes' || featureMatch[ 2 ] == '1' ) && !( featureMatch[ 1 ] in { height: 1, width: 1, top: 1, left: 1 } ) )
+								retval.target[ featureMatch[ 1 ] ] = true;
+							else if ( isFinite( featureMatch[ 2 ] ) )
+								retval.target[ featureMatch[ 1 ] ] = featureMatch[ 2 ];
+						}
+					}
+				} else {
+					retval.target = {
+						type: target.match( selectableTargets ) ? target : 'frame',
+						name: target
+					};
+				}
+
+				var advanced = {};
+
+				for ( var a in advAttrNames ) {
+					var val = element.getAttribute( a );
+
+					if ( val )
+						advanced[ advAttrNames[ a ] ] = val;
+				}
+
+				var advName = element.data( 'cke-saved-name' ) || advanced.advName;
+
+				if ( advName )
+					advanced.advName = advName;
+
+				if ( !CKEDITOR.tools.isEmpty( advanced ) )
+					retval.advanced = advanced;
+			}
+
+			return retval;
+		},
+
+		/**
+		 * Converts link data produced by {@link #parseLinkAttributes} into an object which consists
+		 * of attributes to be set (with their values) and an array of attributes to be removed.
+		 * This method can be used to compose or to update any link element with the given data.
+		 *
+		 * @since 4.4
+		 * @param {CKEDITOR.editor} editor
+		 * @param {Object} data Data in {@link #parseLinkAttributes} format.
+		 * @returns {Object} An object consisting of two keys, i.e.:
+		 *
+		 *		{
+		 *			// Attributes to be set.
+		 *			set: {
+		 *				href: 'http://foo.bar',
+		 *				target: 'bang'
+		 *			},
+		 *			// Attributes to be removed.
+		 *			removed: [
+		 *				'id', 'style'
+		 *			]
+		 *		}
+		 *
+		 */
+		getLinkAttributes: function( editor, data ) {
+			var emailProtection = editor.config.emailProtection || '',
+				set = {};
+
+			// Compose the URL.
+			switch ( data.type ) {
+				case 'url':
+					var protocol = ( data.url && data.url.protocol !== undefined ) ? data.url.protocol : 'http://',
+						url = ( data.url && CKEDITOR.tools.trim( data.url.url ) ) || '';
+
+					set[ 'data-cke-saved-href' ] = ( url.indexOf( '/' ) === 0 ) ? url : protocol + url;
+
+					break;
+				case 'anchor':
+					var name = ( data.anchor && data.anchor.name ),
+						id = ( data.anchor && data.anchor.id );
+
+					set[ 'data-cke-saved-href' ] = '#' + ( name || id || '' );
+
+					break;
+				case 'email':
+					var email = data.email,
+						address = email.address,
+						linkHref;
+
+					switch ( emailProtection ) {
+						case '':
+						case 'encode':
+							var subject = encodeURIComponent( email.subject || '' ),
+								body = encodeURIComponent( email.body || '' ),
+								argList = [];
+
+							// Build the e-mail parameters first.
+							subject && argList.push( 'subject=' + subject );
+							body && argList.push( 'body=' + body );
+							argList = argList.length ? '?' + argList.join( '&' ) : '';
+
+							if ( emailProtection == 'encode' ) {
+								linkHref = [
+									'javascript:void(location.href=\'mailto:\'+', // jshint ignore:line
+									protectEmailAddressAsEncodedString( address )
+								];
+								// parameters are optional.
+								argList && linkHref.push( '+\'', escapeSingleQuote( argList ), '\'' );
+
+								linkHref.push( ')' );
+							} else {
+								linkHref = [ 'mailto:', address, argList ];
+							}
+
+							break;
+						default:
+							// Separating name and domain.
+							var nameAndDomain = address.split( '@', 2 );
+							email.name = nameAndDomain[ 0 ];
+							email.domain = nameAndDomain[ 1 ];
+
+							linkHref = [ 'javascript:', protectEmailLinkAsFunction( editor, email ) ]; // jshint ignore:line
+					}
+
+					set[ 'data-cke-saved-href' ] = linkHref.join( '' );
+					break;
+			}
+
+			// Popups and target.
+			if ( data.target ) {
+				if ( data.target.type == 'popup' ) {
+					var onclickList = [
+							'window.open(this.href, \'', data.target.name || '', '\', \''
+						],
+						featureList = [
+							'resizable', 'status', 'location', 'toolbar', 'menubar', 'fullscreen', 'scrollbars', 'dependent'
+						],
+						featureLength = featureList.length,
+						addFeature = function( featureName ) {
+							if ( data.target[ featureName ] )
+								featureList.push( featureName + '=' + data.target[ featureName ] );
+						};
+
+					for ( var i = 0; i < featureLength; i++ )
+						featureList[ i ] = featureList[ i ] + ( data.target[ featureList[ i ] ] ? '=yes' : '=no' );
+
+					addFeature( 'width' );
+					addFeature( 'left' );
+					addFeature( 'height' );
+					addFeature( 'top' );
+
+					onclickList.push( featureList.join( ',' ), '\'); return false;' );
+					set[ 'data-cke-pa-onclick' ] = onclickList.join( '' );
+				}
+				else if ( data.target.type != 'notSet' && data.target.name ) {
+					set.target = data.target.name;
+				}
+			}
+
+			// Advanced attributes.
+			if ( data.advanced ) {
+				for ( var a in advAttrNames ) {
+					var val = data.advanced[ advAttrNames[ a ] ];
+
+					if ( val )
+						set[ a ] = val;
+				}
+
+				if ( set.name )
+					set[ 'data-cke-saved-name' ] = set.name;
+			}
+
+			// Browser need the "href" fro copy/paste link to work. (#6641)
+			if ( set[ 'data-cke-saved-href' ] )
+				set.href = set[ 'data-cke-saved-href' ];
+
+			var removed = {
+				target: 1,
+				onclick: 1,
+				'data-cke-pa-onclick': 1,
+				'data-cke-saved-name': 1
+			};
+
+			if ( data.advanced )
+				CKEDITOR.tools.extend( removed, advAttrNames );
+
+			// Remove all attributes which are not currently set.
+			for ( var s in set )
+				delete removed[ s ];
+
+			return {
+				set: set,
+				removed: CKEDITOR.tools.objectKeys( removed )
+			};
+		}
+	};
+
+	// TODO Much probably there's no need to expose these as public objects.
+
+	CKEDITOR.unlinkCommand = function() {};
+	CKEDITOR.unlinkCommand.prototype = {
+		exec: function( editor ) {
+			var style = new CKEDITOR.style( { element: 'a', type: CKEDITOR.STYLE_INLINE, alwaysRemoveElement: 1 } );
+			editor.removeStyle( style );
+		},
+
+		refresh: function( editor, path ) {
+			// Despite our initial hope, document.queryCommandEnabled() does not work
+			// for this in Firefox. So we must detect the state by element paths.
+
+			var element = path.lastElement && path.lastElement.getAscendant( 'a', true );
+
+			if ( element && element.getName() == 'a' && element.getAttribute( 'href' ) && element.getChildCount() )
+				this.setState( CKEDITOR.TRISTATE_OFF );
+			else
+				this.setState( CKEDITOR.TRISTATE_DISABLED );
+		},
+
+		contextSensitive: 1,
+		startDisabled: 1,
+		requiredContent: 'a[href]'
+	};
+
+	CKEDITOR.removeAnchorCommand = function() {};
+	CKEDITOR.removeAnchorCommand.prototype = {
+		exec: function( editor ) {
+			var sel = editor.getSelection(),
+				bms = sel.createBookmarks(),
+				anchor;
+			if ( sel && ( anchor = sel.getSelectedElement() ) && ( !anchor.getChildCount() ? CKEDITOR.plugins.link.tryRestoreFakeAnchor( editor, anchor ) : anchor.is( 'a' ) ) )
+				anchor.remove( 1 );
+			else {
+				if ( ( anchor = CKEDITOR.plugins.link.getSelectedLink( editor ) ) ) {
+					if ( anchor.hasAttribute( 'href' ) ) {
+						anchor.removeAttributes( { name: 1, 'data-cke-saved-name': 1 } );
+						anchor.removeClass( 'cke_anchor' );
+					} else {
+						anchor.remove( 1 );
+					}
+				}
+			}
+			sel.selectBookmarks( bms );
+		},
+		requiredContent: 'a[name]'
+	};
+
+	CKEDITOR.tools.extend( CKEDITOR.config, {
+		/**
+		 * Whether to show the Advanced tab in the Link dialog window.
+		 *
+		 * @cfg {Boolean} [linkShowAdvancedTab=true]
+		 * @member CKEDITOR.config
+		 */
+		linkShowAdvancedTab: true,
+
+		/**
+		 * Whether to show the Target tab in the Link dialog window.
+		 *
+		 * @cfg {Boolean} [linkShowTargetTab=true]
+		 * @member CKEDITOR.config
+		 */
+		linkShowTargetTab: true
+
+		/**
+		 * Whether JavaScript code is allowed as a `href` attribute in an anchor tag.
+		 * With this option enabled it is possible to create links like:
+		 *
+		 *		<a href="javascript:alert('Hello world!')">hello world</a>
+		 *
+		 * By default JavaScript links are not allowed and will not pass
+		 * the Link dialog window validation.
+		 *
+		 * @since 4.4.1
+		 * @cfg {Boolean} [linkJavaScriptLinksAllowed=false]
+		 * @member CKEDITOR.config
+		 */
+	} );
+} )();
