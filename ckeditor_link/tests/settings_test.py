@@ -12,11 +12,12 @@ logging.getLogger("factory").setLevel(logging.WARN)
 from selenium.webdriver.phantomjs import webdriver
 SELENIUM_WEBDRIVER = webdriver
 
-CKEDITOR_LINK_IFRAME_URL = '/admin/test_app/linkmodel/add/'
+CKEDITOR_LINK_IFRAME_URL = '/admin/test_app/linkmodel/add/?_popup=true'
 
 CKEDITOR_CONFIGS = {
     'default': {
         'djangolinkIframeURL': CKEDITOR_LINK_IFRAME_URL,
+        'linkShowAdvancedTab': False,
         'extraPlugins': ','.join(
             [
                 # your extra plugins here

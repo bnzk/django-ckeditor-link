@@ -60,6 +60,9 @@
 			var that = this;
             this.editor = editor;
 
+			// mess with the original
+			delete editor._.menuItems.link;
+
 			var allowed = 'a[!href, data-*]',
 				required = 'a[href]';
 
@@ -112,6 +115,7 @@
 				editor.addMenuItems( {
 					djangolink: {
 						label: editor.lang.link.menu,
+						'icon': 'link',
 						command: 'djangolink',
 						group: 'link',
 						order: 1
@@ -133,7 +137,7 @@
 					var menu = {};
 
 					if ( anchor.getAttribute( 'href' ) && anchor.getChildCount() )
-						menu = { djangolink: CKEDITOR.TRISTATE_OFF, unlink: CKEDITOR.TRISTATE_OFF };
+						menu = { djangolink: CKEDITOR.TRISTATE_OFF };
 
 					return menu;
 				} );
