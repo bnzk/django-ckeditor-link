@@ -12,6 +12,8 @@ logging.getLogger("factory").setLevel(logging.WARN)
 from selenium.webdriver.phantomjs import webdriver
 SELENIUM_WEBDRIVER = webdriver
 
+CKEDITOR_LINK_FORM_URL = '/admin/test_app/linkmodel/add/'
+
 CKEDITOR_CONFIGS = {
     'default': {
         'extraPlugins': ','.join(
@@ -35,7 +37,7 @@ CKEDITOR_CONFIGS = {
             ['Bold', 'Underline'],
             ['DjangoLink', 'Unlink'],
             ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Link', 'Unlink'],
+            #['Link', 'Unlink'],
             ['RemoveFormat', 'Source']
         ]
     }
@@ -69,9 +71,9 @@ STATICFILES_DIRS = (
     os.path.join(APP_ROOT, 'static'),
 )
 
-TEMPLATE_DIRS = (
-    os.path.join(APP_ROOT, 'tests/test_app/templates'),
-)
+# TEMPLATE_DIRS = (
+#     os.path.join(APP_ROOT, 'tests/test_app/templates'),
+# )
 
 COVERAGE_REPORT_HTML_OUTPUT_DIR = os.path.join(
     os.path.join(APP_ROOT, 'tests/coverage'))
@@ -96,6 +98,29 @@ EXTERNAL_APPS = (
     # 'treebeard',
     # 'menus',
 )
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.request',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+            ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                # 'django.template.loaders.eggs.Loader',
+            ],
+        }
+    },
+]
+
 
 INTERNAL_APPS = (
     'ckeditor_link',

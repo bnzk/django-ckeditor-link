@@ -31,15 +31,27 @@ ckeditor_link does not need it's own database tables, so no need to migrate.
 Usage
 ------------
 
-Have a look at ``ckeditor_link/tests/test_app/admin.py`` for some examples.
+Have a look at ``ckeditor_link/tests/test_app/settings_test.py`` for an example.
 
 .. code-block:: python
 
-    NOPE
-    from ckeditor_link.admin import assaavdsvad
+    CKEDITOR_CONFIGS = {
+        'default': {
+            'extraPlugins': ','.join(
+                [
+                    # your extra plugins here
+                    'djangolink',
+                    ...
+                ]),
+            'toolbar': 'Custom',
+            'toolbar_Custom': [
+                ['Bold', 'Underline'],
+                ['DjangoLink', 'Unlink'],
+                ...
+            ]
+        }
+    }
 
-    class TestModel(models.Model):
-        file = FolderlessFileField(blank=True, null=True)
 
 
 Contribute

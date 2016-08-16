@@ -22,3 +22,12 @@ class TestModel(models.Model):
 #
 #     def __str__(self):
 #         return "%s" % self.title
+
+@python_2_unicode_compatible
+class LinkModel(models.Model):
+    target = models.CharField(max_length=255, blank=True, default='', )
+    external_url = models.CharField(max_length=255, blank=True, default='',)
+    testmodel = models.ForeignKey(TestModel, null=True, default=None, blank=True)
+
+    def __str__(self):
+        return "%s" % self.title

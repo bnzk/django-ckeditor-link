@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TestModel
+from .models import TestModel, LinkModel
 
 admin.site.register(TestModel)
-# admin.site.register(CMSTestModel)
+admin.site.register(LinkModel)
