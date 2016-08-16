@@ -12,10 +12,11 @@ logging.getLogger("factory").setLevel(logging.WARN)
 from selenium.webdriver.phantomjs import webdriver
 SELENIUM_WEBDRIVER = webdriver
 
-CKEDITOR_LINK_FORM_URL = '/admin/test_app/linkmodel/add/'
+CKEDITOR_LINK_IFRAME_URL = '/admin/test_app/linkmodel/add/'
 
 CKEDITOR_CONFIGS = {
     'default': {
+        'djangolinkIframeURL': CKEDITOR_LINK_IFRAME_URL,
         'extraPlugins': ','.join(
             [
                 # your extra plugins here
@@ -37,7 +38,7 @@ CKEDITOR_CONFIGS = {
             ['Bold', 'Underline'],
             ['DjangoLink', 'Unlink'],
             ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            #['Link', 'Unlink'],
+            ['Link', 'Unlink'],
             ['RemoveFormat', 'Source']
         ]
     }

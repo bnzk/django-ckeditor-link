@@ -104,14 +104,18 @@
 
                 var $iframe = $(CKEDITOR.dialog.getCurrent().parts.contents.$).find('iframe');
                 $iframe.attr("src", '/admin/test_app/linkmodel/add/?_popup=true');
+				var $dialog_content = $(CKEDITOR.dialog.getCurrent().parts.contents.$);
+				$dialog_content.find('.cke_dialog_page_contents').css('height', '100%')
+				$dialog_content.find('.cke_dialog_page_contents table[role=presentation]').css('height', '100%');
 
                 $iframe.unbind('load');
                 $iframe.bind('load', function () {
                     // tweak UI
-                    $(this).contents().find('h1').hide().end();
-                    $(this).contents().find('.submit-row').hide().end();
-                    $(this).contents().find('#content').css('padding', 0);
-                    $(this).contents().find('#container').css('min-width', 0).css('padding', 0);
+					var $iframe_content = $(this).contents();
+                    $iframe_content.find('h1').hide().end();
+                    $iframe_content.find('.submit-row').hide().end();
+                    $iframe_content.find('#content').css('padding', 0);
+                    $iframe_content.find('#container').css('min-width', 0).css('padding', 0);
 
                     // fill form
                     var $form = $(this).contents().find('form');
@@ -186,4 +190,16 @@
 		};
 
 	} );
+
+	CKEDITOR.tools.extend( CKEDITOR.config, {
+		/**
+		 * where to load the link iframe from
+		 *
+		 * @cfg {string} [djangolinkIframeURL='/admin/link/link/add']
+		 * @member CKEDITOR.config
+		 */
+		djangolinkIframeURL: '/admin/link/link/add'
+
+	} );
+
 } )(django.jQuery);
