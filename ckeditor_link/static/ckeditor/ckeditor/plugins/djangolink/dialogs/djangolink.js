@@ -18,7 +18,7 @@
 		return {
             'title': 'Link',
             'minWidth': 600,
-            'minHeight': 330,
+            'minHeight': 280,
             'contents': [{
                 'elements': [{
                     type: 'html',
@@ -109,7 +109,6 @@
                 var $iframe = $(CKEDITOR.dialog.getCurrent().parts.contents.$).find('iframe');
                 $iframe.attr("src", editor.config.djangolinkIframeURL + "&" + $.param(data));
 				$iframe.hide(0);
-                $iframe.contents().find('html, body').scrollTop(0);
 				var $dialog_content = $(CKEDITOR.dialog.getCurrent().parts.contents.$);
 				$dialog_content.find('.cke_dialog_page_contents').css('height', '100%')
 				$dialog_content.find('.cke_dialog_page_contents table[role=presentation]').css('height', '100%');
@@ -119,6 +118,7 @@
                     // tweak UI
 					$iframe.show(0);
 					var $iframe_content = $(this).contents();
+                    $iframe_content.find('html, body').scrollTop(0);
                     $iframe_content.find('h1').hide().end();
                     $iframe_content.find('.submit-row').hide().end();
                     $iframe_content.find('#content').css('padding', 0);
