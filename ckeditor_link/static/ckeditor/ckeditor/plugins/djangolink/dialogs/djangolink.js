@@ -102,8 +102,9 @@
 				// Record down the selected element in the dialog.
 				this._.selectedElement = element;
 
+				var data = plugin.parseLinkAttributes(element);
                 var $iframe = $(CKEDITOR.dialog.getCurrent().parts.contents.$).find('iframe');
-                $iframe.attr("src", editor.config.djangolinkIframeURL);
+                $iframe.attr("src", editor.config.djangolinkIframeURL + "&" + $.param(data));
 				$iframe.hide(0);
 				var $dialog_content = $(CKEDITOR.dialog.getCurrent().parts.contents.$);
 				$dialog_content.find('.cke_dialog_page_contents').css('height', '100%')
@@ -119,19 +120,10 @@
                     $iframe_content.find('#content').css('padding', 0);
                     $iframe_content.find('#container').css('min-width', 0).css('padding', 0);
 
-                    // fill form
+                    // form
                     var $form = $(this).contents().find('form');
 					$form.bind('submit', function(e) {e.preventDefault(); });
-                    var $fields = $form.find("input, select");
-                    var data = plugin.parseLinkAttributes(element);
-                    $.each($fields, function(index, field) {
-                        var $field = $(field);
-                        if (data.hasOwnProperty($field.attr("name"))) {
-                            $field.val(data[$field.attr("name")]);
-                        } else {
-                            $field.val('');
-                        }
-                    });
+
                 });
 			},
 			onO22k: function() {
