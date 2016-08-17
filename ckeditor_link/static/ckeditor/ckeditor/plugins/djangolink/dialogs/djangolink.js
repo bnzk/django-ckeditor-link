@@ -109,6 +109,7 @@
                 var $iframe = $(CKEDITOR.dialog.getCurrent().parts.contents.$).find('iframe');
                 $iframe.attr("src", editor.config.djangolinkIframeURL + "&" + $.param(data));
 				$iframe.hide(0);
+                $iframe.contents().find('html, body').scrollTop(0);
 				var $dialog_content = $(CKEDITOR.dialog.getCurrent().parts.contents.$);
 				$dialog_content.find('.cke_dialog_page_contents').css('height', '100%')
 				$dialog_content.find('.cke_dialog_page_contents table[role=presentation]').css('height', '100%');
