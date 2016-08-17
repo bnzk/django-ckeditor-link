@@ -36,6 +36,9 @@
                     data[$field.attr("name")] = $field.val();
                 });
 
+				// TODO: submit data as ajax, if is_valid, get href from response, if not, check
+				// errors in form
+
                 var selection = editor.getSelection(),
 					attributes = plugin.getLinkAttributes( editor, data );
 
@@ -122,7 +125,10 @@
 
                     // form
                     var $form = $(this).contents().find('form');
-					$form.bind('submit', function(e) {e.preventDefault(); });
+					$form.bind('submit', function(e) {
+						e.preventDefault();
+						// trigger onOK!?
+					});
 
                 });
 			},
