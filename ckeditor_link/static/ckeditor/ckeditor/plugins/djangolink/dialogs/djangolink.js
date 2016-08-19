@@ -110,8 +110,10 @@
                 $iframe.attr("src", editor.config.djangolinkIframeURL + "&" + $.param(data));
 				$iframe.hide(0);
 				var $dialog_content = $(CKEDITOR.dialog.getCurrent().parts.contents.$);
+				$dialog_content.css({'padding': '0'});
 				$dialog_content.find('.cke_dialog_page_contents').css('height', '100%')
 				$dialog_content.find('.cke_dialog_page_contents table[role=presentation]').css('height', '100%');
+				$dialog_content.find('.cke_dialog_ui_vbox_child').css({'padding': '0', 'height': '100%'});
 
                 $iframe.unbind('load');
                 $iframe.bind('load', function () {
