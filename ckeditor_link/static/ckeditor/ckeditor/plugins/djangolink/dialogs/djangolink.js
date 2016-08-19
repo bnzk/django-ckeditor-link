@@ -114,6 +114,7 @@
 				$dialog_content.find('.cke_dialog_page_contents').css('height', '100%')
 				$dialog_content.find('.cke_dialog_page_contents table[role=presentation]').css('height', '100%');
 				$dialog_content.find('.cke_dialog_ui_vbox_child').css({'padding': '0', 'height': '100%'});
+				$dialog_content.find('.cke_dialog_ui_vbox_child iframe').css({'display': 'block'});
 
                 $iframe.unbind('load');
                 $iframe.bind('load', function () {
