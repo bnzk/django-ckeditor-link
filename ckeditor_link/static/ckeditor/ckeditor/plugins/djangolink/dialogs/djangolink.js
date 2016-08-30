@@ -84,6 +84,7 @@
 				}
 
                 // TODO: remove iframe??
+                $iframe.attr("src", "");
 
                 return true;
             },
