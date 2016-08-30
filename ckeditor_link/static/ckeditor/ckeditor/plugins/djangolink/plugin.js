@@ -336,6 +336,7 @@
 				var key = attribute.name.substr('data-'.length);
 				// TODO: this mapping must go into a config!
 				if (key == "page_2") { key = "page"; }
+				if (key == "page_1" || key == "page_3") { return; }
 				data[key] = attribute.value;
 			});
 			return data
