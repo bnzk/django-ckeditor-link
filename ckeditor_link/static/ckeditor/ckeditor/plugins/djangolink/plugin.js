@@ -365,16 +365,19 @@
 		 *		}
 		 *
 		 */
-		getLinkAttributes: function(editor, data ) {
+		getLinkAttributes: function(editor, data, link_value) {
 			var set = {}, removed;
 			var excludes = ['_popup', '_save', 'csrfmiddlewaretoken'];
 
 			$.each(data, function(index, item) {
-				if ($.inArray(index, excludes) < 0) {
+				if ($.inArray(index, excludes) < 0 && item != null) {
 					set['data-' + index] = item;
 				}
 			});
-			set.href = 'www'; // otherwise the a tag is removed from ck side.
+			set.href = ''; // otherwise the a tag is removed from ck side.
+			if (link_value) {
+				set.href = link_value; // otherwise the a tag is removed from ck side.
+			}
 			removed = [];
 
 			return {

@@ -27,7 +27,13 @@ class TestModel(models.Model):
 class LinkModel(models.Model):
     target = models.CharField(max_length=255, blank=True, default='', )
     external_url = models.CharField(max_length=255, blank=True, default='',)
+    email = models.EmailField(blank=True, default='',)
+    # http://stackoverflow.com/questions/12644142/prefill-a-datetimefield-from-url-in-django-admin
+    when = models.DateTimeField(blank=True, null=False, default='')
     testmodel = models.ForeignKey(TestModel, null=True, default=None, blank=True)
 
     def __str__(self):
-        return "%s" % self.title
+        return "LINK! %s" % self.target
+
+    def get_link(self):
+        return "http://www.dynamic.com"

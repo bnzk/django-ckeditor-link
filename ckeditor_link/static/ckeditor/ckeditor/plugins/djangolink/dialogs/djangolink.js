@@ -27,6 +27,7 @@
             }],
             'onOk': function () {
                 // original link:804!
+				var editor = this.getParentEditor();
                 var $iframe = $(CKEDITOR.dialog.getCurrent().parts.contents.$).find('iframe').contents();
                 var $form = $iframe.find('form');
                 var $fields = $form.find("input, select");
@@ -38,55 +39,78 @@
 
 				// TODO: submit data as ajax, if is_valid, get href from response, if not, check
 				// errors in form
+				var verify_url = editor.config.djangolinkVerifyURL;
+				$.ajax({
+					'url': verify_url,
+					'method': 'post',
+					'data': data
+				}).then($.proxy(function(response_data, xhr) {  // loving this syntax
 
-                var selection = editor.getSelection(),
-					attributes = plugin.getLinkAttributes( editor, data );
-
-				if ( !this._.selectedElement ) {
-					var range = selection.getRanges()[ 0 ];
-
-					// TODO: there is "link" as link text if none
-					if ( range.collapsed ) {
-                        var text = new CKEDITOR.dom.text('link', editor.document );
-						range.insertNode(text);
-						range.selectNodeContents(text);
+					if (response_data.valid != 'true') {
+						$form.find('.form-row').removeClass("errors").find("ul.errorlist").remove();
+						$.each(response_data.errors, function(fieldname, error_list) {
+							var error_ul = '<ul class="errorlist">';
+							$.each(error_list, function(index, error_message) {
+								error_ul += "<li>" + error_message + "</li>";
+							});
+							error_ul += '</ul>';
+							$form.find('.form-row.field-' + fieldname).addClass("errors").prepend(error_ul);
+						});
+						return false;
 					}
 
-					// Apply style.
-					var style = new CKEDITOR.style( {
-						element: 'a',
-						attributes: attributes.set
-					} );
+					var selection = editor.getSelection(),
+						attributes = plugin.getLinkAttributes( editor, response_data.data, response_data.link_value );
 
-					style.type = CKEDITOR.STYLE_INLINE; // need to override... dunno why.
-					style.applyToRange( range, editor );
-					range.select();
-				} else {
-					// We're only editing an existing link, so just overwrite the attributes.
-					var element = this._.selectedElement,
-						href = element.data( 'cke-saved-href' ),
-						textView = element.getHtml();
+					if ( !this._.selectedElement ) {
+						var range = selection.getRanges()[ 0 ];
 
-					element.setAttributes( attributes.set );
-					element.removeAttributes( attributes.removed );
+						// TODO: there is "link" as link text if none
+						if ( range.collapsed ) {
+							var text = new CKEDITOR.dom.text('link', editor.document );
+							range.insertNode(text);
+							range.selectNodeContents(text);
+						}
 
-					// Update text view when user changes protocol (#4612).
-					if ( href == textView || data.type == 'email' && textView.indexOf( '@' ) != -1 ) {
-						// Short mailto link text view (#5736).
-						element.setHtml( data.type == 'email' ?
-							data.email.address : attributes.set[ 'data-cke-saved-href' ] );
+						// Apply style.
+						var style = new CKEDITOR.style( {
+							element: 'a',
+							attributes: attributes.set
+						} );
 
-						// We changed the content, so need to select it again.
-						selection.selectElement( element );
+						style.type = CKEDITOR.STYLE_INLINE; // need to override... dunno why.
+						style.applyToRange( range, editor );
+						range.select();
+					} else {
+						// We're only editing an existing link, so just overwrite the attributes.
+						var element = this._.selectedElement,
+							href = element.data( 'cke-saved-href' ),
+							textView = element.getHtml();
+
+						element.setAttributes( attributes.set );
+						element.removeAttributes( attributes.removed );
+
+						// Update text view when user changes protocol (#4612).
+						if ( href == textView || data.type == 'email' && textView.indexOf( '@' ) != -1 ) {
+							// Short mailto link text view (#5736).
+							element.setHtml( data.type == 'email' ?
+								data.email.address : attributes.set[ 'data-cke-saved-href' ] );
+
+							// We changed the content, so need to select it again.
+							selection.selectElement( element );
+						}
+
+						delete this._.selectedElement;
+
 					}
+					CKEDITOR.dialog.getCurrent().hide();
+					// TODO: better remove/refresh iframe??
+					$iframe.attr("src", "");
 
-					delete this._.selectedElement;
-				}
+				}, this));
 
-                // TODO: remove iframe??
-                $iframe.attr("src", "");
+                return false;
 
-                return true;
             },
 			onShow: function() {
 				var editor = this.getParentEditor(),
@@ -204,7 +228,8 @@
 		 * @cfg {string} [djangolinkIframeURL='/admin/link/link/add']
 		 * @member CKEDITOR.config
 		 */
-		djangolinkIframeURL: '/admin/link/link/add'
+		djangolinkIframeURL: '/admin/link/link/add/',
+		djangolinkVerifyURL: '/admin/link/link/verify/'
 
 	} );
 

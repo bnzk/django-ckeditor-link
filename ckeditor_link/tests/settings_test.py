@@ -13,10 +13,12 @@ from selenium.webdriver.phantomjs import webdriver
 SELENIUM_WEBDRIVER = webdriver
 
 CKEDITOR_LINK_IFRAME_URL = '/admin/test_app/linkmodel/add/?_popup=true'
+CKEDITOR_LINK_VERIFY_URL = '/admin/test_app/linkmodel/verify/'
 
 CKEDITOR_CONFIGS = {
     'default': {
         'djangolinkIframeURL': CKEDITOR_LINK_IFRAME_URL,
+        'djangolinkVerifyURL': CKEDITOR_LINK_VERIFY_URL,
         'linkShowAdvancedTab': False,
         'extraPlugins': ','.join(
             [
