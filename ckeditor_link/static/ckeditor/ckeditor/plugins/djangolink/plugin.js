@@ -334,6 +334,8 @@
 			var data = {};
 			$.each(element.$.attributes, function(index, attribute) {
 				var key = attribute.name.substr('data-'.length);
+				// TODO: this mapping must go into a config!
+				if (key == "page_2") { key = "page"; }
 				data[key] = attribute.value;
 			});
 			return data
