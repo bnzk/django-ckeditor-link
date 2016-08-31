@@ -6,7 +6,7 @@ from ckeditor_link.tests.utils.selenium_utils import SeleniumTestCase, CustomWeb
 from ckeditor_link.tests.test_app.models import TestModelSingle, TestModelAdvanced
 
 
-class ckeditor_linkAdminTests(SeleniumTestCase):
+class ckeditor_linkDialogTests(SeleniumTestCase):
     def setUp(self):
         self.single_empty = TestModelSingle()
         self.single_empty.save()
@@ -28,7 +28,7 @@ class ckeditor_linkAdminTests(SeleniumTestCase):
         self.open(reverse('admin:index'))
         self.wd.find_css(".app-test_app")
 
-    def test_single_stash_empty(self):
+    def test_dialog_opens_has_form(self):
         self.login()
         self.open(reverse('admin:test_app_testmodelsingle_change', args=[self.single_empty.id]))
         horse = self.wd.find_css("div.field-horse")
@@ -38,7 +38,7 @@ class ckeditor_linkAdminTests(SeleniumTestCase):
         octo = self.wd.find_css("div.field-octopus")
         self.assertFalse(octo.is_displayed())
 
-    def test_single_stash(self):
+    def test_dialog_form_validation(self):
         self.login()
         self.open(reverse('admin:test_app_testmodelsingle_change', args=[self.single.id]))
         horse = self.wd.find_css("div.field-horse")
@@ -54,23 +54,13 @@ class ckeditor_linkAdminTests(SeleniumTestCase):
         octo = self.wd.find_css("div.field-octopus")
         self.assertFalse(octo.is_displayed())
 
-    def test_multi_stash_empty(self):
+    def test_dialog_submit_and_link_attrs(self):
         self.login()
         self.open(reverse('admin:test_app_testmodeladvanced_change', args=[self.advanced_empty.id]))
         inline = self.wd.find_css("#testinlinemodel_set-group")
         self.assertFalse(inline.is_displayed())
         f11 = self.wd.find_css("div.field-set1_1")
         self.assertFalse(f11.is_displayed())
-        f31 = self.wd.find_css("div.field-set3_1")
-        self.assertFalse(f31.is_displayed())
-
-    def test_multi_stash(self):
-        self.login()
-        self.open(reverse('admin:test_app_testmodeladvanced_change', args=[self.advanced.id]))
-        inline = self.wd.find_css("#testinlinemodel_set-group")
-        self.assertTrue(inline.is_displayed())
-        f11 = self.wd.find_css("div.field-set1_1")
-        self.assertTrue(f11.is_displayed())
         f31 = self.wd.find_css("div.field-set3_1")
         self.assertFalse(f31.is_displayed())
 
