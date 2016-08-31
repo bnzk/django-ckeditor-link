@@ -4,7 +4,7 @@ django-ckeditor_link
 .. image:: https://travis-ci.org/benzkji/django-ckeditor_link.svg
     :target: https://travis-ci.org/benzkji/django-ckeditor_link
 
-a better link dialog for ckeditor in django modelforms.
+link plugin for ckeditor, based on django modelforms/modeladmin, allowing direct linking to your models, or to whatever your want.
 
 
 Installation
