@@ -14,7 +14,7 @@ To get the latest stable release from PyPi
 
 .. code-block:: bash
 
-    pip install django-ckeditor_link
+    pip install django-ckeditor-link
 
 Add ``ckeditor_link`` to your ``INSTALLED_APPS``
 
@@ -64,9 +64,8 @@ Following steps are needed.
     ...
     from ckeditor_link.admin import DjangoLinkAdmin
 
-
     class LinkAdmin(DjangoLinkAdmin):
-        form = LinkModelForm
+        pass
 
     admin.site.register(LinkModel, LinkAdmin)
 
