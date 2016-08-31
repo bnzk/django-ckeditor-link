@@ -36,27 +36,40 @@ Have a look at ``ckeditor_link/tests/test_app/settings_test.py`` for a complete 
 Following steps are needed.
 
 
-1. Define a link model.
+1. Define a link model. Proposed way: Create a base model, that you can extend from for example when
+having a teaser model. And a CKLink model, that has managed=False, so not even a database table is
+created.
 
 .. code-block:: python
 
     # your_app/models.py
 
-    class LinkModel(models.Model):
+    @python_2_unicode_compatible
+    class LinkModelBase(models.Model):
         target = models.CharField(max_length=255, blank=True, default='', )
         external_url = models.CharField(max_length=255, blank=True, default='',)
         email = models.EmailField(blank=True, default='',)
         testmodel = models.ForeignKey(TestModel, null=True, default=None, blank=True)
 
+        class Meta:
+            abstract = True
+
         def __str__(self):
+            # do it better
             return "LINK! %s" % self.target
 
         def get_link(self):
-            # return link value, based on choosen fields.
+            # return link value, based on fields.
             return "http://www.dynamic.com"
 
 
-2. Register your model.
+    class CKLinkModel(LinkModelBase):
+
+        class Meta:
+            managed = False
+
+
+2. Register your model with DjangoLinkAdmin.
 
 .. code-block:: python
 
@@ -64,10 +77,10 @@ Following steps are needed.
     ...
     from ckeditor_link.admin import DjangoLinkAdmin
 
-    class LinkAdmin(DjangoLinkAdmin):
+    class CKModelLinkAdmin(DjangoLinkAdmin):
         pass
 
-    admin.site.register(LinkModel, LinkAdmin)
+    admin.site.register(CKLinkModel, CKModelLinkAdmin)
 
 
 3. Configure your django-ckeditor (or whatever ck you use).
@@ -103,7 +116,7 @@ Following steps are needed.
 
 .. code-block:: html
 
-    not yet available
+    not yet available, do it yourself for now :/
 
 
 

@@ -12,8 +12,8 @@ logging.getLogger("factory").setLevel(logging.WARN)
 from selenium.webdriver.phantomjs import webdriver
 SELENIUM_WEBDRIVER = webdriver
 
-CKEDITOR_LINK_IFRAME_URL = '/admin/test_app/linkmodel/add/?_popup=true'
-CKEDITOR_LINK_VERIFY_URL = '/admin/test_app/linkmodel/verify/'
+CKEDITOR_LINK_IFRAME_URL = '/admin/test_app/cklinkmodel/add/?_popup=true'
+CKEDITOR_LINK_VERIFY_URL = '/admin/test_app/cklinkmodel/verify/'
 
 CKEDITOR_CONFIGS = {
     'default': {

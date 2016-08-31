@@ -23,8 +23,9 @@ class TestModel(models.Model):
 #     def __str__(self):
 #         return "%s" % self.title
 
+
 @python_2_unicode_compatible
-class LinkModel(models.Model):
+class LinkModelBase(models.Model):
     target = models.CharField(max_length=255, blank=True, default='', )
     external_url = models.CharField(max_length=255, blank=True, default='',)
     email = models.EmailField(blank=True, default='',)
@@ -32,8 +33,17 @@ class LinkModel(models.Model):
     when = models.DateField(blank=True, null=True)
     testmodel = models.ForeignKey(TestModel, null=True, default=None, blank=True)
 
+    class Meta:
+        abstract = True
+
     def __str__(self):
         return "LINK! %s" % self.target
 
     def get_link(self):
         return "http://www.dynamic.com"
+
+
+class CKLinkModel(LinkModelBase):
+
+    class Meta:
+        managed = False

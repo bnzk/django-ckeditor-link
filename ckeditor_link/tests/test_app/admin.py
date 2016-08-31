@@ -5,15 +5,15 @@ from django.forms import DateTimeInput
 
 from ckeditor_link.admin import DjangoLinkAdmin
 
-from .models import TestModel, LinkModel
+from .models import TestModel, CKLinkModel
 
 
-class LinkModelForm(forms.ModelForm):
+class CKLinkModelForm(forms.ModelForm):
     when = forms.DateField(widget=forms.SelectDateWidget, required=False)
 
 
-class LinkAdmin(DjangoLinkAdmin):
-    form = LinkModelForm
+class CKLinkModelAdmin(DjangoLinkAdmin):
+    form = CKLinkModelForm
 
 admin.site.register(TestModel)
-admin.site.register(LinkModel, LinkAdmin)
+admin.site.register(CKLinkModel, CKLinkModelAdmin)
