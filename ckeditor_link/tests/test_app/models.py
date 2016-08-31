@@ -29,7 +29,7 @@ class LinkModel(models.Model):
     external_url = models.CharField(max_length=255, blank=True, default='',)
     email = models.EmailField(blank=True, default='',)
     # http://stackoverflow.com/questions/12644142/prefill-a-datetimefield-from-url-in-django-admin
-    when = models.DateTimeField(blank=True, null=False, default='')
+    when = models.DateField(blank=True, null=True)
     testmodel = models.ForeignKey(TestModel, null=True, default=None, blank=True)
 
     def __str__(self):
