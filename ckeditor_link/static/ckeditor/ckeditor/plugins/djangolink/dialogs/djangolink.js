@@ -132,7 +132,7 @@
 
 				var data = plugin.parseLinkAttributes(element);
                 var $iframe = $(CKEDITOR.dialog.getCurrent().parts.contents.$).find('iframe');
-                $iframe.attr("src", editor.config.djangolinkIframeURL + "&" + $.param(data));
+                $iframe.attr("src", editor.config.djangolinkIframeURL + "?_popup=true&" + $.param(data));
 				$iframe.hide(0);
 				var $dialog_content = $(CKEDITOR.dialog.getCurrent().parts.contents.$);
 				$dialog_content.css({'padding': '0'});

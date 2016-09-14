@@ -3,6 +3,7 @@ import os
 import tempfile
 import logging
 
+from django.urls import reverse_lazy
 
 DEBUG = True
 
@@ -12,8 +13,9 @@ logging.getLogger("factory").setLevel(logging.WARN)
 from selenium.webdriver.phantomjs import webdriver
 SELENIUM_WEBDRIVER = webdriver
 
-CKEDITOR_LINK_IFRAME_URL = '/admin/test_app/cklinkmodel/add/?_popup=true'
-CKEDITOR_LINK_VERIFY_URL = '/admin/test_app/cklinkmodel/verify/'
+
+CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:test_app_cklinkmodel_add')
+CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:test_app_cklinkmodel_verify')
 
 CKEDITOR_CONFIGS = {
     'default': {
