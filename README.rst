@@ -37,7 +37,7 @@ Following steps are needed.
 
 
 1. Define a link model. Proposed way: Create a base model, that you can extend from for example when
-having a teaser model. And a CKLink model, that has managed=False, so not even a database table is
+having a teaser model. And a CKLink model, that has managed=False, so no database table is
 created.
 
 .. code-block:: python
