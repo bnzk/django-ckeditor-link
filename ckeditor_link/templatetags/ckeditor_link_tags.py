@@ -29,6 +29,7 @@ def ckeditor_link_add_links(html):
     links = fragment.cssselect('a')
     for link in links:
         if link.get('data-ckeditor-link', None):
+            link.attrib.pop('data-ckeditor-link')
             kwargs = {}
             dummy_link = ckeditor_link_class()
             for key, value in link.items():
@@ -47,7 +48,6 @@ def ckeditor_link_add_links(html):
                         kwargs[new_key] = value
                         link.attrib.pop(key)
             real_link = ckeditor_link_class(**kwargs)
-            print real_link
             link.set('href', real_link.get_link())
             if (getattr(real_link, 'get_target')):
                 link.set('target', real_link.get_target())
