@@ -374,6 +374,8 @@
 					set['data-' + index] = item;
 				}
 			});
+			set['data-ckeditor-link'] = true;
+
 			set.href = ''; // otherwise the a tag is removed from ck side.
 			if (link_value) {
 				set.href = link_value; // otherwise the a tag is removed from ck side.

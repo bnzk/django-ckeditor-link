@@ -1,9 +1,11 @@
 """Settings that need to be set in order to run the tests."""
 import os
+import sys
 import tempfile
 import logging
 
-from django.urls import reverse_lazy
+from django.core.urlresolvers import reverse_lazy
+
 
 DEBUG = True
 
@@ -14,6 +16,7 @@ from selenium.webdriver.phantomjs import webdriver
 SELENIUM_WEBDRIVER = webdriver
 
 
+CKEDITOR_LINK_MODEL = 'ckeditor_link.tests.test_app.models.CKLinkModel'
 CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:test_app_cklinkmodel_add')
 CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:test_app_cklinkmodel_verify')
 

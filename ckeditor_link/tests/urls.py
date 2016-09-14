@@ -3,9 +3,12 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from test_app.views import TestModelDetailView
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^testmodel/(?P<pk>\d+)/$', TestModelDetailView.as_view(), name='testmodel_detail'),
 ]
 
 # if settings.DEBUG:

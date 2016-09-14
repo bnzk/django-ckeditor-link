@@ -37,10 +37,19 @@ class LinkModelBase(models.Model):
         abstract = True
 
     def __str__(self):
-        return "LINK! %s" % self.target
+        return "LINK object: %s" % self.get_link()
 
     def get_link(self):
-        return "http://www.dynamic.com"
+        if self.external_url:
+            return self.external_url
+        else:
+            return "http://no-link-given.com/"
+
+    def get_target(self):
+        return "_blank"
+
+    def get_css_class(self):
+        return "no-css-class"
 
 
 class CKLinkModel(LinkModelBase):

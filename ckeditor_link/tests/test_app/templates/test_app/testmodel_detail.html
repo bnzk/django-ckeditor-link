@@ -1,0 +1,5 @@
+{% load ckeditor_link_tags %}
+
+<h1>{{ object.title }}</h1>
+
+{{ object.richtext|ckeditor_link_add_links|safe }}
