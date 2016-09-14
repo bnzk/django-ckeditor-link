@@ -21,10 +21,14 @@ class DjangoLinkAdmin(admin.ModelAdmin):
             url(
                 r'^verify/$',
                 self.admin_site.admin_view(self.verify),
-                name='ckeditor_link_verify'
+                name=self._get_verify_url_name()
             ),
         ]
         return my_urls + super(DjangoLinkAdmin, self).get_urls()
+
+    def _get_verify_url_name(self):
+        return '{0}_{1}_verify'.format(self.model._meta.app_label,
+                                       self.model._meta.model_name)
 
     def verify(self, request):
         """
