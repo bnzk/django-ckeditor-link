@@ -6,7 +6,11 @@ from ckeditor_link.tests.utils.selenium_utils import SeleniumTestCase, CustomWeb
 from ckeditor_link.tests.test_app.models import TestModelSingle, TestModelAdvanced
 
 
-class ckeditor_linkDialogTests(SeleniumTestCase):
+class ckeditor_linkEditorTests(SeleniumTestCase):
+    fixtures = 'test_app.json'
+    admin_password = 'admin'
+
+
     def setUp(self):
         self.single_empty = TestModelSingle()
         self.single_empty.save()

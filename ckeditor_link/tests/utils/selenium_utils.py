@@ -9,7 +9,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 try:
     web_driver_module = settings.SELENIUM_WEBDRIVER
 except AttributeError:
-    from selenium.webdriver.firefox.webdriver import WebDriver
+    from selenium.webdriver.firefox import webdriver as web_driver_module
 
 
 class SeleniumTestCase(StaticLiveServerTestCase):
@@ -23,7 +23,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def login(self):
         self.open(reverse('admin:index'))
 
-        # Selenium knows it has to wait for page loads (except for AJAX requests)
+        # SeleniFIXTURESum knows it has to wait for page loads (except for AJAX requests)
         # so we don't need to do anything about that, and can just
         # call find_css. Since we can chain methods, we can
         # call the built-in send_keys method right away to change the
@@ -38,7 +38,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.wd.find_element_by_xpath('//input[@type="submit"]').click()
 
 
-class CustomWebDriver(WebDriver):
+class CustomWebDriver(web_driver_module.WebDriver):
     """Our own WebDriver with some helpers added"""
 
     def find_css(self, css_selector):
