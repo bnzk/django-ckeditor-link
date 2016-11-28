@@ -27,7 +27,7 @@
             }],
             'onOk': function () {
                 // original link:804!
-				var editor = this.getParentEditor();
+				// var editor = this.getParentEditor();
                 var $iframe = $(CKEDITOR.dialog.getCurrent().parts.contents.$).find('iframe').contents();
                 var $form = $iframe.find('form');
                 var $fields = $form.find("input, select");
@@ -113,11 +113,11 @@
 
             },
 			onShow: function() {
-				var editor = this.getParentEditor(),
-					selection = editor.getSelection(),
+				//var editor = this.getParentEditor(),
+				var selection = editor.getSelection(),
 					element = null;
 
-				// Fill in all the relevant fields if there's already one link selected.
+				// Fill 	in all the relevant fields if there's already one link selected.
 				if ( ( element = plugin.getSelectedLink( editor ) ) && element.hasAttribute( 'href' ) ) {
 					// Don't change selection if some element is already selected.
 					// For example - don't destroy fake selection.
@@ -160,61 +160,6 @@
 					});
 
                 });
-			},
-			onO22k: function() {
-				var data = {};
-
-				// Collect data from fields.
-				this.commitContent( data );
-
-				var selection = editor.getSelection(),
-					attributes = plugin.getLinkAttributes( editor, data );
-
-				if ( !this._.selectedElement ) {
-					var range = selection.getRanges()[ 0 ];
-
-					// Use link URL as text with a collapsed cursor.
-					if ( range.collapsed ) {
-						// Short mailto link text view (#5736).
-						var text = new CKEDITOR.dom.text( data.type == 'email' ?
-							data.email.address : attributes.set[ 'data-cke-saved-href' ], editor.document );
-						range.insertNode( text );
-						range.selectNodeContents( text );
-					}
-
-					// Apply style.
-					var style = new CKEDITOR.style( {
-						element: 'a',
-						attributes: attributes.set
-					} );
-
-					style.type = CKEDITOR.STYLE_INLINE; // need to override... dunno why.
-					style.applyToRange( range, editor );
-					range.select();
-				} else {
-					// We're only editing an existing link, so just overwrite the attributes.
-					var element = this._.selectedElement,
-						href = element.data( 'cke-saved-href' ),
-						textView = element.getHtml();
-
-					element.setAttributes( attributes.set );
-					element.removeAttributes( attributes.removed );
-
-					// Update text view when user changes protocol (#4612).
-					if ( href == textView || data.type == 'email' && textView.indexOf( '@' ) != -1 ) {
-						// Short mailto link text view (#5736).
-						element.setHtml( data.type == 'email' ?
-							data.email.address : attributes.set[ 'data-cke-saved-href' ] );
-
-						// We changed the content, so need to select it again.
-						selection.selectElement( element );
-					}
-
-					delete this._.selectedElement;
-				}
-
-
-
 			},
 
 		};

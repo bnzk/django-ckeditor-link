@@ -89,8 +89,9 @@ created.
 
     # config for django-ckeditor
 
-    CKEDITOR_LINK_IFRAME_URL = '/admin/your_app/linkmodel/add/?_popup=true'
-    CKEDITOR_LINK_VERIFY_URL = '/admin/your_app/linkmodel/verify/'
+    CKEDITOR_LINK_MODEL = 'ckeditor_link.tests.test_app.models.LinkModel'
+    CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:test_app_linkmodel_add')
+    CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:test_app_linkmodel_verify')
 
     CKEDITOR_CONFIGS = {
         'default': {

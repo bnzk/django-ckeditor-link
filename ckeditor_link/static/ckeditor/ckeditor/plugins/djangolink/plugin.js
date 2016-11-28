@@ -58,8 +58,6 @@
 
 		init: function( editor ) {
 			var that = this;
-            this.editor = editor;
-
 			// mess with the original
 			delete editor._.menuItems.link;
 
@@ -70,9 +68,10 @@
 				allowedContent: allowed,
 				requiredContent: required,
 				exec: function () {
-					var selection = that.editor.getSelection();
+					var selection = editor.getSelection();
 					var element = selection.getSelectedElement() || selection.getCommonAncestor().getAscendant('a', true);
-					that.editLink(element);
+					//var element = selection.getSelectedElement(); // || selection.getCommonAncestor().getAscendant('a', true);
+					that.editLink(element, editor);
 				}
 			});
 
@@ -145,10 +144,10 @@
 
 		},
 
-		editLink:function(element) {
+		 editLink:function(element, editor) {
 			var $body = $('body');
-            var that = this;
-			this.editor.openDialog('djangolink');
+            // var that = this;
+			editor.openDialog('djangolink');
 		},
 
 		afterInit: function( editor ) {

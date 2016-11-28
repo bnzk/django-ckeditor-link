@@ -1,7 +1,6 @@
 import importlib
 
 from django.conf import settings
-from lxml.html import fragment_fromstring, tostring
 from django import template
 from django.template.defaultfilters import stringfilter
 
@@ -20,6 +19,8 @@ register = template.Library()
 @register.filter
 @stringfilter
 def ckeditor_link_add_links(html):
+    # lxml is not a dependency, but needed for this tag.
+    from lxml.html import fragment_fromstring, tostring
     if not ckeditor_link_class:
         # TODO: use some log thing
         if settings.DEBUG:

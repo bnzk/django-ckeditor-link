@@ -1,19 +1,17 @@
 from django import forms
 from django.contrib import admin
-from django.db import models
-from django.forms import DateTimeInput
 
 from ckeditor_link.admin import DjangoLinkAdmin
 
-from .models import TestModel, CKLinkModel
+from .models import TestModel, LinkModel
 
 
-class CKLinkModelForm(forms.ModelForm):
+class LinkModelForm(forms.ModelForm):
     when = forms.DateField(widget=forms.SelectDateWidget, required=False)
 
 
 class CKLinkModelAdmin(DjangoLinkAdmin):
-    form = CKLinkModelForm
+    form = LinkModelForm
 
 admin.site.register(TestModel)
-admin.site.register(CKLinkModel, CKLinkModelAdmin)
+admin.site.register(LinkModel, CKLinkModelAdmin)

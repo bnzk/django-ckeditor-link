@@ -9,7 +9,8 @@ from ckeditor.fields import RichTextField
 @python_2_unicode_compatible
 class TestModel(models.Model):
     title = models.CharField(max_length=255, )
-    richtext = RichTextField()
+    richtext = RichTextField(default='')
+    richtext_second = RichTextField(default='')
 
     def __str__(self):
         return "%s" % self.title
@@ -52,7 +53,5 @@ class LinkModelBase(models.Model):
         return "no-css-class"
 
 
-class CKLinkModel(LinkModelBase):
-
-    class Meta:
-        managed = False
+class LinkModel(LinkModelBase):
+    pass

@@ -1,5 +1,5 @@
 # not required by setup.py..
-django-ckeditor
+django-ckeditor==5.1.0
 
 tox
 coverage
@@ -8,3 +8,6 @@ flake8
 factory_boy
 mock
 selenium
+
+django==1.9
+lxml

@@ -16,9 +16,9 @@ from selenium.webdriver.phantomjs import webdriver
 SELENIUM_WEBDRIVER = webdriver
 
 
-CKEDITOR_LINK_MODEL = 'ckeditor_link.tests.test_app.models.CKLinkModel'
-CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:test_app_cklinkmodel_add')
-CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:test_app_cklinkmodel_verify')
+CKEDITOR_LINK_MODEL = 'ckeditor_link.tests.test_app.models.LinkModel'
+CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:test_app_linkmodel_add')
+CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:test_app_linkmodel_verify')
 
 CKEDITOR_CONFIGS = {
     'default': {
