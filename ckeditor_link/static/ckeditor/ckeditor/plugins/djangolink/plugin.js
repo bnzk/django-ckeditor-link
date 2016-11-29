@@ -369,7 +369,7 @@
 			var excludes = ['_popup', '_save', 'csrfmiddlewaretoken'];
 
 			$.each(data, function(index, item) {
-				if ($.inArray(index, excludes) < 0 && item != null) {
+				if ($.inArray(index, excludes) < 0) {
 					set['data-' + index] = item;
 				}
 			});

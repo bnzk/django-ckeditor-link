@@ -117,11 +117,21 @@ created.
 
 .. code-block:: html
 
-    not yet available, do it yourself for now :/
-
+    available, undocumented. at your own risk (needs lxml)
 
 
 Contribute
 ------------
 
-Fork and code. Either run `tox` for complete tests, or `python manage.py test --settings=ckeditor_link.tests.settings_test`
+Fork and code. Quickstart:
+
+.. code-block:: python
+    ./manage.py migrate  # create local sqlite db
+    ./manage.py createsuperuser  # you want that
+    ./manage.py loaddata test_app  # same data that is used for running tests
+    ./manage.py runserver  # goto localhost:8000/admin/
+
+
+Testing
+#######
+Either run `tox` for complete tests, or `python manage.py test --settings=ckeditor_link.tests.settings_test`

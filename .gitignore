@@ -6,6 +6,8 @@ db.sqlite
 .coverage
 htmlcov
 .tox
+geckodriver.log
+ghostdriver.log
 test_app_media
 folderless/tests/coverage
 /dist/

@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from ckeditor.fields import RichTextField
@@ -14,6 +15,9 @@ class TestModel(models.Model):
 
     def __str__(self):
         return "%s" % self.title
+
+    def get_absolute_url(self):
+        return reverse('testmodel_detail', args=(self.id, ))
 
 
 # @python_2_unicode_compatible

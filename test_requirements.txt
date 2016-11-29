@@ -1,6 +1,4 @@
 # not required by setup.py..
-django-ckeditor==5.1.0
-
 tox
 coverage
 django-coverage
@@ -10,4 +8,7 @@ mock
 selenium
 
 django==1.9
+django-ckeditor==5.1.1
+
 lxml
+cssselect

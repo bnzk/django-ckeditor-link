@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from time import sleep
+
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.expected_conditions import visibility_of
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -14,7 +17,7 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
     password = 'admin'
 
     def setUp(self):
-        superuser = User.objects.create_superuser('admin', 'admin@free.fr', 'admin')
+        superuser = User.objects.create_superuser(self.username, 'admin@free.fr', self.password)
         self.existing = TestModel.objects.get(pk=1)
         # Instantiating the WebDriver will load your browser
         self.wd = CustomWebDriver()
@@ -30,35 +33,51 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
 
     def test_editor_has_button_dialog_opens_has_form(self):
         self.login()
+        sleep(1)  # must be a better solution!
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
-        button = self.wd.wait_for_css("a.cke_button__djangolink")
+        sleep(1)  # argh
+        button = self.wd.wait_for_css(".cke_button__djangolink")
         button[0].click()
         dialog_title = self.wd.wait_for_css(".cke_dialog_title")
-        # self.assertTrue(dialog_title.is_displayed())
+        sleep(1)  # argh
+        iframe = self.wd.find_css(".cke_dialog_ui_html")
+        self.wd.switch_to.frame(iframe)
+        target = self.wd.wait_for_css("#id_target")
 
     def test_dialog_form_validation(self):
         self.login()
-        self.open(reverse('admin:test_app_testmodelsingle_change', args=[self.single.id]))
-        horse = self.wd.find_css("div.field-horse")
-        self.assertFalse(horse.is_displayed())
-        bear = self.wd.find_css("div.field-bear")
-        self.assertFalse(bear.is_displayed())
-        octo = self.wd.find_css("div.field-octopus")
-        self.assertTrue(octo.is_displayed())
-        # change select value
-        self.wd.find_css("div.field-selection select > option[value=horse]").click()
-        horse = self.wd.find_css("div.field-horse")
-        self.assertTrue(horse.is_displayed())
-        octo = self.wd.find_css("div.field-octopus")
-        self.assertFalse(octo.is_displayed())
+        sleep(1)  # must be a better solution!
+        self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
+        sleep(1)  # argh
+        button = self.wd.wait_for_css(".cke_button__djangolink")
+        button[0].click()
+        self.wd.wait_for_css(".cke_dialog_title")
+        sleep(1)  # argh
+        iframe = self.wd.find_css(".cke_dialog_ui_html")
+        self.wd.switch_to.frame(iframe)
+        email = self.wd.wait_for_css("#id_email")
+        email.send_keys('what-foo')
+        self.wd.switch_to.default_content()
+        ok = self.wd.wait_for_css(".cke_dialog_ui_button_ok")
+        ok.click()
+        self.wd.switch_to.frame(iframe)
+        self.wd.wait_for_css(".field-email .errorlist")
+        email.send_keys('root@example.com')
+        self.wd.switch_to.default_content()
+        ok = self.wd.wait_for_css(".cke_dialog_ui_button_ok")
+        ok.click()
+        sleep(1)  # argh
+        try:
+            title = self.wd.find_css(".cke_dialog_title")
+            self.assertFalse(title.is_displayed())
+        except NoSuchElementException:
+            # ok if removed from the DOM!!
+            pass
 
     def test_dialog_submit_and_link_attrs(self):
         self.login()
-        self.open(reverse('admin:test_app_testmodeladvanced_change', args=[self.advanced_empty.id]))
-        inline = self.wd.find_css("#testinlinemodel_set-group")
-        self.assertFalse(inline.is_displayed())
-        f11 = self.wd.find_css("div.field-set1_1")
-        self.assertFalse(f11.is_displayed())
-        f31 = self.wd.find_css("div.field-set3_1")
-        self.assertFalse(f31.is_displayed())
+        self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
 
+    def test_remove_foreign_key_attrs(self):
+        self.login()
+        self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))

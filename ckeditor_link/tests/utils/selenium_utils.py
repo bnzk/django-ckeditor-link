@@ -22,7 +22,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def login(self):
         self.open(reverse('admin:index'))
-
         # SeleniFIXTURESum knows it has to wait for page loads (except for AJAX requests)
         # so we don't need to do anything about that, and can just
         # call find_css. Since we can chain methods, we can
