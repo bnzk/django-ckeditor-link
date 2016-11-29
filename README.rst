@@ -125,6 +125,7 @@ Fork and code. Quickstart:
 
 .. code-block:: bash
 
+    pip install -r test_requirements.txt
     ./manage.py migrate  # create local sqlite db
     ./manage.py createsuperuser  # you want that
     ./manage.py loaddata test_app  # same data that is used for running tests
