@@ -123,7 +123,8 @@ Contribute
 
 Fork and code. Quickstart:
 
-.. code-block:: python
+.. code-block:: bash
+
     ./manage.py migrate  # create local sqlite db
     ./manage.py createsuperuser  # you want that
     ./manage.py loaddata test_app  # same data that is used for running tests
