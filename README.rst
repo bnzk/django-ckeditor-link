@@ -128,7 +128,7 @@ Fork and code. Quickstart:
     ./manage.py migrate  # create local sqlite db
     ./manage.py createsuperuser  # you want that
     ./manage.py loaddata test_app  # same data that is used for running tests
-    ./manage.py runserver  # goto localhost:8000/admin/
+    ./manage.py runserver  # goto localhost:8000/admin/ or localhost:8000/testmodel/2/
 
 
 Testing
