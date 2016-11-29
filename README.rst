@@ -37,8 +37,8 @@ Following steps are needed.
 
 
 1. Define a link model. Proposed way: Create a base model, that you can extend from for example when
-having a teaser model. And a CKLink model, that has managed=False, so no database table is
-created.
+having a teaser model. And a CKLink model, whose purpose is only to provide a modelform and validation. No data is
+ever written to that table, if used with DjangoLinkAdmin.
 
 .. code-block:: python
 
@@ -64,9 +64,7 @@ created.
 
 
     class CKLinkModel(LinkModelBase):
-
-        class Meta:
-            managed = False
+        pass
 
 
 2. Register your model with DjangoLinkAdmin.
