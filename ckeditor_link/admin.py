@@ -15,7 +15,7 @@ class DjangoLinkAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         """
-        add our verify url.
+        add verify url.
         """
         my_urls = [
             url(
@@ -56,6 +56,6 @@ class DjangoLinkAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         """
-        avoid an accidental save!
+        no save!
         """
         return False
