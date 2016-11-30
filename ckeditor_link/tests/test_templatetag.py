@@ -33,7 +33,7 @@ class ckeditor_linkDialogTests(TestCase):
 
     def test_tag_robustness(self):
         """
-        can it handle LinkModel with for example no .get_class method?
+        can it handle LinkModel with for example no get_css_class method?
         """
         client = Client()
         url = reverse('testmodel_detail', args=[self.test_object.id])
