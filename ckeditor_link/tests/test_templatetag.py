@@ -3,12 +3,10 @@ from django.core.urlresolvers import reverse
 from django.test import Client
 from django.test import TestCase
 
-from ckeditor_link.tests.utils.django_utils import create_superuser
-from ckeditor_link.tests.utils.selenium_utils import SeleniumTestCase, CustomWebDriver
 from ckeditor_link.tests.test_app.models import TestModel, LinkModel
 
 
-class ckeditor_linkDialogTests(SeleniumTestCase):
+class ckeditor_linkDialogTests(TestCase):
     fixtures = ['test_app.json', ]
 
     def setUp(self):
@@ -35,7 +33,7 @@ class ckeditor_linkDialogTests(SeleniumTestCase):
 
     def test_tag_robustness(self):
         """
-        can it handle LinkModel with for example no .get_class method?
+        can it handle LinkModel with for example no get_css_class method?
         """
         client = Client()
         url = reverse('testmodel_detail', args=[self.test_object.id])
