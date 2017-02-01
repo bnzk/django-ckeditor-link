@@ -51,15 +51,11 @@ def ckeditor_link_add_links(html):
             try:
                 # this can go wrong with fk and the like
                 real_link = ckeditor_link_class(**kwargs)
-            except ValueError:
-                continue
-            try:
-                # this can go wrong with fk (no more existing...)
                 link.set('href', real_link.get_link())
+                if (getattr(real_link, 'get_target')):
+                    link.set('target', real_link.get_target())
+                if (getattr(real_link, 'get_css_class')):
+                    link.set('class', real_link.get_css_class())
             except ValueError:
                 continue
-            if (getattr(real_link, 'get_target')):
-                link.set('target', real_link.get_target())
-            if (getattr(real_link, 'get_css_class')):
-                link.set('class', real_link.get_css_class())
     return tostring(fragment)
