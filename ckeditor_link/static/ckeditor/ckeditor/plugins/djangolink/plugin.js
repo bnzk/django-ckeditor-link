@@ -6,9 +6,7 @@
 
 /*
  main things to do:
- - get iframe url for link form onto button/into dialog
- - catch onOk for dialog, get link value and data attrs
- - put data attrs on link in ck html code
+- main things done. working on nuances...and cleaning up!
   */
 
 
@@ -58,7 +56,8 @@
 
 		init: function( editor ) {
 			var that = this;
-			// mess with the original
+
+			// mess with the original, remove link from context menu
 			delete editor._.menuItems.link;
 
 			var allowed = 'a[!href, data-*]',
@@ -314,17 +313,7 @@
 		},
 
 		/**
-		 * Parses attributes of the link element and returns an object representing
-		 * the current state (data) of the link. This data format is a plain object accepted
-		 * e.g. by the Link dialog window and {@link #getLinkAttributes}.
-		 *
-		 * **Note:** Data model format produced by the parser must be compatible with the Link
-		 * plugin dialog because it is passed directly to {@link CKEDITOR.dialog#setupContent}.
-		 *
-		 * @since 4.4
-		 * @param {CKEDITOR.editor} editor
-		 * @param {CKEDITOR.dom.element} element
-		 * @returns {Object} An object of link data.
+		 * parses link attributes into data to be used by djangolink dialog
 		 */
 		parseLinkAttributes: function(element ) {
 			if (!element || !element.$.attributes) {
@@ -334,6 +323,7 @@
 			$.each(element.$.attributes, function(index, attribute) {
 				var key = attribute.name.substr('data-'.length);
 				// TODO: this mapping must go into a config!
+				// TODO: this is probabla obsolete!
 				if (key == "page_2") { key = "page"; }
 				if (key == "page_1" || key == "page_3") { return; }
 				data[key] = attribute.value;
@@ -342,27 +332,7 @@
 		},
 
 		/**
-		 * Converts link data produced by {@link #parseLinkAttributes} into an object which consists
-		 * of attributes to be set (with their values) and an array of attributes to be removed.
-		 * This method can be used to compose or to update any link element with the given data.
-		 *
-		 * @since 4.4
-		 * @param {CKEDITOR.editor} editor
-		 * @param {Object} data Data in {@link #parseLinkAttributes} format.
-		 * @returns {Object} An object consisting of two keys, i.e.:
-		 *
-		 *		{
-		 *			// Attributes to be set.
-		 *			set: {
-		 *				href: 'http://foo.bar',
-		 *				target: 'bang'
-		 *			},
-		 *			// Attributes to be removed.
-		 *			removed: [
-		 *				'id', 'style'
-		 *			]
-		 *		}
-		 *
+		 * convert link data we get from an xhr (validated..) to actual data attributes.
 		 */
 		getLinkAttributes: function(editor, data, link_value) {
 			var set = {}, removed;
@@ -380,14 +350,13 @@
 
 			set.href = ''; // otherwise the a tag is removed from ck side.
 			if (link_value) {
-				set.href = link_value; // otherwise the a tag is removed from ck side.
+				set.href = link_value;
 			}
 			removed = [];
 
 			return {
 				set: set,
-				// removed: CKEDITOR.tools.objectKeys( removed ) what is this?
-				removed: CKEDITOR.tools.objectKeys( removed )
+				removed: CKEDITOR.tools.objectKeys( removed )  // what?
 			};
 		}
 	};
