@@ -18,7 +18,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     clients and logging in profiles.
     """
     def open(self, url):
-        self.wd.get("%s%s" % (self.live_server_url, url))
+        self.webdriver.get("%s%s" % (self.live_server_url, url))
 
     def login(self):
         self.open(reverse('admin:index'))
@@ -27,14 +27,14 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         # call find_css. Since we can chain methods, we can
         # call the built-in send_keys method right away to change the
         # value of the field
-        self.wd.find_css('#id_username').send_keys(self.username)
+        self.webdriver.find_css('#id_username').send_keys(self.username)
         # for the password, we can now just call find_css since we know the page
         # has been rendered
-        self.wd.find_css("#id_password").send_keys(self.password)
+        self.webdriver.find_css("#id_password").send_keys(self.password)
         # You're not limited to CSS selectors only, check
         # http://seleniumhq.org/docs/03_webdriver.html for
         # a more compreehensive documentation.
-        self.wd.find_element_by_xpath('//input[@type="submit"]').click()
+        self.webdriver.find_element_by_xpath('//input[@type="submit"]').click()
 
 
 class CustomWebDriver(web_driver_module.WebDriver):
