@@ -34,7 +34,11 @@
                 var data = {};
                 $.each($fields, function(index, field) {
                     var $field = $(field);
-                    data[$field.attr("name")] = $field.val();
+					var value = $field.val();
+					if ($field.attr("type") == "hidden" && value == 'null') {
+						value = '';
+					}
+                    data[$field.attr("name")] = value;
                 });
 
 				// submit data as ajax, if is_valid, get href from response, if not, check
