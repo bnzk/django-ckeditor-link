@@ -370,6 +370,9 @@
 
 			$.each(data, function(index, item) {
 				if ($.inArray(index, excludes) < 0) {
+					if (item === null) {
+						item = ''; // prevent attributes with "null" values!
+					}
 					set['data-' + index] = item;
 				}
 			});

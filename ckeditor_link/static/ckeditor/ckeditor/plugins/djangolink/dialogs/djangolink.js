@@ -37,7 +37,7 @@
                     data[$field.attr("name")] = $field.val();
                 });
 
-				// TODO: submit data as ajax, if is_valid, get href from response, if not, check
+				// submit data as ajax, if is_valid, get href from response, if not, check
 				// errors in form
 				var verify_url = editor.config.djangolinkVerifyURL;
 				$.ajax({
