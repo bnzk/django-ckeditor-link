@@ -24,7 +24,7 @@ def ckeditor_link_add_links(html):
     if not ckeditor_link_class:
         # TODO: use some log thing
         if settings.DEBUG:
-            print "Warning: CKEDITOR_LINK_MODEL (%s) could not be imported!?" % (settings.CKEDITOR_LINK_MODEL, )
+            print("Warning: CKEDITOR_LINK_MODEL (%s) could not be imported!?" % (settings.CKEDITOR_LINK_MODEL, ))
         return html
     fragment = fragment_fromstring("<div>" + html + "</div>")
     links = fragment.cssselect('a')
