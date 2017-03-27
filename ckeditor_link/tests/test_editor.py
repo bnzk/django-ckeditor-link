@@ -18,7 +18,7 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
 
     def setUp(self):
         superuser = User.objects.create_superuser(self.username, 'admin@free.fr', self.password)
-        self.existing = TestModel.objects.get(pk=2)
+        self.existing = TestModel.objects.get(pk=1)
         # Instantiating the WebDriver will load your browser
         self.webdriver = CustomWebDriver()
 
