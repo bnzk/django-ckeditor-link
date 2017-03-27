@@ -11,8 +11,8 @@ DEBUG = True
 
 logging.getLogger("factory").setLevel(logging.WARN)
 
-# from selenium.webdriver.firefox import webdriver
-from selenium.webdriver.phantomjs import webdriver
+from selenium.webdriver.firefox import webdriver
+# from selenium.webdriver.phantomjs import webdriver
 SELENIUM_WEBDRIVER = webdriver
 
 

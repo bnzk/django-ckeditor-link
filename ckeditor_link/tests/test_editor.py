@@ -33,9 +33,8 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
 
     def test_editor_has_button_dialog_opens_has_form(self):
         self.login()
-        sleep(1)  # must be a better solution!
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
-        sleep(1)  # argh
+        sleep(1)  # argh: wait for the iframe to be loaded!
         button = self.webdriver.wait_for_css(".cke_button__djangolink")
         button[0].click()
         dialog_title = self.webdriver.wait_for_css(".cke_dialog_title")
