@@ -134,4 +134,5 @@ Fork and code. Quickstart:
 
 Testing
 #######
-Either run `tox` for complete tests, or `python manage.py test --settings=ckeditor_link.tests.settings_test`
+
+Either run `tox` for complete tests, or `python manage.py test
