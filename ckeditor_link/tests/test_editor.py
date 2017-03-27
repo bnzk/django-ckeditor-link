@@ -45,7 +45,6 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
 
     def test_dialog_form_validation(self):
         self.login()
-        sleep(1)  # must be a better solution!
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
         sleep(1)  # argh
         button = self.webdriver.wait_for_css(".cke_button__djangolink")
@@ -76,7 +75,6 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
 
     def test_no_fake_null_as_string_values(self):
         self.login()
-        sleep(1)  # must be a better solution!
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
         sleep(1)  # argh
         button = self.webdriver.wait_for_css(".cke_button__djangolink")
@@ -97,9 +95,11 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
         self.assertEqual('', link.get_attribute('data-testmodel'))
 
     def test_two_editors_in_same_form(self):
+        # TODO
         self.login()
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
 
     def test_dialog_submit_and_link_attrs(self):
+        # TODO
         self.login()
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
