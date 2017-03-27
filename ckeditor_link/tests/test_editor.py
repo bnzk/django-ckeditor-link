@@ -18,7 +18,7 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
 
     def setUp(self):
         superuser = User.objects.create_superuser(self.username, 'admin@free.fr', self.password)
-        self.existing = TestModel.objects.get(pk=1)
+        self.existing = TestModel.objects.get(pk=2)
         # Instantiating the WebDriver will load your browser
         self.webdriver = CustomWebDriver()
 
@@ -34,11 +34,11 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
     def test_editor_has_button_dialog_opens_has_form(self):
         self.login()
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
-        sleep(1)  # argh: wait for the iframe to be loaded!
+        sleep(2)  # argh: wait for the iframe to be loaded!
         button = self.webdriver.wait_for_css(".cke_button__djangolink")
         button[0].click()
         dialog_title = self.webdriver.wait_for_css(".cke_dialog_title")
-        sleep(1)  # argh
+        sleep(2)  # argh
         iframe = self.webdriver.find_css(".cke_dialog_ui_html")
         self.webdriver.switch_to.frame(iframe)
         target = self.webdriver.wait_for_css("#id_target")
@@ -46,11 +46,11 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
     def test_dialog_form_validation(self):
         self.login()
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
-        sleep(1)  # argh
+        sleep(2)  # argh
         button = self.webdriver.wait_for_css(".cke_button__djangolink")
         button[0].click()
         self.webdriver.wait_for_css(".cke_dialog_title")
-        sleep(1)  # argh
+        sleep(2)  # argh
         iframe = self.webdriver.find_css(".cke_dialog_ui_html")
         self.webdriver.switch_to.frame(iframe)
         email = self.webdriver.wait_for_css("#id_email")
@@ -64,7 +64,7 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
         self.webdriver.switch_to.default_content()
         ok = self.webdriver.wait_for_css(".cke_dialog_ui_button_ok")
         ok.click()
-        sleep(1)  # argh
+        sleep(2)  # argh
         try:
             # check that dialog is gone or invisible
             title = self.webdriver.find_css(".cke_dialog_title")
@@ -76,18 +76,18 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
     def test_no_fake_null_as_string_values(self):
         self.login()
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
-        sleep(1)  # argh
+        sleep(2)  # argh
         button = self.webdriver.wait_for_css(".cke_button__djangolink")
         button[0].click()
         self.webdriver.wait_for_css(".cke_dialog_title")
-        sleep(1)  # argh
+        sleep(2)  # argh
         iframe = self.webdriver.find_css(".cke_dialog_ui_html")
         self.webdriver.switch_to.frame(iframe)
         self.webdriver.wait_for_css("#id_testmodel")  # just wait for it, then send with "null"
         self.webdriver.switch_to.default_content()
         ok = self.webdriver.wait_for_css(".cke_dialog_ui_button_ok")
         ok.click()
-        sleep(1)  # argh
+        sleep(2)  # argh
         # inserted at first position in html, so this should work.
         ckcontent_iframe = self.webdriver.find_css("#cke_id_richtext iframe")
         self.webdriver.switch_to.frame(ckcontent_iframe)
