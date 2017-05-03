@@ -13,7 +13,7 @@ def read(fname):
 setup(
     name="django-ckeditor-link",
     version=version,
-    url='http://github.com/benzkji/django-ckeditor-link',
+    url='http://github.com/bnzk/django-ckeditor-link',
     license='MIT',
     platforms=['OS Independent'],
     description="better link dialog for ckeditor",

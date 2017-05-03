@@ -35,6 +35,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         # http://seleniumhq.org/docs/03_webdriver.html for
         # a more compreehensive documentation.
         self.webdriver.find_element_by_xpath('//input[@type="submit"]').click()
+        self.webdriver.wait_for_css("body.dashboard")
 
 
 class CustomWebDriver(web_driver_module.WebDriver):
@@ -53,3 +54,7 @@ class CustomWebDriver(web_driver_module.WebDriver):
     def wait_for_css(self, css_selector, timeout=7):
         """ Shortcut for WebDriverWait"""
         return WebDriverWait(self, timeout).until(lambda driver : driver.find_css(css_selector))
+
+    def wait_for_iframe(self, iframe_selector, timeout=7):
+        """ Shortcut for WebDriverWait"""
+        return WebDriverWait(self, timeout).until(lambda driver : driver.frame_to_be_available_and_switch_to_it())

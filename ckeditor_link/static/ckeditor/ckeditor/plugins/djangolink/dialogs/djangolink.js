@@ -64,7 +64,7 @@
 					}
 
 					var selection = editor.getSelection(),
-						attributes = plugin.getLinkAttributes( editor, response_data.data, response_data.link_value );
+						attributes = plugin.getLinkAttributes(editor, response_data.data, response_data.link_value );
 
 					if ( !this._.selectedElement ) {
 						var range = selection.getRanges()[ 0 ];
@@ -134,7 +134,7 @@
 				// Record down the selected element in the dialog.
 				this._.selectedElement = element;
 
-				var data = plugin.parseLinkAttributes(element);
+				var data = plugin.parseLinkAttributes(editor, element);
                 var $iframe = $(CKEDITOR.dialog.getCurrent().parts.contents.$).find('iframe');
                 $iframe.attr("src", editor.config.djangolinkIframeURL + "?_popup=true&" + $.param(data));
 				$iframe.hide(0);
@@ -178,7 +178,8 @@
 		 * @member CKEDITOR.config
 		 */
 		djangolinkIframeURL: '/admin/link/link/add/',
-		djangolinkVerifyURL: '/admin/link/link/verify/'
+		djangolinkVerifyURL: '/admin/link/link/verify/',
+		djangolinkFallbackField: 'external'
 
 	} );
 

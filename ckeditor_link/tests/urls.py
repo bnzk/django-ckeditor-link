@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from test_app.views import TestModelDetailView
+from ckeditor_link.tests.test_app.views import TestModelDetailView
 
 
 urlpatterns = [
