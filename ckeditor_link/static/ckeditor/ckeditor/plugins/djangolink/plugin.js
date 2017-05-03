@@ -315,7 +315,7 @@
 		/**
 		 * parses link attributes into data to be used by djangolink dialog
 		 */
-		parseLinkAttributes: function(element ) {
+		parseLinkAttributes: function(editor, element ) {
 			if (!element || !element.$.attributes) {
 				return {};
 			}
@@ -328,6 +328,14 @@
 				if (key == "page_1" || key == "page_3") { return; }
 				data[key] = attribute.value;
 			});
+			// fallback: put href value into fallback field
+			// for migrating legacy content
+			if (!$(element).attr("data-ckeditor-link")) {
+				if ($(element).attr("href")) {
+					var key = editor.config.djangolinkFallbackField;
+					data[key] = $(element).attr("href");
+				}
+			}
 			return data
 		},
 

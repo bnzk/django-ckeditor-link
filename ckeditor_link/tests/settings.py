@@ -24,6 +24,7 @@ CKEDITOR_CONFIGS = {
     'default': {
         'djangolinkIframeURL': CKEDITOR_LINK_IFRAME_URL,
         'djangolinkVerifyURL': CKEDITOR_LINK_VERIFY_URL,
+        'djangolinkFallbackField': 'external_url',
         'linkShowAdvancedTab': False,
         'extraPlugins': ','.join(
             [
@@ -45,7 +46,6 @@ CKEDITOR_CONFIGS = {
         'toolbar_Custom': [
             ['Bold', 'Underline'],
             ['DjangoLink', 'Unlink'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Link', 'Unlink'],
             ['RemoveFormat', 'Source']
         ]
@@ -60,7 +60,7 @@ APP_ROOT = os.path.abspath(
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:',
+        'NAME': 'db.sqlite',
     }
 }
 
