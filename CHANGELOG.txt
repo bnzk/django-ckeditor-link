@@ -1,7 +1,13 @@
 
-==== 0.xxx (not yet) ===
 
-- fix for djangocms-admin-styles
+==== 0.1.4 ===
+
+- fallback: legacy href values can be migrated into a specified field/attribute
+
+
+==== 0.1.3 ===
+
+- working more or less
 
 
 ==== 0.0.1 (not yet) ===

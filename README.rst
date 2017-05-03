@@ -95,6 +95,7 @@ ever written to that table, if used with DjangoLinkAdmin.
         'default': {
             'djangolinkIframeURL': CKEDITOR_LINK_IFRAME_URL,
             'djangolinkVerifyURL': CKEDITOR_LINK_VERIFY_URL,
+            'djangolinkFallbackField': 'external,
             'extraPlugins': ','.join(
                 [
                     # your extra plugins here
@@ -109,6 +110,10 @@ ever written to that table, if used with DjangoLinkAdmin.
             ]
         }
     }
+
+If you have existing content with normal <a href=""> style links, you can migrate them into ckeditor-link mode:
+In the ckeditor configs, specify your model field as `djangolinkFallbackField` (see above), existing href values will
+show up in that field (and stay there).
 
 
 4. In your template, use the django-ckeditor-link templatetag.
