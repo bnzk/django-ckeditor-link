@@ -1,5 +1,12 @@
 
 
+==== 0.1.5 ===
+
+- support django 1.11
+- readme enhanced, for pypi submit a short version only
+- new project urls entered
+
+
 ==== 0.1.4 ===
 
 - fallback: legacy href values can be migrated into a specified field/attribute
