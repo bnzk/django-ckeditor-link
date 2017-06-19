@@ -7,3 +7,5 @@
     :target: https://pypi.python.org/pypi/django-ckeditor-link/
 
 link plugin for ckeditor, based on django modelforms/modeladmin, allowing direct linking to your models, or to whatever your want.
+
+Development and Docs on `<https://github.com/bnzk/django-ckeditor-link/>`_
