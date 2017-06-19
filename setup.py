@@ -17,7 +17,7 @@ setup(
     license='MIT',
     platforms=['OS Independent'],
     description="better link dialog for ckeditor",
-    long_description=read('README.rst'),
+    long_description=read('PYPI.rst'),
     author=u'Ben Stähli',
     author_email='bnzk@bnzk.ch',
     packages=find_packages(),

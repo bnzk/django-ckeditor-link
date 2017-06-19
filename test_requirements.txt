@@ -7,8 +7,7 @@ factory_boy
 mock
 selenium
 
-django==1.9
-django-ckeditor==5.1.1
+django-ckeditor
 
 lxml
 cssselect
