@@ -51,10 +51,10 @@ class CustomWebDriver(web_driver_module.WebDriver):
             raise NoSuchElementException(css_selector)
         return elems
 
-    def wait_for_css(self, css_selector, timeout=7):
+    def wait_for_css(self, css_selector, timeout=4):
         """ Shortcut for WebDriverWait"""
         return WebDriverWait(self, timeout).until(lambda driver : driver.find_css(css_selector))
 
-    def wait_for_iframe(self, iframe_selector, timeout=7):
+    def wait_for_iframe(self, iframe_selector, timeout=4):
         """ Shortcut for WebDriverWait"""
         return WebDriverWait(self, timeout).until(lambda driver : driver.frame_to_be_available_and_switch_to_it())
