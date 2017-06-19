@@ -1,3 +1,6 @@
+==== (ongoing) ===
+
+- better selenium testing (should do on travis CI!)
 
 
 ==== 0.1.5 ===
@@ -5,6 +8,7 @@
 - support django 1.11
 - readme enhanced, for pypi submit a short version only
 - new project urls entered
+- selenium testing still a mess, still doesnt work on travis CI
 
 
 ==== 0.1.4 ===
