@@ -36,11 +36,10 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
     def test_editor_has_button_dialog_opens_has_form(self):
         self.login()
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
-        print "gooooooo"
         # wait = WebDriverWait(self.webdriver, 5)
         # element = wait.until(EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, '.cke_dialog_ui_html')))
         # WebDriverWait(self.webdriver, 4).until(EC.presence_of_element_located(By.CSS_SELECTOR, '.cke_dialog_ui_html'))
-        sleep(0.1)  # #1 may ckeditor be very slow, so the click event is not handled?!
+        sleep(1)  # #1 may ckeditor be very slow, so the click event is not handled?!
         button = self.webdriver.wait_for_css(".cke_button__djangolink")
         button[0].click()
         dialog_title = self.webdriver.wait_for_css(".cke_dialog_title")
@@ -52,7 +51,7 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
     def test_dialog_form_validation(self):
         self.login()
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
-        sleep(0.1)  # #1
+        sleep(1)  # #1
         button = self.webdriver.wait_for_css(".cke_button__djangolink")
         button[0].click()
         self.webdriver.wait_for_css(".cke_dialog_title")
@@ -70,7 +69,7 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
         self.webdriver.switch_to.default_content()
         ok = self.webdriver.wait_for_css(".cke_dialog_ui_button_ok")
         ok.click()
-        sleep(0.1)  # argh
+        sleep(1)  # argh
         try:
             # check that dialog is gone or invisible
             title = self.webdriver.find_css(".cke_dialog_title")
@@ -82,18 +81,18 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
     def test_no_fake_null_as_string_values(self):
         self.login()
         self.open(reverse('admin:test_app_testmodel_change', args=[self.existing.id]))
-        sleep(2)  # argh
+        sleep(1)  # argh
         button = self.webdriver.wait_for_css(".cke_button__djangolink")
         button[0].click()
         self.webdriver.wait_for_css(".cke_dialog_title")
-        sleep(2)  # argh
+        sleep(1)  # argh
         iframe = self.webdriver.find_css(".cke_dialog_ui_html")
         self.webdriver.switch_to.frame(iframe)
         self.webdriver.wait_for_css("#id_testmodel")  # just wait for it, then send with "null"
         self.webdriver.switch_to.default_content()
         ok = self.webdriver.wait_for_css(".cke_dialog_ui_button_ok")
         ok.click()
-        sleep(2)  # argh
+        sleep(1)  # argh
         # inserted at first position in html, so this should work.
         ckcontent_iframe = self.webdriver.find_css("#cke_id_richtext iframe")
         self.webdriver.switch_to.frame(ckcontent_iframe)
