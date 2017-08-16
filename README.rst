@@ -31,6 +31,9 @@ Add ``ckeditor_link`` to your ``INSTALLED_APPS``
 
 ckeditor_link does not need it's own database tables, so no need to migrate.
 
+Planned: If you want an out of the box solution for linking, you can add `ckeditor_link.link_model` to your
+`INSTALLED_APPS`.
+
 
 Usage
 ------------
