@@ -26,6 +26,12 @@ class LinkBase(models.Model):
         default='',
         verbose_name=_('Link Style'),
     )
+    free = models.CharField(
+        max_length=512,
+        default='',
+        blank=True,
+        verbose_name=_("Internal / Other"),
+    )
     external = models.URLField(
         blank=True,
         default='',
@@ -36,11 +42,11 @@ class LinkBase(models.Model):
         blank=True,
         verbose_name=_("E-Mail"),
     )
-    free = models.CharField(
-        max_length=512,
+    phone = models.CharField(
+        max_length=64,
         default='',
         blank=True,
-        verbose_name=_("Internal / Other"),
+        verbose_name=_("Phone"),
     )
 
     class Meta:
@@ -62,6 +68,8 @@ class LinkBase(models.Model):
             return link
         elif self.mailto:
             return "mailto:%s" % self.mailto
+        elif self.phone:
+            return "tel:%s" % self.mailto
         return ''
 
     def get_link_text(self):
