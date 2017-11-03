@@ -53,7 +53,7 @@ class LinkModelBase(models.Model):
     def get_link_target(self):
         return "_blank"
 
-    def get_link_cssclass(self):
+    def get_link_style(self):
         return "no-css-class"
 
 

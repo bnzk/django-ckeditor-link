@@ -54,7 +54,7 @@ def ckeditor_link_add_links(html):
                 link.set('href', real_link.get_link())
                 if getattr(real_link, 'get_link_target', None):
                     link.set('target', real_link.get_link_target())
-                if getattr(real_link, 'get_link_style'):
+                if getattr(real_link, 'get_link_style', None):
                     link.set('class', real_link.get_link_style())
             except ValueError:
                 continue
