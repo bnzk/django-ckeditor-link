@@ -91,8 +91,8 @@ class LinkBase(models.Model):
 if CKEDITOR_LINK_USE_CMS_FILER:
 
     from cms.models import Page
-    from cms.fields import PageField
-    from filer.fields import FilerFileField
+    from cms.models.fields import PageField
+    from filer.fields.file import FilerFileField
 
 
     class CMSFilerLinkBase(LinkBase):
