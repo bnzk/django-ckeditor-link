@@ -74,7 +74,7 @@ class LinkBase(models.Model):
 
     def get_link_text(self):
         obj = None
-        if self.name:
+        if getattr(self, 'name', None):
             return self.name
         if self.link_type:
             obj = getattr(self, self.link_type, None)

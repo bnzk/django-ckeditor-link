@@ -50,10 +50,10 @@ class LinkModelBase(models.Model):
         else:
             return "http://no-link-given.com/"
 
-    def get_target(self):
+    def get_link_target(self):
         return "_blank"
 
-    def get_css_class(self):
+    def get_link_cssclass(self):
         return "no-css-class"
 
 
