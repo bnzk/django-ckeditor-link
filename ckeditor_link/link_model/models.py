@@ -20,7 +20,7 @@ class LinkBase(models.Model):
         default='',
         verbose_name=_('Link type'),
     )
-    link_class = models.CharField(
+    link_style = models.CharField(
         max_length=64,
         blank=True,
         default='',
@@ -86,7 +86,7 @@ class LinkBase(models.Model):
     def get_link_type(self):
         return self.link_type
 
-    def get_link_cssclass(self):
+    def get_link_style(self):
         return self.link_style
 
     def get_link_target(self):
