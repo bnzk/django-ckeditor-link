@@ -15,32 +15,32 @@ class LinkBase(models.Model):
     #     default='',
     # )
     link_type = models.CharField(
-        verbose_name=_('Link'),
         max_length=20,
         blank=True,
         default='',
+        verbose_name=_('Link type'),
     )
     link_class = models.CharField(
-        verbose_name=_('Link Style'),
         max_length=64,
         blank=True,
         default='',
+        verbose_name=_('Link Style'),
     )
     external = models.URLField(
-        null=True,
         blank=True,
+        default='',
         verbose_name=_("External Address"),
     )
     mailto = models.EmailField(
-        null=True,
+        default='',
         blank=True,
         verbose_name=_("E-Mail"),
     )
     free = models.CharField(
         max_length=512,
-        null=True,
+        default='',
         blank=True,
-        verbose_name=_("Other"),
+        verbose_name=_("Internal / Other"),
     )
 
     class Meta:
