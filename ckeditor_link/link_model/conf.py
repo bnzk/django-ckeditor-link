@@ -21,17 +21,17 @@ if CKEDITOR_LINK_USE_CMS_FILER:
             ('', _("None")),
             ('page', _("page")),
             ('file', _("File")),
+            ('free', _("Free")),
             ('external', _("External URL")),
             ('mailto', _("E-Mail")),
-            ('free', _("Free")),
         )
     )
 else:
     CKEDITOR_LINK_TYPE_CHOICES = getattr(
         settings, 'CKEDITOR_LINK_TYPE_CHOICES', (
             ('', _("None")),
+            ('free', _("Free")),
             ('external', _("External URL")),
             ('mailto', _("E-Mail")),
-            ('free', _("Free")),
         )
     )

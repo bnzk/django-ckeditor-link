@@ -83,7 +83,7 @@ class LinkBase(models.Model):
 
     def get_link_target(self):
         type = self.get_link_type()
-        if type in ['file', 'external']:\
+        if type in ['file', 'external']:
             return "_blank"
         return ""
 
