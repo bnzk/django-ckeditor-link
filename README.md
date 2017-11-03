@@ -1,28 +1,21 @@
-django-ckeditor-link
-*****************
+# django-ckeditor-link
 
-.. image:: https://travis-ci.org/bnzk/django-ckeditor-link.svg
-    :target: https://travis-ci.org/bnzk/django-ckeditor-link
-.. image:: https://img.shields.io/pypi/v/django-ckeditor-link.svg
-    :target: https://pypi.python.org/pypi/django-ckeditor-link/
-.. image:: https://img.shields.io/pypi/l/django-ckeditor-link.svg
-    :target: https://pypi.python.org/pypi/django-ckeditor-link/
+
+[![Build Status](https://travis-ci.org/bnzk/django-ckeditor-link.svg "Build Status")](https://travis-ci.org/bnzk/django-ckeditor-link/)
+[![PyPi Version](https://img.shields.io/pypi/v/django-ckeditor-link.svg "PyPi Version")](https://pypi.python.org/pypi/django-ckeditor-link/)
+[![Licence](https://img.shields.io/pypi/l/django-ckeditor-link.svg "Licence")](https://pypi.python.org/pypi/django-ckeditor-link/)
+
 
 link plugin for ckeditor, based on django modelforms/modeladmin, allowing direct linking to your models, or to whatever your want.
 
 
-Installation
-------------
+## Installation
 
 To get the latest stable release from PyPi
 
-.. code-block:: bash
-
     pip install django-ckeditor-link
 
-Add ``ckeditor_link`` to your ``INSTALLED_APPS``
-
-.. code-block:: python
+Add `ckeditor_link` to your `INSTALLED_APPS`
 
     INSTALLED_APPS = (
         ...,
@@ -31,23 +24,19 @@ Add ``ckeditor_link`` to your ``INSTALLED_APPS``
 
 ckeditor_link does not need it's own database tables, so no need to migrate.
 
-Planned: If you want an out of the box solution for linking, you can add `ckeditor_link.link_model` to your
-`INSTALLED_APPS`.
+If you want an out of the box solution for linking, you can add `ckeditor_link.link_model` to your
+`INSTALLED_APPS`. Warning, EXPERIMENTAL feature.
 
 
-Usage
-------------
+## Usage
 
-Have a look at ``ckeditor_link/tests/test_app/settings_test.py`` for a complete example.
+Have a look at `ckeditor_link/tests/test_app/settings_test.py` for a complete example.
 
 Following steps are needed.
 
-
-1. Define a link model. Proposed way: Create a base model, that you can extend from for example when
+1. Define a link model. Proposed way: Create an abstract base model, that you can extend from for example when
 having a teaser model. And a CKLink model, whose purpose is only to provide a modelform and validation. No data is
 ever written to that table, if used with DjangoLinkAdmin.
-
-.. code-block:: python
 
     # your_app/models.py
 
@@ -70,8 +59,14 @@ ever written to that table, if used with DjangoLinkAdmin.
             return "http://www.dynamic.com"
 
 
-    class CKLinkModel(LinkModelBase):
+    class LinkModel(LinkModelBase):
         pass
+
+
+    class Teaser(LinkModelBase):
+        image = models.ImageField()
+        title = models.CharField()
+        text = models.TextField()
 
 
 2. Register your model with DjangoLinkAdmin.
@@ -82,21 +77,19 @@ ever written to that table, if used with DjangoLinkAdmin.
     ...
     from ckeditor_link.admin import DjangoLinkAdmin
 
-    class CKModelLinkAdmin(DjangoLinkAdmin):
+    class LinkModelAdmin(DjangoLinkAdmin):
         pass
 
-    admin.site.register(CKLinkModel, CKModelLinkAdmin)
+    admin.site.register(LinkModel, LinkModelAdmin)
 
 
 3. Configure your django-ckeditor (or whatever ck you use).
 
-.. code-block:: python
-
     # config for django-ckeditor
 
-    CKEDITOR_LINK_MODEL = 'ckeditor_link.tests.test_app.models.LinkModel'
-    CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:test_app_linkmodel_add')
-    CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:test_app_linkmodel_verify')
+    CKEDITOR_LINK_MODEL = 'my_app.models.LinkModel'
+    CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:my_app_linkmodel_add')
+    CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:my_app_linkmodel_verify')
 
     CKEDITOR_CONFIGS = {
         'default': {
@@ -123,15 +116,13 @@ In the ckeditor configs, specify your model field as `djangolinkFallbackField` (
 show up in that field (and stay there).
 
 
-4. In your template, use the django-ckeditor-link templatetag.
+4. In your template, use the django-ckeditor-link templatetag. This adds `lxml` and `cssselect` as dependencies.
 
-.. code-block:: html
+    {% load ckeditor_link_tags %}
+    {% object.html_field|ckeditor_link_add_link %}
 
-    available, undocumented. at your own risk (needs lxml)
 
-
-Contribute
-------------
+## Contribute
 
 Fork and code. Quickstart:
 
@@ -144,7 +135,6 @@ Fork and code. Quickstart:
     ./manage.py runserver  # goto localhost:8000/admin/ or localhost:8000/testmodel/2/
 
 
-Testing
-#######
+### Testing
 
 Either run `tox` for complete tests, or `python manage.py test

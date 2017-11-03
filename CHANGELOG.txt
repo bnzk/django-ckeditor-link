@@ -1,5 +1,6 @@
 ==== (ongoing) ===
 
+- backward incompatible change: get_link_style, get_link_target for getting target and style of a link.
 - better selenium testing (should do on travis CI!)
 
 
