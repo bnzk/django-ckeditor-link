@@ -105,6 +105,9 @@ if CKEDITOR_LINK_USE_CMS_FILER:
             blank=True,
         )
 
+        class Meta:
+            abstract = True
+
         def get_link(self):
             # best practice is to call super first, so not relevant attrs are nulled
             super_link = super(CMSFilerLinkBase, self).get_link()
@@ -116,7 +119,7 @@ if CKEDITOR_LINK_USE_CMS_FILER:
                 if self.page.site.id == settings.SITE_ID:
                     return page_url
                 else:
-                    return 'http://' + self.page.site.domain + page_url
+                    return 'http:/fields /' + self.page.site.domain + page_url
             elif self.file:
                 return self.file.url
             return super_link
