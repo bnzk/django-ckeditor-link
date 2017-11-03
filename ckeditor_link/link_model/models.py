@@ -69,7 +69,7 @@ class LinkBase(models.Model):
         elif self.mailto:
             return "mailto:%s" % self.mailto
         elif self.phone:
-            return "tel:%s" % self.mailto
+            return "tel:%s" % self.phone
         return ''
 
     def get_link_text(self):
