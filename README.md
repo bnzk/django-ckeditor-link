@@ -38,7 +38,7 @@ Following steps are needed.
 having a teaser model. And a CKLink model, whose purpose is only to provide a modelform and validation. No data is
 ever written to that table, if used with DjangoLinkAdmin.
 
-    # your_app/models.py
+    \# your_app/models.py
 
     @python_2_unicode_compatible
     class LinkModelBase(models.Model):
@@ -68,12 +68,15 @@ ever written to that table, if used with DjangoLinkAdmin.
         title = models.CharField()
         text = models.TextField()
 
+For your convinience, we provide a basic link model, and a django-cms and django-filer compatible version, under
+ckeditor_link.link_model.models. They are named ``
+
 
 2. Register your model with DjangoLinkAdmin.
 
 .. code-block:: python
 
-    # your_app/admin.py
+    \# your_app/admin.py
     ...
     from ckeditor_link.admin import DjangoLinkAdmin
 
@@ -85,7 +88,8 @@ ever written to that table, if used with DjangoLinkAdmin.
 
 3. Configure your django-ckeditor (or whatever ck you use).
 
-    # config for django-ckeditor
+
+    \# config for django-ckeditor
 
     CKEDITOR_LINK_MODEL = 'my_app.models.LinkModel'
     CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:my_app_linkmodel_add')
@@ -125,8 +129,6 @@ show up in that field (and stay there).
 ## Contribute
 
 Fork and code. Quickstart:
-
-.. code-block:: bash
 
     pip install -r test_requirements.txt
     ./manage.py migrate  # create local sqlite db

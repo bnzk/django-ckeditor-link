@@ -2,10 +2,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 
+use = False
+if 'cms' in settings.INSTALLED_APPS and 'filer' in settings.INSTALLED_APPS:
+    use = True
+
 CKEDITOR_LINK_USE_CMS_FILER = getattr(
     settings,
     'CKEDITOR_LINK_USE_CMS_FILER',
-    False
+    use
 )
 
 CKEDITOR_LINK_STYLE_CHOICES = getattr(

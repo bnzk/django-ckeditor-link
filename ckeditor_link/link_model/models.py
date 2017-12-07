@@ -96,7 +96,7 @@ class LinkBase(models.Model):
         return ""
 
 
-if 'cms' in settings.INSTALLED_APPS and 'filer' in settings.INSTALLED_APPS:
+if CKEDITOR_LINK_USE_CMS_FILER:
 
     from cms.models import Page
     from cms.models.fields import PageField
