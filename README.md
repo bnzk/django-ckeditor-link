@@ -129,8 +129,8 @@ ever written to that table, if used with DjangoLinkAdmin.
 must install those yourself.
 
     ```django
-        {% load ckeditor_link_tags %}
-        {% object.html_field|ckeditor_link_add_link %}
+    {% load ckeditor_link_tags %}
+    {% object.html_field|ckeditor_link_add_link %}
     ```
 
 ## Contribute
