@@ -102,18 +102,18 @@ ever written to that table, if used with DjangoLinkAdmin.
         'default': {
             'djangolinkIframeURL': CKEDITOR_LINK_IFRAME_URL,
             'djangolinkVerifyURL': CKEDITOR_LINK_VERIFY_URL,
-            'djangolinkFallbackField': 'external,
+            'djangolinkFallbackField': 'external',
             'extraPlugins': ','.join(
                 [
                     # your extra plugins here
                     'djangolink',
-                    ...
+
                 ]),
             'toolbar': 'Custom',
             'toolbar_Custom': [
                 ['Bold', 'Underline'],
                 ['DjangoLink', 'Unlink'],
-                ...
+
             ]
         }
     }
