@@ -38,42 +38,42 @@ Following steps are needed.
 having a teaser model. And a CKLink model, whose purpose is only to provide a modelform and validation. No data is
 ever written to that table, if used with DjangoLinkAdmin.
 
-```python
-# your_app/models.py
+    ```python
+    # your_app/models.py
 
-@python_2_unicode_compatible
-class LinkModelBase(models.Model):
-    target = models.CharField(max_length=255, blank=True, default='', )
-    external_url = models.CharField(max_length=255, blank=True, default='',)
-    email = models.EmailField(blank=True, default='',)
-    testmodel = models.ForeignKey(TestModel, null=True, default=None, blank=True)
+    @python_2_unicode_compatible
+    class LinkModelBase(models.Model):
+        target = models.CharField(max_length=255, blank=True, default='', )
+        external_url = models.CharField(max_length=255, blank=True, default='',)
+        email = models.EmailField(blank=True, default='',)
+        testmodel = models.ForeignKey(TestModel, null=True, default=None, blank=True)
 
-    class Meta:
-        abstract = True
+        class Meta:
+            abstract = True
 
-    def __str__(self):
-        # do it better
-        return "LINK! %s" % self.target
+        def __str__(self):
+            # do it better
+            return "LINK! %s" % self.target
 
-    def get_link(self):
-        # return link value, based on fields.
-        return "http://www.dynamic.com"
-
-
-class LinkModel(LinkModelBase):
-    pass
+        def get_link(self):
+            # return link value, based on fields.
+            return "http://www.dynamic.com"
 
 
-class Teaser(LinkModelBase):
-    image = models.ImageField()
-    title = models.CharField()
-    text = models.TextField()
-```
+    class LinkModel(LinkModelBase):
+        pass
 
 
-For your convinience, we provide a basic link model, and a django-cms / django-filer compatible version, under
-`ckeditor_link.link_model.models`. They are named `LinkBase` and `CMSFilerLinkBase`. To use them, you would need
-to add `ckeditor_link.link_model` to `INSTALLED_APPS` in your settings.
+    class Teaser(LinkModelBase):
+        image = models.ImageField()
+        title = models.CharField()
+        text = models.TextField()
+    ```
+
+
+    For your convinience, we provide a basic link model, and a django-cms / django-filer compatible version, under
+    `ckeditor_link.link_model.models`. They are named `LinkBase` and `CMSFilerLinkBase`. To use them, you would need
+    to add `ckeditor_link.link_model` to `INSTALLED_APPS` in your settings.
 
 
 2. Register your model with DjangoLinkAdmin.
