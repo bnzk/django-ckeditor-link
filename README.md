@@ -121,27 +121,29 @@ CKEDITOR_CONFIGS = {
 ```
 
 
-If you have existing content with normal <a href=""> style links, you can migrate them into ckeditor-link mode:
+If you have existing content with normal `<a href="">` style links, you can migrate them into ckeditor-link mode:
 In the ckeditor configs, specify your model field as `djangolinkFallbackField` (see above), existing href values will
 show up in that field (and stay there).
 
 
 4. In your template, use the django-ckeditor-link templatetag. This adds `lxml` and `cssselect` as dependencies.
 
+```django
     {% load ckeditor_link_tags %}
     {% object.html_field|ckeditor_link_add_link %}
-
+```
 
 ## Contribute
 
 Fork and code. Quickstart:
 
+```shell
     pip install -r test_requirements.txt
     ./manage.py migrate  # create local sqlite db
     ./manage.py createsuperuser  # you want that
     ./manage.py loaddata test_app  # same data that is used for running tests
     ./manage.py runserver  # goto localhost:8000/admin/ or localhost:8000/testmodel/2/
-
+```
 
 ### Testing
 
