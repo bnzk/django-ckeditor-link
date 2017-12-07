@@ -1,6 +1,5 @@
 # django-ckeditor-link
 
-
 [![Build Status](https://travis-ci.org/bnzk/django-ckeditor-link.svg "Build Status")](https://travis-ci.org/bnzk/django-ckeditor-link/)
 [![PyPi Version](https://img.shields.io/pypi/v/django-ckeditor-link.svg "PyPi Version")](https://pypi.python.org/pypi/django-ckeditor-link/)
 [![Licence](https://img.shields.io/pypi/l/django-ckeditor-link.svg "Licence")](https://pypi.python.org/pypi/django-ckeditor-link/)
