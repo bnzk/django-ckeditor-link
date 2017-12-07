@@ -68,8 +68,9 @@ ever written to that table, if used with DjangoLinkAdmin.
         title = models.CharField()
         text = models.TextField()
 
+
 For your convinience, we provide a basic link model, and a django-cms and django-filer compatible version, under
-ckeditor_link.link_model.models. They are named ``
+ckeditor_link.link_model.models. They are named `LinkBase` and `CMSFilerLinkBase`.
 
 
 2. Register your model with DjangoLinkAdmin.
