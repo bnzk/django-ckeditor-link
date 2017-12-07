@@ -71,8 +71,9 @@ class Teaser(LinkModelBase):
 ```
 
 
-For your convinience, we provide a basic link model, and a django-cms and django-filer compatible version, under
-ckeditor_link.link_model.models. They are named `LinkBase` and `CMSFilerLinkBase`.
+For your convinience, we provide a basic link model, and a django-cms / django-filer compatible version, under
+`ckeditor_link.link_model.models`. They are named `LinkBase` and `CMSFilerLinkBase`. To use them, you would need
+to add `ckeditor_link.link_model` to `INSTALLED_APPS` in your settings.
 
 
 2. Register your model with DjangoLinkAdmin.
