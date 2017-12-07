@@ -96,11 +96,12 @@ class LinkBase(models.Model):
         return ""
 
 
-if CKEDITOR_LINK_USE_CMS_FILER:
+if 'cms' in settings.INSTALLED_APPS and 'filer' in settings.INSTALLED_APPS:
 
     from cms.models import Page
     from cms.models.fields import PageField
     from filer.fields.file import FilerFileField
+
 
 
     class CMSFilerLinkBase(LinkBase):
