@@ -38,6 +38,7 @@ Following steps are needed.
 having a teaser model. And a CKLink model, whose purpose is only to provide a modelform and validation. No data is
 ever written to that table, if used with DjangoLinkAdmin.
 
+
     \# your_app/models.py
 
     @python_2_unicode_compatible
@@ -75,7 +76,6 @@ ckeditor_link.link_model.models. They are named `LinkBase` and `CMSFilerLinkBase
 
 2. Register your model with DjangoLinkAdmin.
 
-.. code-block:: python
 
     \# your_app/admin.py
     ...
@@ -89,32 +89,34 @@ ckeditor_link.link_model.models. They are named `LinkBase` and `CMSFilerLinkBase
 
 3. Configure your django-ckeditor (or whatever ck you use).
 
+```python
+\# config for django-ckeditor
 
-    \# config for django-ckeditor
+CKEDITOR_LINK_MODEL = 'my_app.models.LinkModel'
+CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:my_app_linkmodel_add')
+CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:my_app_linkmodel_verify')
 
-    CKEDITOR_LINK_MODEL = 'my_app.models.LinkModel'
-    CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:my_app_linkmodel_add')
-    CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:my_app_linkmodel_verify')
-
-    CKEDITOR_CONFIGS = {
-        'default': {
-            'djangolinkIframeURL': CKEDITOR_LINK_IFRAME_URL,
-            'djangolinkVerifyURL': CKEDITOR_LINK_VERIFY_URL,
-            'djangolinkFallbackField': 'external,
-            'extraPlugins': ','.join(
-                [
-                    # your extra plugins here
-                    'djangolink',
-                    ...
-                ]),
-            'toolbar': 'Custom',
-            'toolbar_Custom': [
-                ['Bold', 'Underline'],
-                ['DjangoLink', 'Unlink'],
+CKEDITOR_CONFIGS = {
+    'default': {
+        'djangolinkIframeURL': CKEDITOR_LINK_IFRAME_URL,
+        'djangolinkVerifyURL': CKEDITOR_LINK_VERIFY_URL,
+        'djangolinkFallbackField': 'external,
+        'extraPlugins': ','.join(
+            [
+                # your extra plugins here
+                'djangolink',
                 ...
-            ]
-        }
+            ]),
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Underline'],
+            ['DjangoLink', 'Unlink'],
+            ...
+        ]
     }
+}
+```
+
 
 If you have existing content with normal <a href=""> style links, you can migrate them into ckeditor-link mode:
 In the ckeditor configs, specify your model field as `djangolinkFallbackField` (see above), existing href values will
