@@ -1,8 +1,14 @@
 ==== (ongoing) ===
 
-- backward incompatible change: get_link_style, get_link_target for getting target and style of a link.
 - better selenium testing (should do on travis CI!)
 
+
+==== 0.1.6 ===
+
+- provide ckeditor_link.link_model, with default abstract link models, a basic version,
+  and a django-cms / django-filer enabled version.
+- backward incompatible change (only if you use the built in template tag):
+  get_link_style, get_link_target for getting target and style of a link.
 
 ==== 0.1.5 ===
 

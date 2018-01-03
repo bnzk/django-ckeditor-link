@@ -69,10 +69,10 @@ ever written to that table, if used with DjangoLinkAdmin.
         text = models.TextField()
     ```
 
-
-    For your convinience, we provide a basic link model, and a django-cms / django-filer compatible version, under
-    `ckeditor_link.link_model.models`. They are named `LinkBase` and `CMSFilerLinkBase`. To use them, you would need
-    to add `ckeditor_link.link_model` to `INSTALLED_APPS` in your settings.
+    For your convinience, we provide a basic abstract link model, and a django-cms / django-filer compatible version, under
+    `ckeditor_link.link_model.models`. They are named `LinkBase` and `CMSFilerLinkBase`, and thought to inherit from. To use them, you would need
+    to add `ckeditor_link.link_model` to `INSTALLED_APPS` in your settings. To use the cms / filer version, you'll need to set `CKEDITOR_LINK_USE_CMS_FILER` to True in your settings.
+    You can provide your own LINK_TYPE_CHOICES, if you add some more fields, with `settings.CKEDITOR_LINK_TYPE_CHOICES`.
 
 
 2. Register your model with DjangoLinkAdmin.
