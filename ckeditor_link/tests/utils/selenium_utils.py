@@ -1,15 +1,15 @@
-from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.core.urlresolvers import reverse
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium import webdriver
 
 
-#determine the WebDriver module. default to Firefox
-try:
-    web_driver_module = settings.SELENIUM_WEBDRIVER
-except AttributeError:
-    from selenium.webdriver.firefox import webdriver as web_driver_module
+# compat
+import django
+if django.VERSION[:2] < (1, 10):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 
 class SeleniumTestCase(StaticLiveServerTestCase):
@@ -38,7 +38,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.webdriver.wait_for_css("body.dashboard")
 
 
-class CustomWebDriver(web_driver_module.WebDriver):
+class CustomWebDriver(webdriver.Firefox):
     """Our own WebDriver with some helpers added"""
 
     def find_css(self, css_selector):

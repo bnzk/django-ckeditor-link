@@ -4,17 +4,19 @@ import sys
 import tempfile
 import logging
 
-from django.core.urlresolvers import reverse_lazy
+# compat
+import django
+if django.VERSION[:2] < (1, 10):
+    from django.core.urlresolvers import reverse_lazy
+else:
+    from django.urls import reverse_lazy
 
 
 DEBUG = True
 
 logging.getLogger("factory").setLevel(logging.WARN)
 
-# from selenium.webdriver.firefox import webdriver
-from selenium.webdriver.phantomjs import webdriver
-SELENIUM_WEBDRIVER = webdriver
-
+HEADLESS_TESTING = True
 
 CKEDITOR_LINK_MODEL = 'ckeditor_link.tests.test_app.models.LinkModel'
 CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:test_app_linkmodel_add')
@@ -136,7 +138,7 @@ INTERNAL_APPS = (
     'ckeditor_link.tests.test_app',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -144,6 +146,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 )
+
+MIDDLEWARE_CLASSES = MIDDLEWARE
 
 INSTALLED_APPS = EXTERNAL_APPS + INTERNAL_APPS
 COVERAGE_MODULE_EXCLUDES += EXTERNAL_APPS

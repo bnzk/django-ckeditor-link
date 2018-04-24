@@ -7,7 +7,7 @@ from ckeditor_link.tests.test_app.views import TestModelDetailView
 
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^testmodel/(?P<pk>\d+)/$', TestModelDetailView.as_view(), name='testmodel_detail'),
 ]
 
