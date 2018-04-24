@@ -41,7 +41,13 @@ class LinkModelBase(models.Model):
     email = models.EmailField(blank=True, default='',)
     # http://stackoverflow.com/questions/12644142/prefill-a-datetimefield-from-url-in-django-admin
     when = models.DateField(blank=True, null=True)
-    testmodel = models.ForeignKey(TestModel, null=True, default=None, blank=True)
+    testmodel = models.ForeignKey(
+        TestModel,
+        null=True,
+        on_delete=models.CASCADE,
+        default=None,
+        blank=True,
+    )
 
     class Meta:
         abstract = True

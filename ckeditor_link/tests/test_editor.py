@@ -3,16 +3,19 @@ from time import sleep
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.expected_conditions import visibility_of
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.options import Options
 
 from ckeditor_link.tests.utils.selenium_utils import SeleniumTestCase, CustomWebDriver
 from ckeditor_link.tests.test_app.models import TestModel, LinkModel
+
+
+# compat
+import django
+if django.VERSION[:2] < (1, 10):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 
 class ckeditor_linkEditorTests(SeleniumTestCase):

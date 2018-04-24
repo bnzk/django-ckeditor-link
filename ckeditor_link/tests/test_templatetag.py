@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
 from django.test import Client
 from django.test import TestCase
 
 from ckeditor_link.tests.test_app.models import TestModel, LinkModel
+
+# compat
+import django
+if django.VERSION[:2] < (1, 10):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 
 class ckeditor_linkDialogTests(TestCase):
