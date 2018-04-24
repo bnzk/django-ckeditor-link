@@ -9,15 +9,17 @@ language: python
 cache: pip
 
 env:
-  exclude:
-    - python: '2.7'
-      env: DJANGO=2.0 DB=sqlite
   matrix:
     - DJANGO=1.8.12 DB=sqlite
     - DJANGO=1.9.5 DB=sqlite
     - DJANGO=1.10.0 DB=sqlite
     - DJANGO=1.11.0 DB=sqlite
     - DJANGO=2.0 DB=sqlite
+matrix:
+  allow-failures:
+  exclude:
+    - python: '2.7'
+      env: DJANGO=2.0 DB=sqlite
 
 # https://docs.travis-ci.com/user/gui-and-headless-browsers/
 before_script:

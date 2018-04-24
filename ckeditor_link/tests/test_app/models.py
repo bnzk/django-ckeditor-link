@@ -1,10 +1,15 @@
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from ckeditor.fields import RichTextField
-# from djangocms_text_ckeditor.fields import HTMLField
+
+# compat
+import django
+if django.VERSION[:2] < (1, 10):
+    from django.core.urlresolvers import reverse_lazy
+else:
+    from django.urls import reverse_lazy
 
 
 @python_2_unicode_compatible
