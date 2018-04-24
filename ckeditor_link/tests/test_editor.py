@@ -24,7 +24,7 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
         self.existing = TestModel.objects.get(pk=1)
         # Instantiating the WebDriver will load your browser
         options = Options()
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
         self.webdriver = CustomWebDriver(firefox_options=options, )
 
     def tearDown(self):
