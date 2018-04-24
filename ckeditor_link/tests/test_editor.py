@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from time import sleep
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from selenium.common.exceptions import NoSuchElementException
@@ -24,7 +25,8 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
         self.existing = TestModel.objects.get(pk=1)
         # Instantiating the WebDriver will load your browser
         options = Options()
-        options.add_argument("--headless")
+        if settings.HEADLESS_TESTING:
+            options.add_argument("--headless")
         self.webdriver = CustomWebDriver(firefox_options=options, )
 
     def tearDown(self):

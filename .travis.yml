@@ -35,4 +35,4 @@ install:
   - pip install -r test_requirements.txt
 
 # command to run tests
-script: python manage.py test
+script: python manage.py test --settings=ckeditor_link.tests.settings_no_headless
