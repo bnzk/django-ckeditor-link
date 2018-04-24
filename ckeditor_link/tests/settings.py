@@ -4,7 +4,12 @@ import sys
 import tempfile
 import logging
 
-from django.core.urlresolvers import reverse_lazy
+# compat
+import django
+if django.VERSION[:2] < (1, 10):
+    from django.core.urlresolvers import reverse_lazy
+else:
+    from django.urls import reverse_lazy
 
 
 DEBUG = True
