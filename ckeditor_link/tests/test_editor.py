@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.expected_conditions import visibility_of
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.firefox.options import Options
 
 from ckeditor_link.tests.utils.selenium_utils import SeleniumTestCase, CustomWebDriver
 from ckeditor_link.tests.test_app.models import TestModel, LinkModel
@@ -22,7 +23,9 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
         superuser = User.objects.create_superuser(self.username, 'admin@free.fr', self.password)
         self.existing = TestModel.objects.get(pk=1)
         # Instantiating the WebDriver will load your browser
-        self.webdriver = CustomWebDriver()
+        options = Options()
+        options.add_argument("--headless")
+        self.webdriver = CustomWebDriver(firefox_options=options, )
 
     def tearDown(self):
         self.webdriver.quit()

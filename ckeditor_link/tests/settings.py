@@ -11,10 +11,6 @@ DEBUG = True
 
 logging.getLogger("factory").setLevel(logging.WARN)
 
-# from selenium.webdriver.firefox import webdriver
-from selenium.webdriver.phantomjs import webdriver
-SELENIUM_WEBDRIVER = webdriver
-
 
 CKEDITOR_LINK_MODEL = 'ckeditor_link.tests.test_app.models.LinkModel'
 CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:test_app_linkmodel_add')
