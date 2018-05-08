@@ -8,11 +8,11 @@ cache: pip
 
 env:
   matrix:
-    - REQ='django>=1.8, <1.9'
-    - REQ='django>=1.9, <1.10'
-    - REQ='django>=1.10, <1.11'
-    - REQ='django>=1.11, <2.0'
-    - REQ='django>=2.0, <2.1'
+    - REQ='django>=1.8,<1.9'
+    - REQ='django>=1.9,<1.10'
+    - REQ='django>=1.10,<1.11'
+    - REQ='django>=1.11,<2.0'
+    - REQ='django>=2.0,<2.1'
 matrix:
   allow-failures:
   exclude:
