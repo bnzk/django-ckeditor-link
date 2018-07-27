@@ -1,5 +1,7 @@
 # django-ckeditor-link
 
+build status fails as I am not savyy enough to make this iframe/selenium/sleep mess work. Passes with local tox, believ me ;)
+
 [![Build Status](https://travis-ci.org/bnzk/django-ckeditor-link.svg "Build Status")](https://travis-ci.org/bnzk/django-ckeditor-link/)
 [![PyPi Version](https://img.shields.io/pypi/v/django-ckeditor-link.svg "PyPi Version")](https://pypi.python.org/pypi/django-ckeditor-link/)
 [![Licence](https://img.shields.io/pypi/l/django-ckeditor-link.svg "Licence")](https://pypi.python.org/pypi/django-ckeditor-link/)
