@@ -8,16 +8,16 @@ cache: pip
 
 env:
   matrix:
-    - DJANGO=1.8.12 DB=sqlite
-    - DJANGO=1.9.5 DB=sqlite
-    - DJANGO=1.10.0 DB=sqlite
-    - DJANGO=1.11.0 DB=sqlite
-    - DJANGO=2.0 DB=sqlite
+    - REQ='django>=1.8,<1.9'
+    - REQ='django>=1.9,<1.10'
+    - REQ='django>=1.10,<1.11'
+    - REQ='django>=1.11,<2.0'
+    - REQ='django>=2.0,<2.1'
 matrix:
   allow-failures:
   exclude:
     - python: '2.7'
-      env: DJANGO=2.0 DB=sqlite
+      env: REQ='django>=2.0,<2.1'
 
 # https://docs.travis-ci.com/user/gui-and-headless-browsers/
 before_script:
@@ -34,7 +34,7 @@ before_install:
 # command to install dependencies
 install:
   - pip install .
-  - pip install -q Django==$DJANGO
+  - pip install $REQ
   - pip install -r test_requirements.txt
 
 # command to run tests
