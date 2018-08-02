@@ -36,9 +36,11 @@ def ckeditor_link_add_links(html):
             for key, value in link.items():
                 if key.startswith('data-'):
                     new_key = key.replace('data-', '', 1)
-                    # will be removed!
+                    # TODO: make special fields like django-cms's PageField work without hacks!
                     if new_key == 'page_2':
-                        new_key = 'page'
+                        new_key = 'cms_page'  # backward compat, for 0.2.0
+                    if new_key == 'cms_page_2':
+                        new_key = 'cms_page'
                     # until here
                     if hasattr(dummy_link, new_key):
                         if hasattr(dummy_link, new_key + "_id"):

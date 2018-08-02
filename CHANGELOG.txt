@@ -1,5 +1,14 @@
-==== (ongoing) ===
 
+==== 0.2.1 (under development) ===
+
+- go ahead
+
+
+==== 0.2.0 (released soon) ===
+
+- backward incompatible change: field "page" of CMSFilerLinkBase changed to "cms_page", for when used
+  as base for cms plugins, it has possible clashes with the CMSPlugins "page" attribute.
+-
 
 
 ==== 0.1.6 ===
@@ -10,6 +19,7 @@
   get_link_style, get_link_target for getting target and style of a link.
 - better selenium testing with firefox instead of phantomjs should do on travis CI now!
 - dropping django 1.7 support
+
 
 ==== 0.1.5 ===
 
@@ -33,4 +43,3 @@
 
 - support for django 1.9
 - refactored tests, to use default manage.py test command
-

@@ -104,9 +104,9 @@ if CKEDITOR_LINK_USE_CMS_FILER:
 
 
     class CMSFilerLinkBase(LinkBase):
-        page = PageField(
+        cms_page = PageField(
             null=True,
-            blank=True
+            blank=True,
         )
         file = FilerFileField(
             null=True,
@@ -119,22 +119,22 @@ if CKEDITOR_LINK_USE_CMS_FILER:
         def get_link(self):
             # best practice is to call super first, so not relevant attrs are nulled
             super_link = super(CMSFilerLinkBase, self).get_link()
-            if self.page_id:
+            if self.cms_page_id:
                 try:
-                    page_url = self.page.get_absolute_url()
+                    page_url = self.cms_page.get_absolute_url()
                 except Page.DoesNotExist:
                     return ''
-                if self.page.site.id == settings.SITE_ID:
+                if self.cms_page.site.id == settings.SITE_ID:
                     return page_url
                 else:
-                    return 'http:/fields /' + self.page.site.domain + page_url
+                    return 'http:/fields /' + self.cms_page.site.domain + page_url
             elif self.file:
                 return self.file.url
             return super_link
 
         def get_link_target(self):
             type = self.get_link_type()
-            if type == 'page' and self.page and not self.page.site.id == settings.SITE_ID:
+            if type == 'cms_page' or type == 'page' and self.cms_page and not self.cms_page.site.id == settings.SITE_ID:
                 return "_blank"
             else:
                 return super(CMSFilerLinkBase, self).get_link_target()
