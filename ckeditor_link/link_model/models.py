@@ -99,6 +99,13 @@ class LinkBase(models.Model):
         return ""
 
 
+class Link(LinkBase):
+    """
+    if in installed apps, this will be created and available out of the box
+    """
+    pass
+
+
 if CKEDITOR_LINK_USE_CMS_FILER:
 
     from cms.models import Page
