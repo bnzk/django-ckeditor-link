@@ -7,8 +7,8 @@
 ==== 0.2.0 (released soon) ===
 
 - backward incompatible change: field "page" of CMSFilerLinkBase changed to "cms_page", for when used
-  as base for cms plugins, it has possible clashes with the CMSPlugins "page" attribute.
--
+  as base for cms plugins, it has possible clashes with the CMSPlugins "page" attribute. When creating migrations,
+  django should ask if it was a rename. Pls try with makemigrations --dry-run first!
 
 
 ==== 0.1.6 ===

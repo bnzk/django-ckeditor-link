@@ -4,7 +4,10 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from .conf import CKEDITOR_LINK_TYPE_CHOICES, CKEDITOR_LINK_USE_CMS_FILER
+from .conf import (
+    CKEDITOR_LINK_TYPE_CHOICES,
+    CKEDITOR_LINK_USE_CMS_FILER,
+)
 
 
 class LinkBase(models.Model):
