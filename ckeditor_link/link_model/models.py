@@ -10,6 +10,13 @@ from .conf import (
 )
 
 
+# TODO: when dropping py2, just remove this, and replace unicode( with str(
+try:
+    unicode('')
+except NameError:
+    unicode = str
+
+
 class LinkBase(models.Model):
     # name = models.CharField(
     #     verbose_name=_('Link Text'),
@@ -82,7 +89,6 @@ class LinkBase(models.Model):
         if self.link_type:
             obj = getattr(self, self.link_type, None)
         if not object is None:
-            # TODO: python3
             return unicode(obj)
         return ''
 
