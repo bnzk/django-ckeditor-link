@@ -55,6 +55,4 @@ class ckeditor_linkDialogTests(TestCase):
         client = Client()
         url = reverse('testmodel_detail', args=[self.test_object.id])
         response = client.get(url)
-        print(response.content)
         self.assertContains(response, 'href="targetvalue--xy"')
-        # check it!

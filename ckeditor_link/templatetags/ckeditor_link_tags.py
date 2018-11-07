@@ -54,7 +54,6 @@ def ckeditor_link_add_links(html):
                                 value = None
                         kwargs[new_key] = value
                         link.attrib.pop(key)
-            print(kwargs)
             for key, formatted_string in conf.CKEDITOR_LINK_ATTR_MODIFIERS.items():
                 try:
                     kwargs[key] = formatted_string.format(**kwargs)
