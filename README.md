@@ -14,6 +14,7 @@ link plugin for ckeditor, based on django modelforms/modeladmin, allowing direct
 - [Installation](#installation)
 - [Usage / Examples](#usage--examples)
 - [Settings](#settings)
+- [Compatibility](#django-compatibility)
 - [Contribute](#contribute)
 
 
@@ -158,7 +159,14 @@ CKEDITOR_LINK_ATTR_MODIFIERS
         'multi_widget_field': '{multi_widget_field_1}--{multi_widget_field_whatever}'
         'cms_page': '{cms_page_2}'
     }
-   
+
+
+## Django Compatibility
+
+Officialy supported is django 1.11 LTS and 2.0.
+2.1 fails in tox, needs investigation.
+
+Add a chart with compatibility, one day.
 
 ## Contribute
 
