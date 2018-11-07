@@ -18,6 +18,10 @@ logging.getLogger("factory").setLevel(logging.WARN)
 
 HEADLESS_TESTING = True
 
+# not a good example, but working for our tests
+CKEDITOR_LINK_ATTR_MODIFIERS = {
+    'target': '{target}--xy',
+}
 CKEDITOR_LINK_MODEL = 'ckeditor_link.tests.test_app.models.LinkModel'
 CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:test_app_linkmodel_add')
 CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:test_app_linkmodel_verify')

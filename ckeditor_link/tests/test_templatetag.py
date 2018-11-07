@@ -46,3 +46,15 @@ class ckeditor_linkDialogTests(TestCase):
         response = client.get(url)
         content = response.content
         # check it!
+
+    def test_tag_attr_modifiers(self):
+        """
+        do attr modifiers work?
+        has data-target="targetvalue", needs <a href="targetvalue--xy"
+        """
+        client = Client()
+        url = reverse('testmodel_detail', args=[self.test_object.id])
+        response = client.get(url)
+        print(response.content)
+        self.assertContains(response, 'href="targetvalue--xy"')
+        # check it!

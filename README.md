@@ -134,6 +134,25 @@ must install those yourself.
     {% object.html_field|ckeditor_link_add_link %}
     ```
 
+
+## Settings
+
+CKEDITOR_LINK_MODEL
+
+    # needed when using the ckeditor_link_add_links template filter, otherwise not
+    CKEDITOR_LINK_MODEL = 'my_app.models.LinkModel'
+
+CKEDITOR_LINK_ATTR_MODIFIERS
+
+    # needed when using the ckeditor_link_add_links template filter
+    # used to combine multi widgets values, to be in a valid form. 
+    # django-cms own "PageField" needs this
+    CKEDITOR_LINK_ATTR_MODIFIERS = {
+        'multi_widget_field': '{multi_widget_field_1}--{multi_widget_field_whatever}'
+        'cms_page': '{cms_page_2}'
+    }
+   
+
 ## Contribute
 
 Fork and code. Quickstart:

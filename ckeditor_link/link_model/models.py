@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from builtins import str
 
 from django.conf import settings
 from django.db import models
@@ -9,12 +10,11 @@ from .conf import (
     CKEDITOR_LINK_USE_CMS_FILER,
 )
 
-
-# TODO: when dropping py2, just remove this, and replace unicode( with str(
-try:
-    unicode('')
-except NameError:
-    unicode = str
+# dropped in favour of builtins/str, see above
+# try:
+#     unicode('')
+# except NameError:
+#     unicode = str
 
 
 class LinkBase(models.Model):
@@ -89,7 +89,7 @@ class LinkBase(models.Model):
         if self.link_type:
             obj = getattr(self, self.link_type, None)
         if not object is None:
-            return unicode(obj)
+            return str(obj)
         return ''
 
     def get_link_type(self):
