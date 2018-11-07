@@ -9,6 +9,13 @@ build status fails as I am not savyy enough to make this iframe/selenium/sleep m
 
 link plugin for ckeditor, based on django modelforms/modeladmin, allowing direct linking to your models, or to whatever your want.
 
+### Table of contents
+
+- [Installation](#installation)
+- [Usage / Examples](#usage--examples)
+- [Settings](#settings)
+- [Contribute](#contribute)
+
 
 ## Installation
 
@@ -29,7 +36,7 @@ If you want an out of the box solution for linking, you can add `ckeditor_link.l
 `INSTALLED_APPS`. Warning, EXPERIMENTAL feature.
 
 
-## Usage
+## Usage / Examples
 
 Have a look at `ckeditor_link/tests/test_app/settings_test.py` for a complete example.
 
