@@ -1,14 +1,18 @@
 
 ==== 0.2.1 (under development) ===
 
-- go ahead
+- more tests
 
 
-==== 0.2.0 (released soon) ===
+==== 0.2.0 (2018-11-07) ===
 
-- backward incompatible change: field "page" of CMSFilerLinkBase changed to "cms_page", for when used
-  as base for cms plugins, it has possible clashes with the CMSPlugins "page" attribute. When creating migrations,
-  django should ask if it was a rename. Pls try with makemigrations --dry-run first!
+- license changed to GPLv2, due to ckeditors link plugin
+- backward incompatible change in link_model contrib package : field "page" of CMSFilerLinkBase
+  changed to "cms_page", for when used as base for cms plugins, it has possible clashes with the
+  CMSPlugins "page" attribute. ckeditor_link's templatetag will provide fallback logic for some
+  time.
+- CKEDITOR_LINK_ATTR_MODIFIERS setting / concept: support multi widgets easily in link model
+  forms. see README for more info.
 
 
 ==== 0.1.6 ===
