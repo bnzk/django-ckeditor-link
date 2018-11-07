@@ -164,7 +164,7 @@ CKEDITOR_LINK_ATTR_MODIFIERS
 ## Django Compatibility
 
 Officialy supported is django 1.11 LTS and 2.0.  
-2.1 fails in tox, needs investigation.
+2.1 fails in tox, needs investigation. As there is no magic, it will probably work with older django versions.
 
 Add a chart with compatibility, one day.
 
