@@ -1,12 +1,15 @@
 import importlib
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+
+from ckeditor_link import conf
 from django import template
 from django.template.defaultfilters import stringfilter
 
 
 try:
-    module_name, class_name = settings.CKEDITOR_LINK_MODEL.rsplit(".", 1)
+    module_name, class_name = conf.CKEDITOR_LINK_MODEL.rsplit(".", 1)
     my_module = importlib.import_module(module_name)
     ckeditor_link_class = getattr(my_module, class_name, None)
 except ImportError:
@@ -22,9 +25,10 @@ def ckeditor_link_add_links(html):
     # lxml is not a dependency, but needed for this tag.
     from lxml.html import fragment_fromstring, tostring
     if not ckeditor_link_class:
-        # TODO: use some log thing
+        # TODO: use some log thing, or rais ImproperlyConfigured!
         if settings.DEBUG:
-            print("Warning: CKEDITOR_LINK_MODEL (%s) could not be imported!?" % (settings.CKEDITOR_LINK_MODEL, ))
+            msg = "Warning: CKEDITOR_LINK_MODEL (%s) could not be imported!?" % (conf.CKEDITOR_LINK_MODEL, )
+            raise ImproperlyConfigured(msg)
         return html
     fragment = fragment_fromstring("<div>" + html + "</div>")
     links = fragment.cssselect('a')
@@ -36,9 +40,11 @@ def ckeditor_link_add_links(html):
             for key, value in link.items():
                 if key.startswith('data-'):
                     new_key = key.replace('data-', '', 1)
-                    # will be removed!
+                    # DEPRECATED: use CKEDITOR_LINK_ATTR_MODIFIERS setting!
                     if new_key == 'page_2':
-                        new_key = 'page'
+                        new_key = 'cms_page'  # backward compat, for 0.2.0
+                    if new_key == 'cms_page_2':
+                        new_key = 'cms_page'
                     # until here
                     if hasattr(dummy_link, new_key):
                         if hasattr(dummy_link, new_key + "_id"):
@@ -48,6 +54,12 @@ def ckeditor_link_add_links(html):
                                 value = None
                         kwargs[new_key] = value
                         link.attrib.pop(key)
+            for key, formatted_string in conf.CKEDITOR_LINK_ATTR_MODIFIERS.items():
+                try:
+                    kwargs[key] = formatted_string.format(**kwargs)
+                except KeyError:
+                    # this is an option, we dont know at all how our link is/was built (ages ago)
+                    pass
             try:
                 # this can go wrong with fk and the like
                 real_link = ckeditor_link_class(**kwargs)

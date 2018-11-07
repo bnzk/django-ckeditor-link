@@ -1,11 +1,21 @@
 # django-ckeditor-link
 
+build status fails as I am not savyy enough to make this iframe/selenium/sleep mess work. Passes with local tox, believ me ;)
+
 [![Build Status](https://travis-ci.org/bnzk/django-ckeditor-link.svg "Build Status")](https://travis-ci.org/bnzk/django-ckeditor-link/)
 [![PyPi Version](https://img.shields.io/pypi/v/django-ckeditor-link.svg "PyPi Version")](https://pypi.python.org/pypi/django-ckeditor-link/)
 [![Licence](https://img.shields.io/pypi/l/django-ckeditor-link.svg "Licence")](https://pypi.python.org/pypi/django-ckeditor-link/)
 
 
 link plugin for ckeditor, based on django modelforms/modeladmin, allowing direct linking to your models, or to whatever your want.
+
+### Table of contents
+
+- [Installation](#installation)
+- [Usage / Examples](#usage--examples)
+- [Settings](#settings)
+- [Compatibility](#django-compatibility)
+- [Contribute](#contribute)
 
 
 ## Installation
@@ -27,7 +37,7 @@ If you want an out of the box solution for linking, you can add `ckeditor_link.l
 `INSTALLED_APPS`. Warning, EXPERIMENTAL feature.
 
 
-## Usage
+## Usage / Examples
 
 Have a look at `ckeditor_link/tests/test_app/settings_test.py` for a complete example.
 
@@ -131,6 +141,32 @@ must install those yourself.
     {% load ckeditor_link_tags %}
     {% object.html_field|ckeditor_link_add_link %}
     ```
+
+
+## Settings
+
+CKEDITOR_LINK_MODEL
+
+    # needed when using the ckeditor_link_add_links template filter, otherwise not
+    CKEDITOR_LINK_MODEL = 'my_app.models.LinkModel'
+
+CKEDITOR_LINK_ATTR_MODIFIERS
+
+    # needed when using the ckeditor_link_add_links template filter
+    # used to combine multi widgets values, to be in a valid form. 
+    # django-cms own "PageField" needs this
+    CKEDITOR_LINK_ATTR_MODIFIERS = {
+        'multi_widget_field': '{multi_widget_field_1}--{multi_widget_field_whatever}'
+        'cms_page': '{cms_page_2}'
+    }
+
+
+## Django Compatibility
+
+Officialy supported is django 1.11 LTS and 2.0.  
+2.1 fails in tox, needs investigation. As there is no magic, it will probably work with older django versions.
+
+Add a chart with compatibility, one day.
 
 ## Contribute
 
