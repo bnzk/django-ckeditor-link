@@ -36,8 +36,8 @@ class TestModel(models.Model):
 
 @python_2_unicode_compatible
 class LinkModelBase(models.Model):
-    target = models.CharField(max_length=255, blank=True, default='', )
     external_url = models.CharField(max_length=255, blank=True, default='',)
+    target = models.CharField(max_length=255, blank=True, default='', )
     email = models.EmailField(blank=True, default='',)
     # http://stackoverflow.com/questions/12644142/prefill-a-datetimefield-from-url-in-django-admin
     when = models.DateField(blank=True, null=True)
@@ -58,6 +58,10 @@ class LinkModelBase(models.Model):
     def get_link(self):
         if self.external_url:
             return self.external_url
+        if self.target:
+            return self.target
+        if self.when:
+            return self.when
         else:
             return "http://no-link-given.com/"
 

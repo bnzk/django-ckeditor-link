@@ -23,7 +23,7 @@ if CKEDITOR_LINK_USE_CMS_FILER:
     CKEDITOR_LINK_TYPE_CHOICES = getattr(
         settings, 'CKEDITOR_LINK_TYPE_CHOICES', (
             ('', _("None")),
-            ('page', _("Page")),
+            ('cms_page', _("Page")),
             ('file', _("File")),
             ('free', _("Other / Free")),
             ('external', _("External URL")),
