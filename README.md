@@ -183,3 +183,12 @@ Fork and code. Quickstart:
 ### Testing
 
 Either run `tox` for complete tests, or `python manage.py test
+
+
+#### geckodriver install
+
+- visit https://github.com/mozilla/geckodriver/releases
+- download the latest version of "geckodriver-vX.XX.X-linux64.tar.gz"
+- unarchive the tarball (tar -xvzf geckodriver-vX.XX.X-linux64.tar.gz)
+- give executable permissions to geckodriver (chmod +x geckodriver)
+- move the geckodriver binary to /usr/local/bin or any location on your system PATH.
