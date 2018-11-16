@@ -1,10 +1,13 @@
+language: python
+cache: pip
+
+addons:
+  firefox: "63.0"
+
 python:
   - "2.7"
   - "3.5"
   - "3.6"
-
-language: python
-cache: pip
 
 env:
   matrix:
@@ -13,22 +16,17 @@ env:
     - REQ='django>=1.10,<1.11'
     - REQ='django>=1.11,<2.0'
     - REQ='django>=2.0,<2.1'
+
 matrix:
   allow-failures:
   exclude:
     - python: '2.7'
       env: REQ='django>=2.0,<2.1'
 
-# https://docs.travis-ci.com/user/gui-and-headless-browsers/
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
-
 before_install:
-  - wget https://github.com/mozilla/geckodriver/releases/download/v0.20.1/geckodriver-v0.20.1-linux64.tar.gz
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
   - mkdir geckodriver
-  - tar -xzf geckodriver-v0.20.1-linux64.tar.gz -C geckodriver
+  - tar -xzf geckodriver-v0.23.0-linux64.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
 
 # command to install dependencies
@@ -36,6 +34,12 @@ install:
   - pip install .
   - pip install $REQ
   - pip install -r test_requirements.txt
+
+# https://docs.travis-ci.com/user/gui-and-headless-browsers/
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
 
 # command to run tests
 script: python manage.py test --settings=ckeditor_link.tests.settings_no_headless
