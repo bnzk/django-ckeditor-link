@@ -1,6 +1,6 @@
 # django-ckeditor-link
 
-build status fails as I am not savyy enough to make this iframe/selenium/sleep mess work. Passes with local tox, believ me ;)
+Build status fails sometimes - selenium and iframes and ... sleep. Passes with local tox, believe me.
 
 [![Build Status](https://travis-ci.org/bnzk/django-ckeditor-link.svg "Build Status")](https://travis-ci.org/bnzk/django-ckeditor-link/)
 [![PyPi Version](https://img.shields.io/pypi/v/django-ckeditor-link.svg "PyPi Version")](https://pypi.python.org/pypi/django-ckeditor-link/)
@@ -141,6 +141,22 @@ must install those yourself.
     {% load ckeditor_link_tags %}
     {% object.html_field|ckeditor_link_add_link %}
     ```
+    
+If your linkmodel has a multi widget (as the django-cms's PageField), you can use the 
+`CKEDITOR_LINK_ATTR_MODIFIERS` setting, to modify attributes as you like. Example: 
+
+    ```
+    # a default, working with the provided contrib link_model and django-cms
+    CKEDITOR_LINK_ATTR_MODIFIERS = getattr(
+        settings,
+        'CKEDITOR_LINK_ATTR_MODIFIERS', {
+            'cms_page': '{cms_page_2}'
+        }
+    )
+    ```
+    
+The actual value of `cms_page` will be formatted with the  python `format(**kwargs)` function, where kwargs are the link's
+data attributes and it's values (without `data-`).
 
 
 ## Settings
