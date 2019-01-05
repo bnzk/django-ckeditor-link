@@ -1,5 +1,4 @@
-
-build status fails as I am not savyy enough to make this iframe/selenium/sleep mess work. Passes with local tox, believ me ;)
+Build status fails sometimes - selenium and iframes and ... sleep. Passes with local tox, believe me.
 
 .. image:: https://travis-ci.org/bnzk/django-ckeditor-link.svg
     :target: https://travis-ci.org/bnzk/django-ckeditor-link

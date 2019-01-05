@@ -16,7 +16,7 @@ setup(
     url='http://github.com/bnzk/django-ckeditor-link',
     license='MIT',
     platforms=['OS Independent'],
-    description="better link dialog for ckeditor",
+    description="alternative link dialog for ckeditor 4, in django modeladmin forms",
     long_description=read('PYPI.rst'),
     author=u'Ben Stähli',
     author_email='bnzk@bnzk.ch',

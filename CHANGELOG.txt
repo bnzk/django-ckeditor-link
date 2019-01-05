@@ -1,7 +1,12 @@
 
-==== 0.2.1 (under development) ===
+==== 0.2.2 (under development) ===
 
 - more tests
+
+
+==== 0.2.1 (2019-01-05) ===
+
+- testing for foreign keys that do no more exist, more robustness
 
 
 ==== 0.2.0 (2018-11-07) ===

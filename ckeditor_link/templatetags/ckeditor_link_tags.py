@@ -1,7 +1,7 @@
 import importlib
 
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 
 from ckeditor_link import conf
 from django import template
@@ -68,6 +68,7 @@ def ckeditor_link_add_links(html):
                     link.set('target', real_link.get_link_target())
                 if getattr(real_link, 'get_link_style', None):
                     link.set('class', real_link.get_link_style())
-            except ValueError:
+            except (ValueError, ObjectDoesNotExist) as e:
+            # except (ValueError) as e:
                 continue
     return tostring(fragment)
