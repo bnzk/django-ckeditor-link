@@ -7,9 +7,9 @@ from ckeditor.fields import RichTextField
 # compat
 import django
 if django.VERSION[:2] < (1, 10):
-    from django.core.urlresolvers import reverse_lazy
+    from django.core.urlresolvers import reverse_lazy, reverse
 else:
-    from django.urls import reverse_lazy
+    from django.urls import reverse_lazy, reverse
 
 
 @python_2_unicode_compatible
@@ -37,7 +37,6 @@ class TestModel(models.Model):
 @python_2_unicode_compatible
 class LinkModelBase(models.Model):
     external_url = models.CharField(max_length=255, blank=True, default='',)
-    target = models.CharField(max_length=255, blank=True, default='', )
     email = models.EmailField(blank=True, default='',)
     # http://stackoverflow.com/questions/12644142/prefill-a-datetimefield-from-url-in-django-admin
     when = models.DateField(blank=True, null=True)
@@ -48,6 +47,11 @@ class LinkModelBase(models.Model):
         default=None,
         blank=True,
     )
+    target = models.CharField(
+        max_length=255,
+        blank=True,
+        default='',
+    )
 
     class Meta:
         abstract = True
@@ -56,12 +60,15 @@ class LinkModelBase(models.Model):
         return "LINK object: %s" % self.get_link()
 
     def get_link(self):
+        print(self.__dict__)
         if self.external_url:
             return self.external_url
-        if self.target:
-            return self.target
-        if self.when:
+        elif self.when:
             return self.when
+        elif self.testmodel:
+            return self.testmodel.get_absolute_url()
+        elif self.target:
+            return self.target
         else:
             return "http://no-link-given.com/"
 

@@ -12,11 +12,12 @@ else:
     from django.urls import reverse
 
 
-class ckeditor_linkDialogTests(TestCase):
+class CKeditorLinkTemplateTagTests(TestCase):
     fixtures = ['test_app.json', ]
 
     def setUp(self):
         self.test_object = TestModel.objects.get(pk=2)
+        self.test_object_not_existing_fk = TestModel.objects.get(pk=1)
 
     def tearDown(self):
         pass
@@ -46,6 +47,16 @@ class ckeditor_linkDialogTests(TestCase):
         response = client.get(url)
         content = response.content
         # check it!
+
+    def test_not_existing_foreign_key_value(self):
+        """
+        can it handle no more existing foreign key values set in links?
+        """
+        client = Client()
+        url = reverse('testmodel_detail', args=[self.test_object_not_existing_fk.id])
+        response = client.get(url)
+        # no exception, there we go!
+        self.assertEqual(response.status_code, 200)
 
     def test_tag_attr_modifiers(self):
         """
