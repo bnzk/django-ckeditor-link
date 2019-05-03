@@ -122,10 +122,12 @@ if CKEDITOR_LINK_USE_CMS_FILER:
     class CMSFilerLinkBase(LinkBase):
         cms_page = PageField(
             null=True,
+            on_delete=models.SET_NULL,
             blank=True,
         )
         file = FilerFileField(
             null=True,
+            on_delete=models.SET_NULL,
             blank=True,
         )
 
