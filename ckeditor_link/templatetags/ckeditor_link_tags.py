@@ -71,4 +71,6 @@ def ckeditor_link_add_links(html):
             except (ValueError, ObjectDoesNotExist) as e:
             # except (ValueError) as e:
                 continue
-    return tostring(fragment)
+    # arf: http://makble.com/python-why-lxml-etree-tostring-method-returns-bytes
+    # beautifulsoup to the rescue!
+    return tostring(fragment, encoding='unicode')
