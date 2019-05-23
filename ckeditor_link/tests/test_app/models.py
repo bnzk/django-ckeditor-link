@@ -60,7 +60,7 @@ class LinkModelBase(models.Model):
         return "LINK object: %s" % self.get_link()
 
     def get_link(self):
-        print(self.__dict__)
+        # print(self.__dict__)
         if self.external_url:
             return self.external_url
         elif self.when:

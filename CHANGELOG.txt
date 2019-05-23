@@ -1,7 +1,13 @@
 
-==== 0.2.2 (under development) ===
+==== 0.2.3 (under development) ===
 
 - more tests
+
+
+==== 0.2.2 (2019-05-23) ===
+
+- python3 fix for templatetag (returning b'' instaead of plain string'
+  (http://makble.com/python-why-lxml-etree-tostring-method-returns-bytes)
 
 
 ==== 0.2.1 (2019-01-05) ===
