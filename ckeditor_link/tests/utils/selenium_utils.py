@@ -1,7 +1,10 @@
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 
 
 # compat
@@ -17,6 +20,18 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     A base test case for Selenium, providing hepler methods for generating
     clients and logging in profiles.
     """
+
+    username = 'admin'
+    password = 'admin'
+
+    def setUp(self):
+        User.objects.create_superuser(self.username, 'admin@free.fr', self.password)
+        # Instantiating the WebDriver will load your browser
+        options = Options()
+        if settings.HEADLESS_TESTING:
+            options.add_argument("--headless")
+        self.webdriver = CustomWebDriver(firefox_options=options, )
+
     def open(self, url):
         self.webdriver.get("%s%s" % (self.live_server_url, url))
 

@@ -1,5 +1,8 @@
 from __future__ import unicode_literals
-from builtins import str
+try:
+    from builtins import str
+except ImportError:
+    from __builtin__ import str
 
 from django.conf import settings
 from django.db import models
@@ -130,6 +133,11 @@ if CKEDITOR_LINK_USE_CMS_FILER:
             on_delete=models.SET_NULL,
             blank=True,
         )
+
+        def __init__(self, *args, **kwargs):
+            if kwargs.get('page', None):
+                self.cms_page = kwargs.get('page')
+            return super(CMSFilerLinkBase, self).__init__(*args, **kwargs)
 
         class Meta:
             abstract = True

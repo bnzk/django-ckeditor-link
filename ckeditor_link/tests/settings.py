@@ -18,6 +18,9 @@ logging.getLogger("factory").setLevel(logging.WARN)
 
 HEADLESS_TESTING = True
 
+
+CKEDITOR_LINK_USE_CMS_FILER = True
+
 # not a good example, but working for our tests
 CKEDITOR_LINK_ATTR_MODIFIERS = {
     'target': '{target}--xy',
@@ -109,9 +112,12 @@ EXTERNAL_APPS = (
     'django.contrib.sites',
     'ckeditor',
     # 'djangocms_text_ckeditor',
-    # 'cms',
-    # 'treebeard',
-    # 'menus',
+    'cms',
+    'treebeard',
+    'menus',
+    'filer',
+    'sekizai',
+    'easy_thumbnails',
 )
 
 TEMPLATES = [
@@ -139,6 +145,7 @@ TEMPLATES = [
 
 INTERNAL_APPS = (
     'ckeditor_link',
+    # 'ckeditor_link',
     'ckeditor_link.tests.test_app',
 )
 
