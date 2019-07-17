@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from cms.models import Page
+
 from ckeditor_link.templatetags import ckeditor_link_tags
 
 try:
@@ -76,11 +78,14 @@ class ContribLinkModelTests(SeleniumTestCase):
     @override_settings(
         CKEDITOR_LINK_MODEL='ckeditor_link.tests.test_app.models.CMSFilerLinkModel'
     )
-    def test_cms_page_link(self):
+    def test_cms_page_link_fallback(self):
         reload(conf)
         reload(ckeditor_link_tags)
         client = Client()
         url = reverse('testmodel_detail', args=[self.test_object_cms_page.id])
+        self.test_object_cms_page.richtext = self.test_object_cms_page.richtext.replace(
+            '<cms_page_id_page2>', str(self.page2.id)
+        )
+        self.test_object_cms_page.save()
         response = client.get(url)
-        print(response.content)
         self.assertContains(response, 'href="/page2/"')

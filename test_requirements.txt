@@ -7,12 +7,12 @@ factory_boy
 mock
 selenium
 
-django-ckeditor==5.5.0
+django-ckeditor==5.6.0
 
 # template tag
 lxml
 cssselect
 
 # link model
-django-cms==3.4.6
+django-cms==3.6.0
 django-filer==1.4.0

@@ -61,6 +61,10 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+CMS_TEMPLATES = (
+    ('cms_dummy.html', 'Dummy'),
+)
+
 SITE_ID = 1
 
 APP_ROOT = os.path.abspath(

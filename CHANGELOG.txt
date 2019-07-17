@@ -1,7 +1,13 @@
 
-==== 0.2.3 (under development) ===
+==== 0.2.4 (under development) ===
 
 - more tests
+
+
+==== 0.2.3 (2019-07-17) ===
+
+- builtins fix for python2 / cmsfilerlinkmodel
+- some link model tests, and fallback enhancements for page/cms_page change
 
 
 ==== 0.2.2 (2019-05-23) ===

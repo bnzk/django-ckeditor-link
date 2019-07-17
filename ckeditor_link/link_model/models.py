@@ -150,7 +150,10 @@ if CKEDITOR_LINK_USE_CMS_FILER:
                     page_url = self.cms_page.get_absolute_url()
                 except Page.DoesNotExist:
                     return ''
-                if self.cms_page.site.id == settings.SITE_ID:
+                site = getattr(self.cms_page, 'site', None)
+                if not site:
+                    site = self.cms_page.node.site  # cms 3.5 or 3.6 and up.
+                if site.id == settings.SITE_ID:
                     return page_url
                 else:
                     return 'http:/fields /' + self.cms_page.site.domain + page_url
