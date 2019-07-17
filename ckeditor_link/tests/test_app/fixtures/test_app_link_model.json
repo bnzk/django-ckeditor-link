@@ -1,0 +1,11 @@
+[
+  {"model": "test_app.testmodel", "pk": 101, "fields":
+  {"title": "Test Link Model, external link",
+  "richtext": "<p>None</p>",
+  "richtext_second": "<p><a data-ckeditor-link=\"true\" data-type=\"external\" data-external_url=\"https://example.com/\" data-target=\"_blank\" data-testmodel=\"69\" href=\"sadv\">an external link</a></p>"}},
+
+  {"model": "test_app.testmodel", "pk": 102, "fields":
+  {"title": "Test Link Model, page/cms_page and fallback",
+  "richtext": "<p>One Two <a data-ckeditor-link=\"true\" data-type=\"cms_page\" data-cms_page_2=\"3\" data-target_page_22=\"_ablank\" data-when=\"2018-02-03\" href=\"http://no-link-given.com/\">Link One (Date Link, haha)</a></p>\r\n\r\n<p><a data-ckeditor-link=\"true\" data-email=\"\" data-external_url=\"\" data-target=\"\" data-testmodel=\"1\" href=\"http://no-link-given.com/\">Link Two (Foreign Key)</a></p>\r\n\r\n<p>what</p>",
+  "richtext_second": "<p><a data-ckeditor-link=\"true\" data-email=\"\" data-external_url=\"\" data-target=\"targetvalue\" data-testmodel=\"\" href=\"http://no-link-given.com/\">Second RT, first link</a>&nbsp;<a data-ckeditor-link=\"true\" data-email=\"\" data-external_url=\"sadv\" data-target=\"sdvatest\" data-testmodel=\"1\" href=\"sadv\">link</a></p>"}}
+]
