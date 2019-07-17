@@ -6,6 +6,7 @@
 
 ==== 0.2.3 (2019-07-17) ===
 
+- drop support for django 1.9 and below
 - builtins fix for python2 / cmsfilerlinkmodel
 - some link model tests, and fallback enhancements for page/cms_page change
 
