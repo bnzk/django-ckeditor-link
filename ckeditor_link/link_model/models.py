@@ -1,5 +1,8 @@
 from __future__ import unicode_literals
-from builtins import str
+try:
+    from builtins import str
+except ImportError:
+    from __builtin__ import str
 
 from django.conf import settings
 from django.db import models
@@ -131,6 +134,11 @@ if CKEDITOR_LINK_USE_CMS_FILER:
             blank=True,
         )
 
+        def __init__(self, *args, **kwargs):
+            if kwargs.get('page', None):
+                self.cms_page = kwargs.get('page')
+            return super(CMSFilerLinkBase, self).__init__(*args, **kwargs)
+
         class Meta:
             abstract = True
 
@@ -142,7 +150,10 @@ if CKEDITOR_LINK_USE_CMS_FILER:
                     page_url = self.cms_page.get_absolute_url()
                 except Page.DoesNotExist:
                     return ''
-                if self.cms_page.site.id == settings.SITE_ID:
+                site = getattr(self.cms_page, 'site', None)
+                if not site:
+                    site = self.cms_page.node.site  # cms 3.5 or 3.6 and up.
+                if site.id == settings.SITE_ID:
                     return page_url
                 else:
                     return 'http:/fields /' + self.cms_page.site.domain + page_url

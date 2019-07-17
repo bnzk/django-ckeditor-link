@@ -11,15 +11,27 @@ else:
 
 from ckeditor_link.admin import DjangoLinkAdmin
 
-from .models import TestModel, LinkModel
+from .models import TestModel, LinkModel, ContribLinkModel, CMSFilerLinkModel
 
 
 class LinkModelForm(forms.ModelForm):
     when = forms.DateField(widget=SelectDateWidget, required=False)
 
 
+admin.site.register(TestModel)
+
+
+@admin.register(LinkModel)
 class CKLinkModelAdmin(DjangoLinkAdmin):
     form = LinkModelForm
 
-admin.site.register(TestModel)
-admin.site.register(LinkModel, CKLinkModelAdmin)
+
+@admin.register(ContribLinkModel)
+class CKBaseLinkModelAdmin(DjangoLinkAdmin):
+    pass
+
+
+@admin.register(CMSFilerLinkModel)
+class CMSFilerCKLinkModelAdmin(DjangoLinkAdmin):
+    pass
+

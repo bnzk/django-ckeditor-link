@@ -4,7 +4,7 @@ from time import sleep
 from django.conf import settings
 from django.contrib.auth.models import User
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.firefox.options import Options
+
 
 from ckeditor_link.tests.utils.selenium_utils import SeleniumTestCase, CustomWebDriver
 from ckeditor_link.tests.test_app.models import TestModel, LinkModel
@@ -20,17 +20,10 @@ else:
 
 class ckeditor_linkEditorTests(SeleniumTestCase):
     fixtures = ['test_app.json', ]
-    username = 'admin'
-    password = 'admin'
 
     def setUp(self):
-        superuser = User.objects.create_superuser(self.username, 'admin@free.fr', self.password)
         self.existing = TestModel.objects.get(pk=1)
-        # Instantiating the WebDriver will load your browser
-        options = Options()
-        if settings.HEADLESS_TESTING:
-            options.add_argument("--headless")
-        self.webdriver = CustomWebDriver(firefox_options=options, )
+        super(ckeditor_linkEditorTests, self).setUp()
 
     def tearDown(self):
         self.webdriver.quit()

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from ckeditor.fields import RichTextField
+from ckeditor_link.link_model.models import CMSFilerLinkBase, LinkBase
 
 # compat
 import django
@@ -80,4 +81,12 @@ class LinkModelBase(models.Model):
 
 
 class LinkModel(LinkModelBase):
+    pass
+
+
+class ContribLinkModel(LinkBase):
+    pass
+
+
+class CMSFilerLinkModel(CMSFilerLinkBase):
     pass

@@ -59,3 +59,9 @@ class DjangoLinkAdmin(admin.ModelAdmin):
         no save!
         """
         return False
+
+    def get_changeform_initial_data(self, request):
+        initial = super(DjangoLinkAdmin, self).get_changeform_initial_data(request)
+        if request.GET.get('page', None):
+            initial['cms_page'] = request.GET.get('page')
+        return initial

@@ -11,17 +11,23 @@ python:
 
 env:
   matrix:
-    - REQ='django>=1.8,<1.9'
-    - REQ='django>=1.9,<1.10'
+    # - REQ='django>=1.8,<1.9'
+    # - REQ='django>=1.9,<1.10'
     - REQ='django>=1.10,<1.11'
     - REQ='django>=1.11,<2.0'
     - REQ='django>=2.0,<2.1'
+    - REQ='django>=2.1,<2.2'
+    - REQ='django>=2.2,<2.3'
 
 matrix:
   allow-failures:
   exclude:
     - python: '2.7'
       env: REQ='django>=2.0,<2.1'
+    - python: '2.7'
+      env: REQ='django>=2.1,<2.2'
+    - python: '2.7'
+      env: REQ='django>=2.2,<2.3'
 
 before_install:
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
