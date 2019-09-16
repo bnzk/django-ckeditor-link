@@ -163,12 +163,13 @@ if CKEDITOR_LINK_USE_CMS_FILER:
 
         def get_link_target(self):
             type = self.get_link_type()
-            if getattr(self.cms_page, 'node', None):
-                site = self.cms_page.node.site
-            else:
-                site = self.cms_page.site
-            if (type == 'cms_page' or type == 'page') and self.cms_page and not site.id == settings.SITE_ID:
-                return "_blank"
+            if (type == 'cms_page' or type == 'page') and self.cms_page:
+                if getattr(self.cms_page, 'node', None):
+                    site = self.cms_page.node.site
+                else:
+                    site = self.cms_page.site
+                if not site.id == settings.SITE_ID:
+                    return "_blank"
             else:
                 return super(CMSFilerLinkBase, self).get_link_target()
             return ""
