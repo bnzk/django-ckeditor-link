@@ -1,7 +1,13 @@
 
-==== 0.2.4 (under development) ===
+==== 0.2.5 (under development) ===
 
 - more tests
+
+
+==== 0.2.4 (2019-09-17) ===
+
+- fixed a nasty get_link_target bug, for the provided base link model
+- tox / travis refactoring
 
 
 ==== 0.2.3 (2019-07-17) ===

@@ -1,33 +1,19 @@
+dist: xenial  # has py35!
+sudo: false
 language: python
 cache: pip
-
-addons:
-  firefox: "63.0"
-
 python:
   - "2.7"
   - "3.5"
   - "3.6"
+  - "3.7"
+install: pip install tox-travis
+script: tox
 
-env:
-  matrix:
-    # - REQ='django>=1.8,<1.9'
-    # - REQ='django>=1.9,<1.10'
-    - REQ='django>=1.10,<1.11'
-    - REQ='django>=1.11,<2.0'
-    - REQ='django>=2.0,<2.1'
-    - REQ='django>=2.1,<2.2'
-    - REQ='django>=2.2,<2.3'
 
-matrix:
-  allow-failures:
-  exclude:
-    - python: '2.7'
-      env: REQ='django>=2.0,<2.1'
-    - python: '2.7'
-      env: REQ='django>=2.1,<2.2'
-    - python: '2.7'
-      env: REQ='django>=2.2,<2.3'
+# for selenium/geckodriver
+addons:
+  firefox: "63.0"
 
 before_install:
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
@@ -35,17 +21,68 @@ before_install:
   - tar -xzf geckodriver-v0.23.0-linux64.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
 
-# command to install dependencies
-install:
-  - pip install .
-  - pip install $REQ
-  - pip install -r test_requirements.txt
+services:
+  - xvfb
 
-# https://docs.travis-ci.com/user/gui-and-headless-browsers/
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
 
-# command to run tests
-script: python manage.py test --settings=ckeditor_link.tests.settings_no_headless
+################# THE LEGACY!
+
+## https://docs.travis-ci.com/user/gui-and-headless-browsers/
+#before_script:
+#  - "export DISPLAY=:99.0"
+#  - "sh -e /etc/init.d/xvfb start"
+#  - sleep 3 # give xvfb some time to start
+#
+#
+#
+#language: python
+#cache: pip
+#
+#addons:
+#  firefox: "63.0"
+#
+#python:
+#  - "2.7"
+#  - "3.5"
+#  - "3.6"
+#
+#env:
+#  matrix:
+#    # - REQ='django>=1.8,<1.9'
+#    # - REQ='django>=1.9,<1.10'
+#    - REQ='django>=1.10,<1.11'
+#    - REQ='django>=1.11,<2.0'
+#    - REQ='django>=2.0,<2.1'
+#    - REQ='django>=2.1,<2.2'
+#    - REQ='django>=2.2,<2.3'
+#
+#matrix:
+#  allow-failures:
+#  exclude:
+#    - python: '2.7'
+#      env: REQ='django>=2.0,<2.1'
+#    - python: '2.7'
+#      env: REQ='django>=2.1,<2.2'
+#    - python: '2.7'
+#      env: REQ='django>=2.2,<2.3'
+#
+#before_install:
+#  - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
+#  - mkdir geckodriver
+#  - tar -xzf geckodriver-v0.23.0-linux64.tar.gz -C geckodriver
+#  - export PATH=$PATH:$PWD/geckodriver
+#
+## command to install dependencies
+#install:
+#  - pip install .
+#  - pip install $REQ
+#  - pip install -r test_requirements.txt
+#
+## https://docs.travis-ci.com/user/gui-and-headless-browsers/
+#before_script:
+#  - "export DISPLAY=:99.0"
+#  - "sh -e /etc/init.d/xvfb start"
+#  - sleep 3 # give xvfb some time to start
+#
+## command to run tests
+#script: python manage.py test --settings=ckeditor_link.tests.settings_no_headless
