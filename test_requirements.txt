@@ -14,5 +14,5 @@ lxml
 cssselect
 
 # link model
-django-cms==3.6.0
+django-cms==3.7.0
 django-filer==1.4.0

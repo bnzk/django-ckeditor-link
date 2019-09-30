@@ -1,7 +1,11 @@
-
-==== 0.2.5 (under development) ===
+==== 0.2.6 (under development) ===
 
 - more tests
+
+
+==== 0.2.5 (2019-10-01) ===
+
+- optimizing padding in ckeditor link dialog and django 2 and up
 
 
 ==== 0.2.4 (2019-09-17) ===
