@@ -12,8 +12,8 @@
 
 		return {
             'title': 'Link',
-            'minWidth': 700,
-            'minHeight': 380,
+            'minWidth': 630,
+            'minHeight': 320,
             'contents': [{
                 'elements': [{
                     type: 'html',
