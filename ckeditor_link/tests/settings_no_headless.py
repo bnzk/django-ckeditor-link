@@ -1,4 +1,4 @@
-from .settings import *  #noqa
+from .settings import *  # noqa
 
 
 HEADLESS_TESTING = False

@@ -1,6 +1,6 @@
 """Settings that need to be set in order to run the tests."""
 import os
-import sys
+# import sys
 import tempfile
 import logging
 
@@ -79,7 +79,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en'
 LANGUAGES = (
-    ('en', 'ENGLISHS' ),
+    ('en', 'ENGLISHS', ),
 )
 
 ROOT_URLCONF = 'ckeditor_link.tests.urls'

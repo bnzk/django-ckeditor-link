@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from cms.models import Page
-
 from ckeditor_link.templatetags import ckeditor_link_tags
 
 try:
@@ -13,7 +11,7 @@ from cms import api
 from cms.constants import TEMPLATE_INHERITANCE_MAGIC
 from django.test import Client, override_settings
 
-from ckeditor_link.tests.test_app.models import TestModel, LinkModel
+from ckeditor_link.tests.test_app.models import TestModel
 from ckeditor_link import conf
 
 # compat
@@ -71,7 +69,7 @@ class ContribLinkModelTests(SeleniumTestCase):
             reverse('admin:test_app_cmsfilerlinkmodel_add'),
             self.page2.id
         ))
-        all_options = self.webdriver.wait_for_css("#id_cms_page_1 option", )
+        self.webdriver.wait_for_css("#id_cms_page_1 option", )
         option = self.webdriver.wait_for_css("#id_cms_page_1 option[selected]", )
         self.assertEqual(option.get_attribute('value'), str(self.page2.id))
 

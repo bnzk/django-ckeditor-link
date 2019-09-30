@@ -20,8 +20,7 @@ class DjangoLinkAdmin(admin.ModelAdmin):
         original_media = super(DjangoLinkAdmin, self).media
         css = {
             'all': (
-                settings.STATIC_URL
-                + 'admin/ckeditor_link/css/link_admin.css',
+                settings.STATIC_URL + 'admin/ckeditor_link/css/link_admin.css',
             )
         }
         new_media = widgets.Media(css=css)
