@@ -1,6 +1,10 @@
 
+/* everything !important :( */
+
+
+/* override normal django styles styles */
 .popup #content {
-    padding: 5px 13px 13px;
+    padding: 5px 13px 13px !important;
     box-sizing: border-box;
 }
 
@@ -9,4 +13,9 @@
         /* from django itself */
         width: 100% !important;
     }
+}
+
+/* override djangocms styles */
+.popup #container {
+    padding: 0 !important;
 }
