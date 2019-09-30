@@ -12,8 +12,8 @@
 
 		return {
             'title': 'Link',
-            'minWidth': 600,
-            'minHeight': 280,
+            'minWidth': 630,
+            'minHeight': 320,
             'contents': [{
                 'elements': [{
                     type: 'html',
@@ -134,7 +134,7 @@
                 $iframe.attr("src", editor.config.djangolinkIframeURL + "?_popup=true&" + $.param(data));
 				$iframe.hide(0);
 				var $dialog_content = $(CKEDITOR.dialog.getCurrent().parts.contents.$);
-				$dialog_content.css({'padding': '0'});
+				$dialog_content.css({'padding': '0px'});
 				$dialog_content.find('.cke_dialog_page_contents').css('height', '100%')
 				$dialog_content.find('.cke_dialog_page_contents table[role=presentation]').css('height', '100%');
 				$dialog_content.find('.cke_dialog_ui_vbox_child').css({'padding': '0', 'height': '100%'});
@@ -148,8 +148,8 @@
                     $iframe_content.find('html, body').scrollTop(0);
                     $iframe_content.find('h1').hide().end();
                     $iframe_content.find('.submit-row').hide().end();
-                    $iframe_content.find('#content').css('padding', 0);
-                    $iframe_content.find('#container').css('min-width', 0).css('padding', 0);
+                    // $iframe_content.find('#content').css('padding', 0);
+                    // $iframe_content.find('#container').css('min-width', 0).css('padding', 0);
 
                     // form
                     var $form = $(this).contents().find('form');

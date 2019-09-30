@@ -2,7 +2,7 @@
 from django.test import Client
 from django.test import TestCase
 
-from ckeditor_link.tests.test_app.models import TestModel, LinkModel
+from ckeditor_link.tests.test_app.models import TestModel
 
 # compat
 import django
@@ -29,8 +29,8 @@ class CKeditorLinkTemplateTagTests(TestCase):
         client = Client()
         url = reverse('testmodel_detail', args=[self.test_object.id])
         response = client.get(url)
-        content = response.content
         # check it!
+        self.assertEqual(response.status_code, 200)
 
     def test_tag_no_destruction_of_existing_links(self):
         """
@@ -45,8 +45,8 @@ class CKeditorLinkTemplateTagTests(TestCase):
         client = Client()
         url = reverse('testmodel_detail', args=[self.test_object.id])
         response = client.get(url)
-        content = response.content
         # check it!
+        self.assertEqual(response.status_code, 200)
 
     def test_not_existing_foreign_key_value(self):
         """

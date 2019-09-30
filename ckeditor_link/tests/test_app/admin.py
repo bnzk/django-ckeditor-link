@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib import admin
 
+from ckeditor_link.admin import DjangoLinkAdmin
+from .models import TestModel, LinkModel, ContribLinkModel, CMSFilerLinkModel
 
 # compat
 import django
@@ -8,10 +10,6 @@ if django.VERSION[:2] < (1, 10):
     from django.forms.extras.widgets import SelectDateWidget
 else:
     from django.forms.widgets import SelectDateWidget
-
-from ckeditor_link.admin import DjangoLinkAdmin
-
-from .models import TestModel, LinkModel, ContribLinkModel, CMSFilerLinkModel
 
 
 class LinkModelForm(forms.ModelForm):
@@ -34,4 +32,3 @@ class CKBaseLinkModelAdmin(DjangoLinkAdmin):
 @admin.register(CMSFilerLinkModel)
 class CMSFilerCKLinkModelAdmin(DjangoLinkAdmin):
     pass
-

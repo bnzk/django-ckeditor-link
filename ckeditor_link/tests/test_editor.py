@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 from time import sleep
 
-from django.conf import settings
-from django.contrib.auth.models import User
 from selenium.common.exceptions import NoSuchElementException
 
-
-from ckeditor_link.tests.utils.selenium_utils import SeleniumTestCase, CustomWebDriver
-from ckeditor_link.tests.test_app.models import TestModel, LinkModel
+from ckeditor_link.tests.utils.selenium_utils import SeleniumTestCase
+from ckeditor_link.tests.test_app.models import TestModel
 
 
 # compat
@@ -43,11 +40,11 @@ class ckeditor_linkEditorTests(SeleniumTestCase):
         sleep(1)  # #1 may ckeditor be very slow, so the click event is not handled?!
         button = self.webdriver.wait_for_css(".cke_button__djangolink")
         button[0].click()
-        dialog_title = self.webdriver.wait_for_css(".cke_dialog_title")
+        self.webdriver.wait_for_css(".cke_dialog_title")
         # sleep(2)  # argh
         iframe = self.webdriver.find_css(".cke_dialog_ui_html")
         self.webdriver.switch_to.frame(iframe)
-        target = self.webdriver.wait_for_css("#id_target")
+        self.webdriver.wait_for_css("#id_target")
 
     def test_dialog_form_validation(self):
         self.login()

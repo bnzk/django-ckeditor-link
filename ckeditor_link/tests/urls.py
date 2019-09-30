@@ -1,6 +1,4 @@
 """URLs to run the tests."""
-import cms
-from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 

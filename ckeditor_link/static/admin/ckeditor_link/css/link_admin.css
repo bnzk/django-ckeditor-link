@@ -1,0 +1,12 @@
+
+.popup #content {
+    padding: 5px 13px 13px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+    .aligned .form-row > div {
+        /* from django itself */
+        width: 100% !important;
+    }
+}

@@ -8,9 +8,9 @@ from ckeditor_link.link_model.models import CMSFilerLinkBase, LinkBase
 # compat
 import django
 if django.VERSION[:2] < (1, 10):
-    from django.core.urlresolvers import reverse_lazy, reverse
+    from django.core.urlresolvers import reverse
 else:
-    from django.urls import reverse_lazy, reverse
+    from django.urls import reverse
 
 
 @python_2_unicode_compatible

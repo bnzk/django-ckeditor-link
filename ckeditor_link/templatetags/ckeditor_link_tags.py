@@ -68,8 +68,7 @@ def ckeditor_link_add_links(html):
                     link.set('target', real_link.get_link_target())
                 if getattr(real_link, 'get_link_style', None):
                     link.set('class', real_link.get_link_style())
-            except (ValueError, ObjectDoesNotExist) as e:
-            # except (ValueError) as e:
+            except (ValueError, ObjectDoesNotExist):
                 continue
     # arf: http://makble.com/python-why-lxml-etree-tostring-method-returns-bytes
     # beautifulsoup to the rescue!

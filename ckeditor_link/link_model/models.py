@@ -91,7 +91,7 @@ class LinkBase(models.Model):
             return self.name
         if self.link_type:
             obj = getattr(self, self.link_type, None)
-        if not object is None:
+        if object is not None:
             return str(obj)
         return ''
 
@@ -122,7 +122,7 @@ if CKEDITOR_LINK_USE_CMS_FILER:
     from filer.fields.file import FilerFileField
 
 
-    class CMSFilerLinkBase(LinkBase):
+    class CMSFilerLinkBase(LinkBase):  # noqa
         cms_page = PageField(
             null=True,
             on_delete=models.SET_NULL,
