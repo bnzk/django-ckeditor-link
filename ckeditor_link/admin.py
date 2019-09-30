@@ -1,6 +1,8 @@
+from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
 from django.db import models
+from django.forms import widgets
 from django.http import JsonResponse
 
 
@@ -12,6 +14,18 @@ class DjangoLinkAdmin(admin.ModelAdmin):
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
+
+    @property
+    def media(self):
+        original_media = super(DjangoLinkAdmin, self).media
+        css = {
+            'all': (
+                settings.STATIC_URL
+                + 'admin/ckeditor_link/css/link_admin.css',
+            )
+        }
+        new_media = widgets.Media(css=css)
+        return original_media + new_media
 
     def get_urls(self):
         """
