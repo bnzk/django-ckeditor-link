@@ -1,3 +1,6 @@
+# for consistent migrations, use oldest django possible
+django<3
+
 # not required by setup.py..
 tox
 coverage
@@ -15,4 +18,4 @@ cssselect
 
 # link model
 django-cms==3.7.0
-django-filer==1.4.0
+django-filer==1.5.0

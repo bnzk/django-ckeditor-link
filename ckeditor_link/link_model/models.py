@@ -156,7 +156,7 @@ if CKEDITOR_LINK_USE_CMS_FILER:
                 if site.id == settings.SITE_ID:
                     return page_url
                 else:
-                    return 'http:/fields /' + self.cms_page.site.domain + page_url
+                    return '//' + site.domain + page_url
             elif self.file:
                 return self.file.url
             return super_link
@@ -173,11 +173,3 @@ if CKEDITOR_LINK_USE_CMS_FILER:
             else:
                 return super(CMSFilerLinkBase, self).get_link_target()
             return ""
-
-        # legacy, too simple version (not adapting to the "node" change).
-        # def get_link_target(self):
-        #     type = self.get_link_type()
-        #     if type == 'cms_page' or type == 'page' and self.cms_page and not self.cms_page.site.id == settings.SITE_ID:
-        #         return "_blank"
-        #     else:
-        #         return super(CMSFilerLinkBase, self).get_link_target()

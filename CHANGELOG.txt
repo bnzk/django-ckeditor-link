@@ -1,6 +1,13 @@
-==== 0.2.6 (under development) ===
+==== 0.3.1 (under development) ===
 
-- more tests
+- more tests, mostly templatetag/link model stuff
+
+
+==== 0.3.0 (2020-03-09) ===
+
+- drop python 2.7 support
+- prepare django 3.0 support (wait for django cms, try at your own risk)
+- multi site django-cms bug fixed, with test coverage
 
 
 ==== 0.2.5 (2019-10-01) ===
