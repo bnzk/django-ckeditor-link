@@ -126,11 +126,13 @@ if CKEDITOR_LINK_USE_CMS_FILER:
         cms_page = PageField(
             null=True,
             on_delete=models.SET_NULL,
+            related_name="%(app_label)s_%(class)s_set",
             blank=True,
         )
         file = FilerFileField(
             null=True,
             on_delete=models.SET_NULL,
+            related_name="%(app_label)s_%(class)s_set",
             blank=True,
         )
 
