@@ -4,7 +4,7 @@ django<3
 # not required by setup.py..
 tox
 coverage
-django-coverage
+django-coverage<1.2
 flake8
 factory_boy
 mock

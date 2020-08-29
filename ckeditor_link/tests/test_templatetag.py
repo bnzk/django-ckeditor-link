@@ -58,6 +58,17 @@ class CKeditorLinkTemplateTagTests(TestCase):
         # no exception, there we go!
         self.assertEqual(response.status_code, 200)
 
+    def test_get_link_attrs(self):
+        """
+        can it output correct link attrs
+        """
+        client = Client()
+        url = reverse('testmodel_detail', args=[self.test_object.id])
+        response = client.get(url)
+        # no exception, there we go!
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-test="abc"')
+
     def test_tag_attr_modifiers(self):
         """
         do attr modifiers work?

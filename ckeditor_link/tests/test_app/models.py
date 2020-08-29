@@ -79,6 +79,9 @@ class LinkModelBase(models.Model):
     def get_link_style(self):
         return "no-css-class"
 
+    def get_link_attrs(self):
+        return {'data-test': 'abc'}
+
 
 class LinkModel(LinkModelBase):
     pass
