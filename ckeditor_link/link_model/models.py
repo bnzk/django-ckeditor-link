@@ -138,7 +138,6 @@ class LinkBase(models.Model):
         return None
 
 
-
 class Link(LinkBase):
     """
     if in installed apps, this will be created and available out of the box
@@ -149,10 +148,8 @@ class Link(LinkBase):
 
 if CKEDITOR_LINK_USE_CMS_FILER:
 
-    from cms.models import Page
     from cms.models.fields import PageField
     from filer.fields.file import FilerFileField
-
 
     class CMSFilerLinkBase(LinkBase):  # noqa
         cms_page = PageField(
