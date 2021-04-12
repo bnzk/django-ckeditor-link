@@ -1,4 +1,7 @@
 from __future__ import unicode_literals
+
+from django.core.exceptions import ObjectDoesNotExist
+
 try:
     from builtins import str
 except ImportError:
@@ -72,6 +75,11 @@ class LinkBase(models.Model):
             for key, display in CKEDITOR_LINK_TYPE_CHOICES:
                 if not key == self.link_type:
                     setattr(self, key, None)
+        # generic foreign key link check
+        fk_link = self._check_link_for_foreign_key()
+        if fk_link:
+            return fk_link
+        # other custom link types
         if self.free:
             return self.free
         elif self.external:
@@ -92,7 +100,7 @@ class LinkBase(models.Model):
         if getattr(self, 'name', None):
             return self.name
         if self.link_type:
-            obj = getattr(self, self.link_type, None)
+            obj = self._check_link_for_foreign_key()
         if object is not None:
             return str(obj)
         return ''
@@ -109,10 +117,32 @@ class LinkBase(models.Model):
             return "_blank"
         return ""
 
+    def _check_foreign_key_value(self):
+        """
+        check if link type and it's value are a foreign key
+        Returns: foreign key value, if available
+        """
+        try:
+            value = getattr(self, self.get_link_type(), None)
+            return value
+        except ObjectDoesNotExist:
+            pass
+        return None
+
+    def _check_link_for_foreign_key(self):
+        value = self._check_foreign_key_value()
+        # print(isinstance(value, models.Model))
+        if value and getattr(value, 'get_absolute_url', None):
+            link = value.get_absolute_url()
+            return link
+        return None
+
+
 
 class Link(LinkBase):
     """
     if in installed apps, this will be created and available out of the box
+    beware: no migrations yet!
     """
     pass
 
@@ -131,6 +161,11 @@ if CKEDITOR_LINK_USE_CMS_FILER:
             related_name="%(app_label)s_%(class)s_set",
             blank=True,
         )
+        html_anchor = models.SlugField(
+            default='',
+            blank=True,
+            verbose_name='Anker',
+        )
         file = FilerFileField(
             null=True,
             on_delete=models.SET_NULL,
@@ -141,7 +176,7 @@ if CKEDITOR_LINK_USE_CMS_FILER:
         def __init__(self, *args, **kwargs):
             if kwargs.get('page', None):
                 self.cms_page = kwargs.get('page')
-            return super(CMSFilerLinkBase, self).__init__(*args, **kwargs)
+            super(CMSFilerLinkBase, self).__init__(*args, **kwargs)
 
         class Meta:
             abstract = True
@@ -149,31 +184,34 @@ if CKEDITOR_LINK_USE_CMS_FILER:
         def get_link(self):
             # best practice is to call super first, so not relevant attrs are nulled
             super_link = super(CMSFilerLinkBase, self).get_link()
-            if self.cms_page_id:
-                try:
-                    page_url = self.cms_page.get_absolute_url()
-                except Page.DoesNotExist:
-                    return ''
-                site = getattr(self.cms_page, 'site', None)
-                if not site:
-                    site = self.cms_page.node.site  # cms 3.5 or 3.6 and up.
+            fk_obj = self._check_foreign_key_value()
+            if self.get_link_type() == 'cms_page' and super_link:
+                if self.html_anchor:
+                    super_link += '#%s' % self.html_anchor
+                site = getattr(self.cms_page.node, 'site', None)
                 if site.id == settings.SITE_ID:
-                    return page_url
+                    return super_link
                 else:
-                    return '//' + site.domain + page_url
-            elif self.file:
-                return self.file.url
+                    return '//' + site.domain + super_link
+            elif self.get_link_type() == 'file' and fk_obj:
+                return fk_obj.url
             return super_link
 
         def get_link_target(self):
-            type = self.get_link_type()
-            if (type == 'cms_page' or type == 'page') and self.cms_page:
-                if getattr(self.cms_page, 'node', None):
-                    site = self.cms_page.node.site
-                else:
-                    site = self.cms_page.site
+            fk_obj = self._check_foreign_key_value()
+            if self.get_link_type() == 'cms_page' and fk_obj:
+                site = self._get_cms_page_site()
                 if not site.id == settings.SITE_ID:
                     return "_blank"
             else:
                 return super(CMSFilerLinkBase, self).get_link_target()
             return ""
+
+        def _get_cms_page_site(self):
+            fk_obj = self._check_foreign_key_value()
+            if self.get_link_type() == 'cms_page' and fk_obj:
+                if getattr(self.cms_page, 'node', None):
+                    site = self.cms_page.node.site
+                else:
+                    site = self.cms_page.site
+            return site
