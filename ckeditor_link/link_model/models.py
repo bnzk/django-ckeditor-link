@@ -185,7 +185,10 @@ if CKEDITOR_LINK_USE_CMS_FILER:
             if self.get_link_type() == 'cms_page' and super_link:
                 if self.html_anchor:
                     super_link += '#%s' % self.html_anchor
-                site = getattr(self.cms_page.node, 'site', None)
+                if getattr(self.cms_page, 'node', None):
+                    site = getattr(self.cms_page.node, 'site', None)
+                else:
+                    site = getattr(self.cms_page, 'site', None)
                 if site.id == settings.SITE_ID:
                     return super_link
                 else:
