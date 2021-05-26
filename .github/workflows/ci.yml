@@ -19,7 +19,7 @@ jobs:
       - name: Run Tox
         # Run tox using the version of Python in `PATH`
         # run: tox -e py${{ matrix.python }}-${{ matrix.django }}
-        run: tox
+        run: tox -e py${{ matrix.python }}
 
   coverage:
     runs-on: ubuntu-latest
