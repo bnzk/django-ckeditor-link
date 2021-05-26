@@ -1,6 +1,10 @@
-==== 0.3.1 (under development) ===
+==== 0.3.2 (under development) ===
 
-- more tests, mostly templatetag/link model stuff
+
+==== 0.3.1 (2021-05-26) ===
+
+- more tests added, mostly templatetag/link model stuff
+- re-introduced django 1.11/django-cms 3.4 compat, for legacy projects
 
 
 ==== 0.3.0 (2020-03-09) ===

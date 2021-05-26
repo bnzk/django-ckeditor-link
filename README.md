@@ -2,7 +2,7 @@
 
 Build status fails sometimes - selenium and iframes and ... sleep. Passes with local tox, believe me.
 
-[![Build Status](https://travis-ci.org/bnzk/django-ckeditor-link.svg "Build Status")](https://travis-ci.org/bnzk/django-ckeditor-link/)
+[![CI](https://github.com/bnzk/django-ckeditor-link/actions/workflows/ci.yml/badge.svg)](https://github.com/bnzk/django-ckeditor-link/actions/workflows/ci.yml)
 [![PyPi Version](https://img.shields.io/pypi/v/django-ckeditor-link.svg "PyPi Version")](https://pypi.python.org/pypi/django-ckeditor-link/)
 [![Licence](https://img.shields.io/pypi/l/django-ckeditor-link.svg "Licence")](https://pypi.python.org/pypi/django-ckeditor-link/)
 

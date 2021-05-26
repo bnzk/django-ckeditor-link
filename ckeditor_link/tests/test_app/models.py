@@ -1,9 +1,7 @@
-from __future__ import unicode_literals
-
-from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from ckeditor.fields import RichTextField
 from ckeditor_link.link_model.models import CMSFilerLinkBase, LinkBase
+
 
 # compat
 import django
@@ -13,7 +11,6 @@ else:
     from django.urls import reverse
 
 
-@python_2_unicode_compatible
 class TestModel(models.Model):
     title = models.CharField(max_length=255, )
     richtext = RichTextField(default='')
@@ -35,7 +32,6 @@ class TestModel(models.Model):
 #         return "%s" % self.title
 
 
-@python_2_unicode_compatible
 class LinkModelBase(models.Model):
     external_url = models.CharField(max_length=255, blank=True, default='',)
     email = models.EmailField(blank=True, default='',)
@@ -78,6 +74,9 @@ class LinkModelBase(models.Model):
 
     def get_link_style(self):
         return "no-css-class"
+
+    def get_link_attrs(self):
+        return {'data-test': 'abc'}
 
 
 class LinkModel(LinkModelBase):
