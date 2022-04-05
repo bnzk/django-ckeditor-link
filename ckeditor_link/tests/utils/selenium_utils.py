@@ -30,7 +30,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         options = Options()
         if settings.HEADLESS_TESTING:
             options.add_argument("--headless")
-        self.webdriver = CustomWebDriver(firefox_options=options, )
+        self.webdriver = CustomWebDriver(options=options, )
 
     def open(self, url):
         self.webdriver.get("%s%s" % (self.live_server_url, url))
