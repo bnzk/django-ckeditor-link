@@ -1,4 +1,12 @@
-==== 0.3.2 (under development) ===
+==== 0.4.1 (under development) ===
+
+
+==== 0.3.2 (2022-04-05) ===
+
+- adapted tox and github actions for django 3.2
+- removed django 1.11 from tests (will probably still work, but not supported officialy anymore)
+- small bug with POST variable encoding solved: verify url was called with &var[]1&var[]=2 when there was an array.
+  this was solved using $.params (now using &var=1&var=2, what works with django).
 
 
 ==== 0.3.1 (2021-05-26) ===

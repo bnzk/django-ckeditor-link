@@ -82,6 +82,8 @@ LANGUAGES = (
     ('en', 'ENGLISHS', ),
 )
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 ROOT_URLCONF = 'ckeditor_link.tests.urls'
 
 # media root is overridden when needed in tests

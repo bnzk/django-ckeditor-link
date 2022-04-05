@@ -35,6 +35,9 @@
 					}
                     data[$field.attr("name")] = value;
                 });
+				// https://stackoverflow.com/a/15787112/1029469
+				// avoid the brackets! multiple &key=val, instead of &key[]=val
+				var serialized_data = $.param(data, true);
 
 				// submit data as ajax, if is_valid, get href from response, if not, check
 				// errors in form
@@ -42,7 +45,7 @@
 				$.ajax({
 					'url': verify_url,
 					'method': 'post',
-					'data': data
+					'data': serialized_data
 				}).then($.proxy(function(response_data, xhr) {  // loving this syntax
 
 					if (response_data.valid != 'true') {
