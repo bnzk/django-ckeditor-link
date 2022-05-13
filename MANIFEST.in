@@ -1,7 +1,7 @@
 include LICENSE
+include CHANGELOG.txt
 include DESCRIPTION
 include README.rst
-include PYPI.rst
 global-exclude *.orig *.pyc *.log *.swp
 
 recursive-include ckeditor_link/templatetags *
