@@ -1,6 +1,11 @@
-==== 0.4.2 (under development) ===
+==== 0.4.3 (under development) ===
 
 - ?
+
+
+==== 0.4.2 (2022-04-13) ===
+
+- fix broken package
 
 
 ==== 0.4.1 (2022-04-13) ===
