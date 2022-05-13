@@ -1,4 +1,5 @@
 include LICENSE
+include DESCRIPTION
 include README.rst
 include PYPI.rst
 global-exclude *.orig *.pyc *.log *.swp
