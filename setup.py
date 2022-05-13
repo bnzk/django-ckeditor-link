@@ -18,14 +18,15 @@ setup(
     url='http://github.com/bnzk/django-ckeditor-link',
     license='MIT',
     platforms=['OS Independent'],
-    description="alternative link dialog for ckeditor 4, in django modeladmin forms",
-    long_description=read('PYPI.rst'),
+    description=read('DESCRIPTION'),
+    long_description=read('README.md'),
+    long_description_content_type="text/markdown",
     author=u'Ben Stähli',
     author_email='bnzk@bnzk.ch',
     packages=find_packages(),
     install_requires=(
         # 'Django>=1.3,<1.5',  # no need to limit while in development
-        'Django>=1.8',
+        'Django>=1.11',
     ),
     include_package_data=True,
     zip_safe=False,
