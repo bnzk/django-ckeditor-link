@@ -1,4 +1,12 @@
-==== 0.4.1 (under development) ===
+==== 0.4.2 (under development) ===
+
+- ?
+
+
+==== 0.4.1 (2022-04-13) ===
+
+- badges revamped, README.md on PyPi.
+- no functional changes ;-)
 
 
 ==== 0.3.2 (2022-04-05) ===
