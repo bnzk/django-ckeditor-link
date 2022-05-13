@@ -2,10 +2,10 @@
 
 Build status fails sometimes - selenium and iframes and ... sleep. Passes with local tox, believe me.
 
-[![CI](https://github.com/bnzk/django-ckeditor-link/actions/workflows/ci.yml/badge.svg?style=flat-square)](https://github.com/bnzk/django-ckeditor-link/actions/workflows/ci.yml)
+[![CI](https://img.shields.io/github/workflow/status/bnzk/django-ckeditor-link/CI.svg?style=flat-square)](https://pypi.python.org/pypi/django-ckeditor-link/)
 [![PyPi Version](https://img.shields.io/pypi/v/django-ckeditor-link.svg?style=flat-square "PyPi Version")](https://pypi.python.org/pypi/django-ckeditor-link/)
 [![Licence](https://img.shields.io/github/license/bnzk/django-ckeditor-link.svg?style=flat-square "Licence")](https://pypi.python.org/pypi/django-ckeditor-link/)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/django-ckeditor-link?style=flat-square)](https://pypistats.org/packages/django-ckeditor-link)
+[![Downloads](https://img.shields.io/pypi/dm/django-ckeditor-link?style=flat-square)](https://pypistats.org/packages/django-ckeditor-link)
 
 link plugin for ckeditor, based on django modelforms/modeladmin, allowing direct linking to your models, or to whatever your want.
 
