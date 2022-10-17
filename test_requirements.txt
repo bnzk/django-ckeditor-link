@@ -8,7 +8,7 @@ django-coverage<1.2
 flake8
 factory_boy
 mock
-selenium<4
+selenium
 
 django-ckeditor==5.6.0
 
