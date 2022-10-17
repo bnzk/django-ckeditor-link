@@ -100,7 +100,7 @@ class LinkBase(models.Model):
         if getattr(self, 'name', None):
             return self.name
         if self.link_type:
-            obj = self._check_link_for_foreign_key()
+            obj = self._check_foreign_key_value()
         if object is not None:
             return str(obj)
         return ''
