@@ -1,6 +1,11 @@
-==== 0.4.4 (under development) ===
+==== 0.4.5 (under development) ===
 
 - ?
+
+
+==== 0.4.4 (2022-10-17) ===
+
+- fix broken get_link_text for foreign key links
 
 
 ==== 0.4.3 (2022-04-13) ===
