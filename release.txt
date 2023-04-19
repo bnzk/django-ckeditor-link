@@ -10,8 +10,6 @@ make version a 0.2.7DEV again
 
 
 
-
-
 ### done in github actions now!
 python setup.py sdist && python setup.py bdist_wheel --universal
 twine upload dist/* -r pypitest
