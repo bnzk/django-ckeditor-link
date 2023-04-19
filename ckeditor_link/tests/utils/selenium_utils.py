@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -58,7 +59,8 @@ class CustomWebDriver(webdriver.Firefox):
 
     def find_css(self, css_selector):
         """Shortcut to find elements by CSS. Returns either a list or singleton"""
-        elems = self.find_elements_by_css_selector(css_selector)
+        # elems = self.find_elements_by_css_selector(css_selector)
+        elems = self.find_elements(By.CSS_SELECTOR, css_selector)
         found = len(elems)
         if found == 1:
             return elems[0]
