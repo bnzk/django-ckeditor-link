@@ -1,14 +1,15 @@
 """URLs to run the tests."""
-from django.conf.urls import include, url
+from django.conf.urls import include
+from django.urls import path, re_path
 from django.contrib import admin
 
 from ckeditor_link.tests.test_app.views import TestModelDetailView
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^testmodel/(?P<pk>\d+)/$', TestModelDetailView.as_view(), name='testmodel_detail'),
-    url(r'^', include('cms.urls')),
+    path('admin/', admin.site.urls),
+    re_path(r'^testmodel/(?P<pk>\d+)/$', TestModelDetailView.as_view(), name='testmodel_detail'),
+    path('', include('cms.urls')),
 ]
 
 # if settings.DEBUG:

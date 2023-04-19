@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import path
 from django.contrib import admin
 from django.db import models
 from django.forms import widgets
@@ -31,8 +31,8 @@ class DjangoLinkAdmin(admin.ModelAdmin):
         add verify url.
         """
         my_urls = [
-            url(
-                r'^verify/$',
+            path(
+                'verify/',
                 self.admin_site.admin_view(self.verify),
                 name=self._get_verify_url_name()
             ),
