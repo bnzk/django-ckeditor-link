@@ -2,9 +2,11 @@
 django<3
 
 # not required by setup.py..
+pylint
+flake8
+flake8-print
 tox
-coverage
-django-coverage<1.2
+coverage<6
 flake8
 factory_boy
 mock
