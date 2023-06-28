@@ -148,7 +148,6 @@ class Link(LinkBase):
 if CKEDITOR_LINK_USE_CMS_FILER:
 
     from cms.models.fields import PageField
-    print(CKEDITOR_LINK_MODEL_USE_FILER_ADDONS)
     if CKEDITOR_LINK_MODEL_USE_FILER_ADDONS:
         from filer_addons.filer_gui.fields import FilerFileField
     else:
