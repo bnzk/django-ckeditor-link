@@ -12,6 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from .conf import (
     CKEDITOR_LINK_TYPE_CHOICES,
     CKEDITOR_LINK_USE_CMS_FILER,
+    CKEDITOR_LINK_MODEL_USE_FILER_ADDONS,
 )
 
 # dropped in favour of builtins/str, see above
@@ -147,7 +148,10 @@ class Link(LinkBase):
 if CKEDITOR_LINK_USE_CMS_FILER:
 
     from cms.models.fields import PageField
-    from filer.fields.file import FilerFileField
+    if CKEDITOR_LINK_MODEL_USE_FILER_ADDONS:
+        from filer_addons.filer_gui.fields import FilerFileField
+    else:
+        from filer.fields.file import FilerFileField
 
     class CMSFilerLinkBase(LinkBase):  # noqa
         cms_page = PageField(

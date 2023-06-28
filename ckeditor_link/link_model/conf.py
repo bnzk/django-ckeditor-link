@@ -12,6 +12,13 @@ CKEDITOR_LINK_USE_CMS_FILER = getattr(
     use
 )
 
+CKEDITOR_LINK_MODEL_USE_FILER_ADDONS = getattr(
+    settings,
+    'CKEDITOR_LINK_MODEL_USE_FILER_ADDONS', {
+        False,
+    }
+)
+
 CKEDITOR_LINK_STYLE_CHOICES = getattr(
     settings, 'CKEDITOR_LINK_STYLE_CHOICES', (
         ('', _("Default")),
