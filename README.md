@@ -161,12 +161,20 @@ data attributes and it's values (without `data-`).
 
 ## Settings
 
-CKEDITOR_LINK_MODEL
+CKEDITOR_LINK_MODEL (default: `None`)
 
     # needed when using the ckeditor_link_add_links template filter, otherwise not
     CKEDITOR_LINK_MODEL = 'my_app.models.LinkModel'
 
-CKEDITOR_LINK_ATTR_MODIFIERS
+CKEDITOR_LINK_USE_CMS_FILER (default: `True` if django-cms and django-filer in INSTALLED_APPS)
+
+    # when using the ckeditor_link.link_model app, enable cms and filer integration
+
+CKEDITOR_LINK_MODEL_USE_FILER_ADDONS (default: `False`)
+
+    # when using filer integration, use django-filer-addons.filer_gui admin field
+
+CKEDITOR_LINK_ATTR_MODIFIERS (default: `{'cms_page': '{cms_page_2}'}`)
 
     # needed when using the ckeditor_link_add_links template filter
     # used to combine multi widgets values, to be in a valid form. 
@@ -179,9 +187,7 @@ CKEDITOR_LINK_ATTR_MODIFIERS
 
 ## Django Compatibility
 
-Officialy supported is django 1.11 LTS and 2.0, 2.1 and 2.2 LTS.  As there is no magic, it will probably work with older django versions.
-
-Add a chart with compatibility, one day.
+Please refer to the CHANGELOG.txt for current supported django versions.
 
 ## Contribute
 
