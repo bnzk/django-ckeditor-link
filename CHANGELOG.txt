@@ -2,7 +2,7 @@
 
 - ?
 
-==== 0.5.2 (2024-05-16) ===
+==== 0.5.2 (2024-05-21) ===
 
 - no functional changes
 - REMOVE print statement
