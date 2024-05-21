@@ -1,11 +1,12 @@
+# compat
+import django
 from django import forms
 from django.contrib import admin
 
 from ckeditor_link.admin import DjangoLinkAdmin
-from .models import TestModel, LinkModel, ContribLinkModel, CMSFilerLinkModel
 
-# compat
-import django
+from .models import CMSFilerLinkModel, ContribLinkModel, LinkModel, TestModel
+
 if django.VERSION[:2] < (1, 10):
     from django.forms.extras.widgets import SelectDateWidget
 else:

@@ -1,15 +1,14 @@
+# compat
+import django
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.wait import WebDriverWait
 
-
-# compat
-import django
 if django.VERSION[:2] < (1, 10):
     from django.core.urlresolvers import reverse
 else:
@@ -22,28 +21,30 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     clients and logging in profiles.
     """
 
-    username = 'admin'
-    password = 'admin'
+    username = "admin"
+    password = "admin"
 
     def setUp(self):
-        User.objects.create_superuser(self.username, 'admin@free.fr', self.password)
+        User.objects.create_superuser(self.username, "admin@free.fr", self.password)
         # Instantiating the WebDriver will load your browser
         options = Options()
         if settings.HEADLESS_TESTING:
             options.add_argument("--headless")
-        self.webdriver = CustomWebDriver(options=options, )
+        self.webdriver = CustomWebDriver(
+            options=options,
+        )
 
     def open(self, url):
         self.webdriver.get("%s%s" % (self.live_server_url, url))
 
     def login(self):
-        self.open(reverse('admin:index'))
-        # SeleniFIXTURESum knows it has to wait for page loads (except for AJAX requests)
+        self.open(reverse("admin:index"))
+        # Selenium knows it has to wait for page loads (except for AJAX requests)
         # so we don't need to do anything about that, and can just
         # call find_css. Since we can chain methods, we can
         # call the built-in send_keys method right away to change the
         # value of the field
-        self.webdriver.find_css('#id_username').send_keys(self.username)
+        self.webdriver.find_css("#id_username").send_keys(self.username)
         # for the password, we can now just call find_css since we know the page
         # has been rendered
         self.webdriver.find_css("#id_password").send_keys(self.password)
@@ -69,9 +70,13 @@ class CustomWebDriver(webdriver.Firefox):
         return elems
 
     def wait_for_css(self, css_selector, timeout=4):
-        """ Shortcut for WebDriverWait"""
-        return WebDriverWait(self, timeout).until(lambda driver: driver.find_css(css_selector))
+        """Shortcut for WebDriverWait"""
+        return WebDriverWait(self, timeout).until(
+            lambda driver: driver.find_css(css_selector)
+        )
 
     def wait_for_iframe(self, iframe_selector, timeout=4):
-        """ Shortcut for WebDriverWait"""
-        return WebDriverWait(self, timeout).until(lambda driver: driver.frame_to_be_available_and_switch_to_it())
+        """Shortcut for WebDriverWait"""
+        return WebDriverWait(self, timeout).until(
+            lambda driver: driver.frame_to_be_available_and_switch_to_it()
+        )

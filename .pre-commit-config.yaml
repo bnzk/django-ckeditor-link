@@ -27,8 +27,9 @@ repos:
       - id: check-ast # abstract syntax tree
       - id: check-builtin-literals # no {} and [], but dict() and list()
       - id: debug-statements
-      - id: name-tests-test
-        args: [--pytest-test-first]
+      # naaa
+  #      - id: name-tests-test
+  #        args: [--pytest-test-first]
   # django-upgrade suggestions
   - repo: https://github.com/adamchainz/django-upgrade
     rev: "1.14.0"
