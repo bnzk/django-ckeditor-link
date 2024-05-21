@@ -51,8 +51,8 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install flake8
-        run: pip install flake8 flake8-print
-      - name: Run flake8
+        run: pip install pre-commit
+      - name: Run pre-commit
         # Run tox using the version of Python in `PATH`
         # run: tox -e py${{ matrix.python }}-${{ matrix.django }}
-        run: flake8
+        run: pre-commit run --all-files
