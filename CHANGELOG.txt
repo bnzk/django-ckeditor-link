@@ -2,6 +2,14 @@
 
 - ?
 
+==== 0.5.2 (2024-05-21) ===
+
+- no functional changes
+- REMOVE print statement
+- introduce pre-commit / ruff / black and other goodies
+- remove python 3.7 from test matrix
+
+
 ==== 0.5.1 (2023-06-28) ===
 
 - introduce CKEDITOR_LINK_MODEL_USE_FILER_ADDONS, to enable usage of

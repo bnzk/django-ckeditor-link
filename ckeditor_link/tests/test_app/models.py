@@ -1,10 +1,10 @@
-from django.db import models
-from ckeditor.fields import RichTextField
-from ckeditor_link.link_model.models import CMSFilerLinkBase, LinkBase
-
-
 # compat
 import django
+from ckeditor.fields import RichTextField
+from django.db import models
+
+from ckeditor_link.link_model.models import CMSFilerLinkBase, LinkBase
+
 if django.VERSION[:2] < (1, 10):
     from django.core.urlresolvers import reverse
 else:
@@ -12,15 +12,17 @@ else:
 
 
 class TestModel(models.Model):
-    title = models.CharField(max_length=255, )
-    richtext = RichTextField(default='')
-    richtext_second = RichTextField(default='')
+    title = models.CharField(
+        max_length=255,
+    )
+    richtext = RichTextField(default="")
+    richtext_second = RichTextField(default="")
 
     def __str__(self):
         return "%s" % self.title
 
     def get_absolute_url(self):
-        return reverse('testmodel_detail', args=(self.id, ))
+        return reverse("testmodel_detail", args=(self.id,))
 
 
 # @python_2_unicode_compatible
@@ -33,8 +35,15 @@ class TestModel(models.Model):
 
 
 class LinkModelBase(models.Model):
-    external_url = models.CharField(max_length=255, blank=True, default='',)
-    email = models.EmailField(blank=True, default='',)
+    external_url = models.CharField(
+        max_length=255,
+        blank=True,
+        default="",
+    )
+    email = models.EmailField(
+        blank=True,
+        default="",
+    )
     # http://stackoverflow.com/questions/12644142/prefill-a-datetimefield-from-url-in-django-admin
     when = models.DateField(blank=True, null=True)
     testmodel = models.ForeignKey(
@@ -47,7 +56,7 @@ class LinkModelBase(models.Model):
     target = models.CharField(
         max_length=255,
         blank=True,
-        default='',
+        default="",
     )
 
     class Meta:
@@ -76,7 +85,7 @@ class LinkModelBase(models.Model):
         return "no-css-class"
 
     def get_link_attrs(self):
-        return {'data-test': 'abc'}
+        return {"data-test": "abc"}
 
 
 class LinkModel(LinkModelBase):

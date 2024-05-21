@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.test import Client
-from django.test import TestCase
+# compat
+import django
+from django.test import Client, TestCase
 
 from ckeditor_link.tests.test_app.models import TestModel
 
-# compat
-import django
 if django.VERSION[:2] < (1, 10):
     from django.core.urlresolvers import reverse
 else:
@@ -13,7 +12,9 @@ else:
 
 
 class CKeditorLinkTemplateTagTests(TestCase):
-    fixtures = ['test_app.json', ]
+    fixtures = [
+        "test_app.json",
+    ]
 
     def setUp(self):
         self.test_object = TestModel.objects.get(pk=2)
@@ -27,7 +28,7 @@ class CKeditorLinkTemplateTagTests(TestCase):
         does it transform everything as it should?
         """
         client = Client()
-        url = reverse('testmodel_detail', args=[self.test_object.id])
+        url = reverse("testmodel_detail", args=[self.test_object.id])
         response = client.get(url)
         # check it!
         self.assertEqual(response.status_code, 200)
@@ -43,7 +44,7 @@ class CKeditorLinkTemplateTagTests(TestCase):
         can it handle LinkModel with for example no get_css_class method?
         """
         client = Client()
-        url = reverse('testmodel_detail', args=[self.test_object.id])
+        url = reverse("testmodel_detail", args=[self.test_object.id])
         response = client.get(url)
         # check it!
         self.assertEqual(response.status_code, 200)
@@ -53,7 +54,7 @@ class CKeditorLinkTemplateTagTests(TestCase):
         can it handle no more existing foreign key values set in links?
         """
         client = Client()
-        url = reverse('testmodel_detail', args=[self.test_object_not_existing_fk.id])
+        url = reverse("testmodel_detail", args=[self.test_object_not_existing_fk.id])
         response = client.get(url)
         # no exception, there we go!
         self.assertEqual(response.status_code, 200)
@@ -63,7 +64,7 @@ class CKeditorLinkTemplateTagTests(TestCase):
         can it output correct link attrs
         """
         client = Client()
-        url = reverse('testmodel_detail', args=[self.test_object.id])
+        url = reverse("testmodel_detail", args=[self.test_object.id])
         response = client.get(url)
         # no exception, there we go!
         self.assertEqual(response.status_code, 200)
@@ -75,6 +76,6 @@ class CKeditorLinkTemplateTagTests(TestCase):
         has data-target="targetvalue", needs <a href="targetvalue--xy"
         """
         client = Client()
-        url = reverse('testmodel_detail', args=[self.test_object.id])
+        url = reverse("testmodel_detail", args=[self.test_object.id])
         response = client.get(url)
         self.assertContains(response, 'href="targetvalue--xy"')
