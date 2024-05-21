@@ -2,8 +2,9 @@
 
 - ?
 
-==== 0.5.2 (2024-05-21) ===
+==== 0.5.3 (2024-05-21) ===
 
+- skip 0.5.2 due to github action / pypi troubles
 - no functional changes
 - REMOVE print statement
 - introduce pre-commit / ruff / black and other goodies
